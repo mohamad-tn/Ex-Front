@@ -1,0 +1,76 @@
+<div class="row">
+    <div class="col-md-12">
+        <nb-card class="as-case-card">
+            <nb-card-header>
+                <div class="as-head">
+                    <div class="header-container">
+                        <nb-actions>
+                            <nb-action class="control-item" icon="swap-outline"></nb-action>
+                            <nb-action class="control-item ">
+                                <h5>كشف الحوالات الصادرة</h5> 
+                            </nb-action>
+                        </nb-actions>
+                    </div>
+                    <div class="header-container">
+                        <nb-actions>
+                            <nb-action class="control-item" (click)="showSearchDialog()"><i class="fa fa-binoculars as-icon-primary" aria-hidden="true"></i></nb-action>
+                        </nb-actions>
+                    </div>
+                </div>
+            </nb-card-header>
+            <nb-card-body class="as-case-card-body">
+                <div class="row">
+                    <table class="table table-bordered">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>{{'ToCompany' | localize}}</th>
+                                <th>{{'PaymentType' | localize}}</th>
+                                <th>{{'From-Company-Client' | localize}}</th>
+                                <th>{{'Amount' | localize}}</th>
+                                <th>{{'Commission' | localize}}</th>
+                                <th>{{'CompanyCommission' | localize}}</th>
+                                <th>{{'Date' | localize}}</th>
+                                <th rowspan="2" width="40"></th>
+                            </tr>
+                            
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of outgoingTransfers" >
+                                <td>{{ item?.toCompany.name }}</td>
+                                <td>
+                                    <span *ngIf="item.paymentType == 0 ">نقدي</span>
+                                    <span *ngIf="item.paymentType == 1 ">ذمم عملاء</span>
+                                    <span *ngIf="item.paymentType == 2 ">ذمم شركات</span>
+                                </td>
+                                <td>
+                                    <span *ngIf="item.fromClient != undefined">{{'Client' | localize}} / {{item?.fromClient?.name}}</span>
+                                    <span *ngIf="item.fromCompany != undefined">{{'Company' | localize}} / {{item?.fromCompany?.name}}</span>
+                                </td>
+                                <td>{{ item?.amount }}</td>
+                                <td>{{ item?.commission }}</td>
+                                <td>{{ item?.companyCommission }}</td>
+                                <td>{{ item?.date }}</td>
+                                <td width="40">
+                                    <a style="cursor: pointer;"><nb-icon status="primary" icon="eye-outline" (click)="showOutgoinTransfer(item)"></nb-icon></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <!-- <tfoot class="tfoot-light">
+                            <tr>
+                                <td rowspan="2"></td>
+                                <td rowspan="2"><span style="font-weight: bold;">الاجمالي</span></td>
+                                
+                            </tr>
+                            <tr>
+                                
+                            </tr>
+                        </tfoot> -->
+                    </table>
+                </div>
+                
+            </nb-card-body>
+        </nb-card>
+    
+    </div>
+</div>
+

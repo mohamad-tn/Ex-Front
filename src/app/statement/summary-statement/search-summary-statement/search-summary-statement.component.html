@@ -1,0 +1,38 @@
+<form class="form-horizontal" autocomplete="off" #searchTotalStatmentForm="ngForm" (ngSubmit)="save()">
+    <nb-card>
+        <nb-card-header>
+            {{'Search' | localize}}
+        </nb-card-header>
+        <nb-card-body>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="date">
+                            {{ "ToDate" | localize }}
+                        </label>
+                        <div class="col-md-9">
+                            <ejs-datepicker [format]="'dd/MM/yyyy'" 
+                                id='date' 
+                                name='date' 
+                                locale="en"
+                                cssClass="as-sy-input"
+                                required
+                                placeholder="{{ 'ToDate' | localize }}"
+                                [(ngModel)]="toDate"
+                                #dateModel="ngModel" 
+                                #dateEl
+                            ></ejs-datepicker>
+                            <abp-validation-summary [control]="dateModel" [controlEl]="dateEl">
+                            </abp-validation-summary>                          
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nb-card-body>
+        <nb-card-footer>
+            <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!searchTotalStatmentForm.form.valid || saving"
+                (onCancelClick)="dialogRef.close()"></abp-modal-footer>
+        </nb-card-footer>
+    </nb-card>
+</form>

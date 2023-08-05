@@ -1,0 +1,65 @@
+@import '../../../../@theme//styles/themes';
+
+@include nb-install-component() {
+
+.v-row{
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    width: 100%;
+}
+.v-row-cell{
+    padding: 0rem 1rem;
+    text-align: center;
+}
+
+.title-width{
+    width:30%;
+}
+.as-head{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.as-icon-primary{
+    font-size:24px;
+    cursor: pointer;
+    color:nb-theme(color-primary-default);
+    text-shadow: 2px 2px 2px #8f9bb3;
+}
+
+.primary-text{
+    font-family: 'Cairo';
+    color:nb-theme(color-primary-hover);
+}
+
+.success-text{
+    font-family: 'Cairo';
+    color:nb-theme(color-success-hover);
+}
+
+.default-text{
+    font-family: 'Cairo';
+    color:nb-theme(color-primary-hover);
+}
+.v-text{
+    font-family: 'Cairo';
+    font-weight: 500;
+    font-size: 0.86rem;
+}
+.v-text-primary{
+    @extend .v-text;
+    color:nb-theme(color-primary-hover);
+}
+.v-text-hint{
+    @extend .v-text;
+    color: nb-theme(text-hint-color);
+}
+.v-text-hint-2{
+    font-size: 0.85rem;
+    // font-family: nb-theme(text-button-font-family);
+    color: nb-theme(text-hint-color);
+    font-family: 'Cairo';
+}
+
+}

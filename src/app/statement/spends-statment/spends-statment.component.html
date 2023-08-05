@@ -1,0 +1,83 @@
+<div class="row">
+    <div class="col-md-12">
+        <nb-card class="as-case-card">
+            <nb-card-header>
+                <div class="as-head">
+                    <div class="header-container">
+                        <nb-actions>
+                            <nb-action class="control-item" icon="swap-outline"></nb-action>
+                            <nb-action class="control-item ">
+                                <h5>كشف تحليل المقبوضات </h5> 
+                            </nb-action>
+                        </nb-actions>
+                    </div>
+                    <div class="header-container">
+                        <nb-actions>
+                            <nb-action class="control-item" (click)="showSearchDialog()"><i class="fa fa-binoculars as-icon-primary" aria-hidden="true"></i></nb-action>
+                        </nb-actions>
+                    </div>
+                </div>
+            </nb-card-header>
+            <nb-card-body class="as-case-card-body">
+                <div class="row">
+                    <table class="table table-bordered">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>{{'Amount' | localize}}</th>
+                                <th>{{'Currency' | localize}}</th>
+                                <th>{{'MainAccount' | localize}}</th>
+                                <th>{{'Name' | localize}}</th>
+                                <th>{{'DocumentNumber' | localize}}</th>
+                                <th>{{'Date' | localize}}</th>
+                                <th>{{'Note' | localize}}</th>
+                                <th rowspan="2" width="40"></th>
+                            </tr>
+                            
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of treasuryActions" >
+                                <td>{{ item?.amount }}</td>
+                                <td>{{ item?.currency?.name }}</td>
+                                <td>
+                                    <span *ngIf="item.mainAccount == 0 ">ذمم عملاء</span>
+                                    <span *ngIf="item.mainAccount == 1 ">ذمم شركات</span>
+                                    <span *ngIf="item.mainAccount == 2 ">إيرادات عامة</span>
+                                    <span *ngIf="item.mainAccount == 3 ">مصاريف عامة</span>
+                                    <span *ngIf="item.mainAccount == 4 ">حوالات مباشرة</span>
+                                </td>
+                                <td>
+                                    <span *ngIf="item.mainAccount == 0 ">{{ item?.mainAccountClient?.name }}</span>
+                                    <span *ngIf="item.mainAccount == 1 ">{{ item?.mainAccountCompany?.name }}</span>
+                                    <span *ngIf="item.mainAccount == 2 ">{{ item?.income?.name }}</span>
+                                    <span *ngIf="item.mainAccount == 3 ">{{ item?.expense?.name }}</span>
+                                    <span *ngIf="item.mainAccount == 4 ">{{ item?.incomeTransferDetail?.beneficiary.name }}</span>
+                                </td>
+                                <td>{{ item?.number }}</td>
+                                <td>{{ item?.date }}</td>
+                                <td>{{ item?.note }}</td>
+                                
+                                <td width="40">
+                                    <a style="cursor: pointer;"><nb-icon status="primary" icon="eye-outline" (click)="showTreasuryAction(item)"></nb-icon></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <!-- <tfoot class="tfoot-light">
+                            <tr>
+                                <td rowspan="2"></td>
+                                <td rowspan="2"><span style="font-weight: bold;">الاجمالي</span></td>
+                                
+                            </tr>
+                            <tr>
+                                
+                            </tr>
+                        </tfoot> -->
+                    </table>
+                </div>
+                
+            </nb-card-body>
+        </nb-card>
+    
+    </div>
+</div>
+
+

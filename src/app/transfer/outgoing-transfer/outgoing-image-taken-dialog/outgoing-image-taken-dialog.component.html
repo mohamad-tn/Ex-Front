@@ -1,0 +1,38 @@
+<form class="form-horizontal" autocomplete="off" #imageTakenForm="ngForm" (ngSubmit)="save()">
+    <nb-card>
+        <nb-card-header>
+            {{'التقاط صورة' | localize}}
+        </nb-card-header>
+        <nb-card-body>
+            <div>
+                <webcam [height]="500" [width]="500" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+                    [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable" [videoOptions]="videoOptions" (cameraSwitched)="cameraWasSwitched($event)"
+                    (initError)="handleInitError($event)"></webcam>
+                <br/>
+                <div class="row">
+                    <div class="col-md-5"></div>
+                    <div class="col-md-1">
+                        <button nbButton status="primary" outline (click)="triggerSnapshot();" title="Take Picture">
+                            <nb-icon icon="camera-outline"></nb-icon>
+                        </button>
+                    </div>
+                    <div class="col-md-1">
+                        <button nbButton status="success" outline (click)="showNextWebcam(true);" title="Switch Camera">
+                            <nb-icon icon="refresh-outline"></nb-icon>
+                        </button>
+                    </div>
+                    <div class="col-md-5"></div>
+                </div>
+            </div>
+
+            <h4 *ngIf="errors.length > 0">Messages:</h4>
+            <ul *ngFor="let error of errors">
+                <li>{{error | json}}</li>
+            </ul>
+        </nb-card-body>
+        <nb-card-footer>
+            <!-- <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!imageTakenForm.form.valid || saving"
+            (onCancelClick)="dialogRef.close()"></abp-modal-footer> -->
+        </nb-card-footer>
+    </nb-card>
+</form>

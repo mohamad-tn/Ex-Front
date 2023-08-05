@@ -1,0 +1,29 @@
+<ejs-toolbar>
+    
+    <div>
+        <div style="width: 5px;"></div>
+        
+        <div *ngIf="permission.isGranted(createPermision)">
+            <button nz-button nzType="primary" nzShape="circle"><i class="fa fa-plus"
+                    (click)="showCreateDialog()"></i></button>
+        </div>
+        <div>
+            <button nz-button nzType="default" nzShape="round" (click)="clearFilters()">
+                <span class="fa-ico-po">
+                    <i class="fas fa-filter"></i>
+                    <i class="fas fa-slash" style="color:Tomato"></i>
+                </span>
+                {{'ClearFilters' | localize}}
+            </button>
+        </div>
+        <div>
+            <button nz-button nzType="default" nzShape="round" (click)="clearSorts()">
+                <span class="fa-ico-po">
+                    <i class="fas fa-sort-amount-up"></i>
+                    <i class="fas fa-slash" style="color:Tomato"></i>
+                </span>
+                {{'ClearSorts' | localize}}
+            </button>
+        </div>
+    </div>
+</ejs-toolbar>

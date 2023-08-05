@@ -1,0 +1,168 @@
+<form class="form-horizontal" autocomplete="off" #searchTreasuryBalanceForm="ngForm" (ngSubmit)="filter()">
+    <div class="row">
+        <div class="col-md-12">
+            <nb-card class="as-case-card">
+                <nb-card-header>
+                    <div class="row">
+                        <div class="col-md-11">
+                            <nb-actions>
+                                <nb-action class="control-item" icon="file-text-outline"></nb-action>
+                                <nb-action class="control-item ">
+                                    <h5>{{ "TreasuryBalanceStatement" | localize }}</h5>
+                                </nb-action>
+                            </nb-actions>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="button" nbButton status="basic" outline useExistingCss="true"
+                                        printTitle="treasury" printSectionId="print-section" ngxPrint>
+                                        <nb-icon icon="printer-outline"></nb-icon>
+                                    </button>
+                        </div>
+                    </div>
+                    
+                </nb-card-header>
+                <nb-card-body class="as-case-card-body">
+                    <!-- Search Box -->
+
+                    <div class="row">
+                        <div class="col-md-10">
+
+                            <div class="row">
+
+                                <div class="col-md-4">
+                                    <ejs-dropdownlist id='currencyId' name='currencyId' cssClass="as-sy-input"
+                                        [dataSource]='currencies' [enableRtl]="true" [fields]='fields' required
+                                        [(ngModel)]="input.currencyId" placeholder="{{'Currency' | localize}}"
+                                        #currencyIdModel="ngModel" #currencyIdEl></ejs-dropdownlist>
+                                    <abp-validation-summary [control]="currencyIdModel" [controlEl]="currencyIdEl">
+                                    </abp-validation-summary>
+                                </div>
+                                <div class="col-md-4">
+                                    <ejs-datepicker [format]="'dd/MM/yyyy'" id='fromDate' name='fromDate' cssClass="as-sy-input" locale='ar-SY'
+                                        required placeholder="{{ 'FromDate' | localize }}" [(ngModel)]="input.fromDate"
+                                        #fromDateModel="ngModel" #fromDateEl locale="en"></ejs-datepicker>
+                                    <abp-validation-summary [control]="fromDateModel" [controlEl]="fromDateEl">
+                                    </abp-validation-summary>
+                                </div>
+                                <div class="col-md-4">
+                                    <ejs-datepicker [format]="'dd/MM/yyyy'" id='toDate' name='toDate' cssClass="as-sy-input" locale='ar-SY'
+                                        required placeholder="{{ 'ToDate' | localize }}" [(ngModel)]="input.toDate"
+                                        #toDateModel="ngModel" #toDateEl locale="en"></ejs-datepicker>
+                                    <abp-validation-summary [control]="toDateModel" [controlEl]="toDateEl">
+                                    </abp-validation-summary>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button nbButton status="primary" type="submit"
+                                [disabled]="!searchTreasuryBalanceForm.form.valid">
+                                <nb-icon icon="search"></nb-icon>
+                                {{ 'Search' | localize }}
+                            </button>
+                        </div>
+                    </div>
+                    <hr />
+                    <!-- Grid -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ejs-grid id="CashFlowGrid" #cashFlowGrid [dataSource]="dataSource" [allowPaging]="true"
+                                [enableRtl]='true' [pageSettings]="pageSettings" locale="en" (actionComplete)="onActionComplete($event)" > 
+
+                                <e-columns>
+                                    <e-column field="id" headerText="Id" isPrimaryKey="true" [visible]="false">
+                                    </e-column>
+                                    <e-column  headerText="{{l('Balance')}}" textAlign="center">
+                                        <ng-template #template let-data>{{ numberWithCommas(data.balance) }}
+                                        </ng-template>
+                                    </e-column>
+                                    <e-column headerText="{{'Import' | localize}}" textAlign="center">
+                                        <ng-template #template let-data>{{ data.amount > 0 ? (data.amount) : '' }}
+                                        </ng-template>
+                                    </e-column>
+                                    <e-column headerText="{{'Export' | localize}}" textAlign="center">
+                                        <ng-template #template let-data>{{ data.amount < 0 ? (data.amount * -1) : ''
+                                                }}</ng-template>
+                                    </e-column>
+                                    <e-column field="type" headerText="{{l('Type')}}" textAlign="center"></e-column>
+                                    <e-column field="name" headerText="{{l('Name')}}" width="200" textAlign="center"></e-column>
+                                    <e-column field="date" format='dd/MM/yyyy hh:mm' type='date'
+                                        headerText="{{l('Date')}}" width="200" textAlign="center"></e-column>
+                                    <e-column field="note"  headerText="{{l('Note')}}" width="400" textAlign="center"></e-column>
+
+                                </e-columns>
+                            </ejs-grid>
+                        </div>
+                    </div>
+
+                </nb-card-body>
+            </nb-card>
+        </div>
+    </div>
+
+</form>
+
+<!-- Print ngx print -->
+<div id="print-section" dir="rtl" style="width:100%;display:none">
+    <div style="width:100%;text-align: center;">
+        <h3>كشف رصيد الصندوق</h3>
+    </div>
+    <br />
+    <div dir="rtl" style="width:80%;float: right;text-align: center;">
+        <table dir="rtl" style="color: #424242;border: 1px solid #dee2e6;width: 100%;margin-bottom: 1rem;background-color: transparent;border-collapse: collapse;display: table;text-indent: initial;border-spacing: 2px;">
+            <thead style="display: table-header-group;vertical-align: middle;border-color: inherit;">
+                <tr style="display: table-row;vertical-align: inherit;border-color: inherit;">
+                    <th style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{l('Currency')}}</th>
+                    <th style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">{{currencyName}}</th>
+                    
+                    <th style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{l('FromDate')}}</th>
+                    <th style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">{{fromDate | date:'dd/MM/yyyy'}}</th>
+                    
+                    <th style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{l('ToDate')}}</th>
+                    <th style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">{{toDate | date:'dd/MM/yyyy'}}</th>
+
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <br />
+    <div dir="rtl" style="width:100%;">
+        <table dir="rtl" style="color: #424242;border: 1px solid #dee2e6;width: 100%;margin-bottom: 1rem;background-color: transparent;border-collapse: collapse;display: table;text-indent: initial;border-spacing: 2px;">
+            <thead style="display: table-header-group;vertical-align: middle;border-color: inherit;">
+                <tr style="display: table-row;vertical-align: inherit;border-color: inherit;">
+                    <th  style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{l('Balance')}}</th>
+                    <th  style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{l('Import')}}</th>
+                    <th  style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{l('Export')}}</th>
+                    <th  style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{l('Type')}}</th>
+                    <th  style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{l('Name')}}</th>
+                    <th  style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{l('Date')}}</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of data" >
+                
+                <td style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                    <span>{{ numberWithCommas(item.currentBalance) }}</span>
+                </td>
+                <td style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                    <span>{{ item.amount > 0 ? (item.amount) : '' }}</span>
+                </td>
+                <td style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                    <span>{{ item.amount < 0 ? (item.amount) : '' }}</span>
+                </td>
+                <td style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                    <span>{{ item.type }}</span>
+                </td>
+                <td style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                    <span>{{ item.name }}</span>
+                </td>
+                <td style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                    <span *ngIf="item.date != undefined">{{ getRealDate(item.date) | date:'dd/MM/yyyy'}}</span>
+                    <span *ngIf="item.date == undefined"></span>
+                </td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+    
+</div>
+

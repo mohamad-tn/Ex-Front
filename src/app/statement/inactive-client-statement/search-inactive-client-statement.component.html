@@ -1,0 +1,38 @@
+<form class="form-horizontal" autocomplete="off" #searchDefaultersOfPaymentStatmentForm="ngForm" (ngSubmit)="save()">
+    <nb-card>
+        <nb-card-header>
+            {{'Search' | localize}}
+        </nb-card-header>
+        <nb-card-body>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="days">
+                            {{ "Days" | localize }}
+                        </label>
+                        <div class="col-md-9">
+                            <ejs-numerictextbox 
+                                id='days' 
+                                name='days' 
+                                locale="en"
+                                format='N'
+                                cssClass="as-sy-input"
+                                required
+                                [(ngModel)]="days"
+                                #daysModel="ngModel" 
+                                #daysEl
+                            ></ejs-numerictextbox>
+                            <abp-validation-summary [control]="daysModel" [controlEl]="daysEl">
+                            </abp-validation-summary>                          
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nb-card-body>
+        <nb-card-footer>
+            <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!searchDefaultersOfPaymentStatmentForm.form.valid || saving"
+                (onCancelClick)="dialogRef.close()"></abp-modal-footer>
+        </nb-card-footer>
+    </nb-card>
+</form>

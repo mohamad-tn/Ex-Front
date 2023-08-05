@@ -1,0 +1,604 @@
+
+    <div class="row">
+        <div class="col-md-12">
+            <form class="form-horizontal" autocomplete="off" #createTransferForm="ngForm" (ngSubmit)="save()">
+            <nb-card class="as-case-card">
+                <nb-card-header  class="as-head">
+                    <div class="header-container">
+                        <nb-actions>
+                            <nb-action class="control-item" icon="swap-outline"></nb-action>
+                            <nb-action class="control-item ">
+                                <h5>{{ "OutgoingTransfers" | localize }}</h5> 
+                            </nb-action>
+                            <nb-action class="control-item">
+                                <span class="as-list-number">{{'ListNumber' | localize}} : {{ outgoingTransfer.number }}</span>
+                            </nb-action>
+                        </nb-actions>
+                    </div>
+                    <div class="header-container">
+                        <nb-actions>
+                            <nb-action>
+                                <button nbButton status="primary" outline="true" type="submit" [disabled]="!createTransferForm.form.valid || saving">
+                                    <nb-icon icon="save" status="primary"></nb-icon>
+                                    {{ 'Save' | localize }}
+                                </button>
+                            </nb-action>
+                        </nb-actions>
+                    </div>
+                </nb-card-header>
+                <nb-card-body class="as-case-card-body">
+                    <!-- <div class="as-group row">
+                        <div class="col-md-12">
+                            <h6 class="as-group-elements"><span>{{'MainInfo' | localize}}</span></h6>
+                        </div>
+                    </div> -->
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row required">
+                                        <label class="col-md-3 col-form-label" for="date">
+                                            {{ "Date" | localize }}
+                                        </label>
+                                        <div  class="col-md-9">
+                                            <ejs-datepicker [format]="'dd/MM/yyyy'" 
+                                            id='date' 
+                                            name='date' 
+                                            cssClass="as-sy-input"
+                                            locale="en"
+                                            required
+                                            placeholder="{{ 'SelectDate' | localize }}"
+                                            [(ngModel)]="date"
+                                            #dateModel="ngModel" 
+                                            #dateEl
+                                            ></ejs-datepicker>
+                                            <abp-validation-summary [control]="dateModel" [controlEl]="dateEl">
+                                            </abp-validation-summary>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row required">
+                                        <label class="col-md-3 col-form-label" for="currency">
+                                            {{ "Currency" | localize }}
+                                        </label>
+                                        <div  class="col-md-9">
+                                            <ejs-dropdownlist 
+                                            id='currency' 
+                                            name='currency' 
+                                            cssClass="as-sy-input"
+                                            [dataSource]='currencies' 
+                                            (change)='onCurrencyChange($event)'
+                                            [enableRtl]="true" 
+                                            [fields]='fields' 
+                                            required
+                                            [(ngModel)]="outgoingTransfer.currencyId"
+                                            #currencyModel="ngModel" 
+                                            #currencyEl
+                                            ></ejs-dropdownlist>
+                                            <abp-validation-summary [control]="currencyModel" [controlEl]="currencyEl">
+                                            </abp-validation-summary>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row required">
+                                        <label class="col-md-3 col-form-label" for="toCompany">
+                                            {{ "ToCompany" | localize }}
+                                        </label>
+                                        <div  class="col-md-9">
+                                            <ejs-dropdownlist 
+                                            id='toCompany' 
+                                            name='toCompany' 
+                                            cssClass="as-sy-input"
+                                            
+                                            [dataSource]='companies' 
+                                            (change)='onToCompanyChange($event)'
+                                            [enableRtl]="true" 
+                                            [fields]='fields' 
+                                            required
+                                            [(ngModel)]="outgoingTransfer.toCompanyId"
+                                            #toCompanyModel="ngModel" 
+                                            #toCompanyEl
+                                            ></ejs-dropdownlist>
+                                            <abp-validation-summary [control]="toCompanyModel" [controlEl]="toCompanyEl">
+                                            </abp-validation-summary>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row required">
+                                        <label class="col-md-3 col-form-label" for="country">
+                                            {{ "Country" | localize }}
+                                        </label>
+                                        <div  class="col-md-9">
+                                            <ejs-dropdownlist 
+                                            id='country' 
+                                            name='country' 
+                                            cssClass="as-sy-input"
+                                            [dataSource]='countries' 
+                                            [enableRtl]="true" 
+                                            [fields]='fields' 
+                                            required
+                                            [(ngModel)]="outgoingTransfer.countryId"
+                                            #countryModel="ngModel" 
+                                            #countryEl
+                                            ></ejs-dropdownlist>
+                                            <abp-validation-summary [control]="countryModel" [controlEl]="countryEl">
+                                            </abp-validation-summary>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 balance-box">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label class="col-md-5 balance-text col-form-label" for="companyBalance">
+                                            {{ "PreviousCompanyBalance" | localize }}
+                                        </label>
+                                        <div  class="col-md-7">
+                                            <input class="e-input as-sy-input" type="text" tabindex="-1"  value="{{ getAmountWithCurrency(previousBalanceForToCompany) }}" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label class="col-md-5 balance-text col-form-label" for="companyBalance">
+                                            {{ "CurrentBalance" | localize }}
+                                        </label>
+                                        <div  class="col-md-7">
+                                            <input class="e-input as-sy-input" type="text" tabindex="-1"  value="{{ getAmountWithCurrency(currentBalanceForToCompany) }}" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label class="col-md-5 balance-text col-form-label" for="phone">
+                                            {{ "PhoneNumber" | localize }}
+                                        </label>
+                                        <div  class="col-md-7">
+                                            <input class="e-input as-sy-input" type="text" tabindex="-1"  [value]="companyPhone" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label class="col-md-5 balance-text col-form-label" for="phone">
+                                            {{ "Address" | localize }}
+                                        </label>
+                                        <div  class="col-md-7">
+                                            <input class="e-input as-sy-input" type="text" tabindex="-1"  [value]="companyAddress" readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                    <!-- Sender info -->
+                    <!-- <div class="as-group row">
+                        <div class="col-md-12">
+                            <h6 class="as-group-elements"><span>{{'SenderInfo' | localize}}</span></h6>
+                        </div>
+                    </div> -->
+                    <div class="row">
+                        <div [ngClass]="{'col-md-12' : outgoingTransfer.paymentType == 0 , 'col-md-8' : outgoingTransfer.paymentType != 0}">
+                            <div class="row">
+                                <div [ngClass]="{'col-md-4' : outgoingTransfer.paymentType == 0 , 'col-md-6' : outgoingTransfer.paymentType != 0}">
+                                    <div class="form-group row required">
+                                        <label class="col-md-3 col-form-label" for="name">
+                                            {{ "PaymentType" | localize }}
+                                        </label>
+                                        <div  class="col-md-9">
+                                            <ejs-dropdownlist 
+                                            id='paymentType' 
+                                            name='paymentType' 
+                                            cssClass="as-sy-input"
+                                            [dataSource]='paymentTypes' 
+                                            [enableRtl]="true" 
+                                            [fields]='fields' 
+                                            (change)="onPaymentTypeChange($event)"
+                                            required
+                                            [(ngModel)]="outgoingTransfer.paymentType"
+                                            #paymentTypeModel="ngModel" 
+                                            #paymentTypeEl
+                                            ></ejs-dropdownlist>
+                                            <abp-validation-summary [control]="paymentTypeModel" [controlEl]="paymentTypeEl">
+                                            </abp-validation-summary>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6" *ngIf="outgoingTransfer.paymentType == 1">
+                                    <div class="form-group row required">
+                                        <label class="col-md-3 col-form-label" for="fromClient">
+                                            {{ "Client" | localize }}
+                                        </label>
+                                        <div  class="col-md-9">
+                                            <ejs-dropdownlist 
+                                            id='fromClient' 
+                                            name='fromClient' 
+                                            (change)='onFromClientChange($event)'
+                                            cssClass="as-sy-input"
+                                            [dataSource]='clients' 
+                                            [enableRtl]="true" 
+                                            [fields]='fields' 
+                                            required
+                                            [(ngModel)]="outgoingTransfer.fromClientId"
+                                            #fromClientModel="ngModel" 
+                                            #fromClientEl
+                                            ></ejs-dropdownlist>
+                                            <abp-validation-summary [control]="fromClientModel" [controlEl]="fromClientEl">
+                                            </abp-validation-summary>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" *ngIf="outgoingTransfer.paymentType == 2">
+                                    <div class="form-group row required">
+                                        <label class="col-md-3 col-form-label" for="fromCompany">
+                                            {{ "FromCompany" | localize }}
+                                        </label>
+                                        <div  class="col-md-9">
+                                            <ejs-dropdownlist 
+                                            id='fromCompany' 
+                                            name='fromCompany' 
+                                            (change)='onFromCompanyChange($event)'
+                                            cssClass="as-sy-input"
+                                            [dataSource]='companies' 
+                                            [enableRtl]="true" 
+                                            [fields]='fields' 
+                                            required
+                                            [(ngModel)]="outgoingTransfer.fromCompanyId"
+                                            #fromCompanyModel="ngModel" 
+                                            #fromCompanyEl
+                                            ></ejs-dropdownlist>
+                                            <abp-validation-summary [control]="fromCompanyModel" [controlEl]="fromCompanyEl">
+                                            </abp-validation-summary>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div [ngClass]="{'col-md-4' : outgoingTransfer.paymentType == 0 , 'col-md-6' : outgoingTransfer.paymentType != 0}">
+                                    <div class="form-group row required">
+                                        <label class="col-md-3 col-form-label" for="sender">
+                                            {{ "Sender" | localize }}
+                                        </label>
+                                        <div  class="col-md-9">
+                                            <ejs-autocomplete  
+                                            id='sender' 
+                                            name='sender' 
+                                            cssClass="as-sy-input"
+                                            [dataSource]='customers' 
+                                            [autofill]='true'
+                                            [enableRtl]="true" 
+                                            [fields]='autoCompleteFields' 
+                                            [(ngModel)]="outgoingTransfer.sender.name"
+                                            #senderModel="ngModel" 
+                                            (change)="onChangeSender($event)"
+                                            #senderEl
+                                            ></ejs-autocomplete>
+                                            <abp-validation-summary [control]="senderModel" [controlEl]="senderEl">
+                                            </abp-validation-summary>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div [ngClass]="{'col-md-4' : outgoingTransfer.paymentType == 0 , 'col-md-6' : outgoingTransfer.paymentType != 0}">
+                                    <div class="form-group row">
+                                        <label class="col-md-3 col-form-label" for="senderPhone">
+                                            {{ "SenderPhone" | localize }}
+                                        </label>
+                                        <div  class="col-md-9">
+                                            <input  
+                                            type="text"
+                                            id='senderPhone' 
+                                            name='senderPhone' 
+                                            class="e-input as-sy-input"
+                                            autocomplete="off" 
+                                            [(ngModel)]="outgoingTransfer.sender.phoneNumber"
+                                            #senderPhoneModel="ngModel" 
+                                            #senderPhoneEl
+                                            />
+                                            <abp-validation-summary [control]="senderPhoneModel" [controlEl]="senderPhoneEl">
+                                            </abp-validation-summary>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="col-md-4 balance-box" *ngIf="outgoingTransfer.paymentType != 0">
+                            <div class="form-group row" >
+                                    <label class="col-md-5 balance-text col-form-label" for="companyBalance">
+                                        {{ "PreviousBalance" | localize }}
+                                    </label>
+                                    <div  class="col-md-7">
+                                        <input class="e-input as-sy-input" type="text" tabindex="-1"  value="{{ getAmountWithCurrency(previousBalance) }}" readonly />
+                                    </div>
+                            </div>
+                            <div class="form-group row" >
+                                <label class="col-md-5 balance-text col-form-label" for="companyBalance">
+                                    {{ "CurrentBalance" | localize }}
+                                </label>
+                                <div  class="col-md-7">
+                                    <input class="e-input as-sy-input" type="text" tabindex="-1"  value="{{ getAmountWithCurrency(currentBalance) }}" readonly />
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                    
+                    <!-- Receiver info -->
+                    <!-- <div class="as-group row" >
+                        <div class="col-md-12">
+                            <h6 class="as-group-elements"><span>{{'ReceiverInfo' | localize}}</span></h6>
+                        </div>
+                    </div> -->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group row required">
+                                <label class="col-md-3 col-form-label" for="beneficiary">
+                                    {{ "Beneficiary" | localize }}
+                                </label>
+                                <div  class="col-md-9">
+                                    <ejs-autocomplete 
+                                    id='beneficiary' 
+                                    name='beneficiary' 
+                                    cssClass="as-sy-input"
+                                    [dataSource]='customers' 
+                                    [autofill]='true'
+                                    [enableRtl]="true" 
+                                    [fields]='autoCompleteFields' 
+                                    [(ngModel)]="outgoingTransfer.beneficiary.name"
+                                    required
+                                    (change)="onChangeBeneficiary($event)"
+                                    #beneficiaryModel="ngModel" 
+                                    #beneficiaryEl
+                                    ></ejs-autocomplete>
+                                    <abp-validation-summary [control]="beneficiaryModel" [controlEl]="beneficiaryEl">
+                                    </abp-validation-summary>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="beneficiaryPhone">
+                                    {{ "BeneficiaryPhone" | localize }}
+                                </label>
+                                <div  class="col-md-9">
+                                    <input  
+                                    type="text"
+                                    id='beneficiaryPhone' 
+                                    name='beneficiaryPhone' 
+                                    class="e-input as-sy-input"
+                                    autocomplete="off" 
+                                    [(ngModel)]="outgoingTransfer.beneficiary.phoneNumber"
+                                    #beneficiaryPhoneModel="ngModel" 
+                                    #beneficiaryPhoneEl
+                                    />
+                                    <abp-validation-summary [control]="beneficiaryPhoneModel" [controlEl]="beneficiaryPhoneEl">
+                                    </abp-validation-summary>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="beneficiaryAddress">
+                                    {{ "BeneficiaryAddress" | localize }}
+                                </label>
+                                <div  class="col-md-9">
+                                    <textarea
+                                    id='beneficiaryAddress' 
+                                    name='beneficiaryAddress' 
+                                    class="e-input as-sy-input"
+                                    autocomplete="off"  
+                                    [(ngModel)]="outgoingTransfer.beneficiary.address"
+                                    #beneficiaryAddressModel="ngModel" 
+                                    #beneficiaryAddressEl
+                                    ></textarea>
+                                    <abp-validation-summary [control]="beneficiaryAddressModel" [controlEl]="beneficiaryAddressEl">
+                                    </abp-validation-summary>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Financial info -->
+                    <!-- <div class="as-group row" >
+                        <div class="col-md-12">
+                            <h6 class="as-group-elements"><span>{{'FinancialInfo' | localize}}</span></h6>
+                        </div>
+                    </div> -->
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group row required">
+                                        <label class="col-md-3 col-form-label" for="amount">
+                                            {{ "Amount" | localize }}
+                                        </label>
+                                        <div  class="col-md-9">
+                                            <ejs-numerictextbox [showSpinButton]="false"  
+                                            id='amount' 
+                                            name='amount' 
+                                            format='N'
+                                            min="1"
+                                            locale="en"
+                                            cssClass="as-sy-input"
+                                            [enableRtl]="true" 
+                                            (valueChange)="onAmountChange($event)"
+                                            required
+                                            [(ngModel)]="outgoingTransfer.amount"
+                                            #amountModel="ngModel" 
+                                            #amountEl
+                                            ></ejs-numerictextbox>
+                                            <abp-validation-summary [control]="amountModel" [controlEl]="amountEl">
+                                            </abp-validation-summary>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label class="col-md-3 col-form-label" for="commission">
+                                            {{ "Commission" | localize }}
+                                        </label>
+                                        <div  class="col-md-9">
+                                            <ejs-numerictextbox [showSpinButton]="false"  
+                                            id='commission' 
+                                            name='commission' 
+                                            format='N'
+                                            locale="en"
+                                            cssClass="as-sy-input"
+                                            (valueChange)="onAmountChange($event)"
+                                            [enableRtl]="true" 
+                                            required
+                                            [(ngModel)]="outgoingTransfer.commission"
+                                            #commissionModel="ngModel" 
+                                            #commissionEl
+                                            ></ejs-numerictextbox>
+                                            <abp-validation-summary [control]="commissionModel" [controlEl]="commissionEl">
+                                            </abp-validation-summary>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label class="col-md-3 col-form-label" for="companyCommission">
+                                            {{ "CompanyCommission" | localize }}
+                                        </label>
+                                        <div  class="col-md-9">
+                                            <ejs-numerictextbox [showSpinButton]="false"  
+                                            id='companyCommission' 
+                                            name='companyCommission' 
+                                            cssClass="as-sy-input"
+                                            format='N'
+                                            locale="en"
+                                            [enableRtl]="true" 
+                                            required
+                                            [(ngModel)]="outgoingTransfer.companyCommission"
+                                            (valueChange)="onCompanyCommissionChange($event)"
+                                            #companyCommissionModel="ngModel" 
+                                            #companyCommissionEl
+                                            ></ejs-numerictextbox>
+                                            <abp-validation-summary [control]="companyCommissionModel" [controlEl]="companyCommissionEl">
+                                            </abp-validation-summary>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label class="col-md-3 col-form-label" for="receivedAmount">
+                                            {{ "ReceivedAmount" | localize }}
+                                        </label>
+                                        <div  class="col-md-9">
+                                            <ejs-numerictextbox [showSpinButton]="false"  
+                                            id='receivedAmount' 
+                                            name='receivedAmount' 
+                                            format='N'
+                                            [readonly]="outgoingTransfer.paymentType != 1"
+                                            cssClass="as-sy-input"
+                                            [enableRtl]="true" 
+                                            locale="en"
+                                            [(ngModel)]="outgoingTransfer.receivedAmount"
+                                            #receivedAmountModel="ngModel" 
+                                            #receivedAmountEl
+                                            ></ejs-numerictextbox>
+                                            <abp-validation-summary [control]="receivedAmountModel" [controlEl]="receivedAmountEl">
+                                            </abp-validation-summary>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 balance-box">
+                            <div class="form-group row" >
+                                    <label class="col-md-5 balance-text col-form-label" for="companyBalance">
+                                        {{ "RequiredAmount" | localize }}
+                                    </label>
+                                    <div  class="col-md-7">
+                                        <input class="e-input as-sy-input" type="text" tabindex="-1"  value="{{ numberWithCommas(requiredAmount) }}" readonly />
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                    <!-- Additional info -->
+                    <!-- <div class="as-group row">
+                        <div class="col-md-12">
+                            <h6 class="as-group-elements"><span>{{'AdditionalInfo' | localize}}</span></h6>
+                        </div>
+                    </div> -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="reason">
+                                    {{ "Reason" | localize }}
+                                </label>
+                                <div  class="col-md-9">
+                                    <textarea
+                                    id='reason' 
+                                    name='reason' 
+                                    class="e-input as-sy-input"
+                                    autocomplete="off"  
+                                    [(ngModel)]="outgoingTransfer.reason"
+                                    #reasonModel="ngModel" 
+                                    #reasonEl
+                                    ></textarea>
+                                    <abp-validation-summary [control]="reasonModel" [controlEl]="reasonEl">
+                                    </abp-validation-summary>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Photo -->
+                        <div class="col-md-5">
+                            <div class="row" >
+                                
+                                <div class="col-md-4" >
+                                    <div class="snapshot">
+                                        <img class="taken-photo" width="150" height="127" src="assets/img/take-photo.jpg" (click)="takePhoto();" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4"  *ngFor="let image of outgoingTransfer.images" >
+                                    <div *ngIf="outgoingTransfer.images.length > 0">
+                                        <!-- <img class="taken-photo" [src]="image.fileAsBase64" width="200" height="177" /> -->
+                                        <div class="upload-img">
+                                            <img class="taken-photo" [src]="getSrc(image)" width="150" (click)="showUploadImageDialog($event)"
+                                                height="127"  />
+            
+                                            <div class="upload-img-trash">
+                                                <a (click)="deletePhoto(image)"><nb-icon icon="trash-2-outline"></nb-icon></a>
+                                            </div>
+                                            <div class="upload-img-view">
+                                                <a [nbPopover]="templateRef" nbPopoverTrigger="hint" nbPopoverPlacement="right"><nb-icon icon="maximize-outline"></nb-icon></a>
+                                                <ng-template #templateRef>
+                                                    <div style="margin-top: 20px; background-color:darkslategrey;border-radius: 0.25rem;">
+                                                        <img [src]="getSrc(image)" style="width: 40rem;border-radius: 0.25rem;" />
+                                                    </div>
+                                                </ng-template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                </nb-card-body>
+                <nb-card-footer>
+                    <!-- <button nbButton status="primary" type="submit" [disabled]="!createTransferForm.form.valid || saving">
+                        <nb-icon icon="save"></nb-icon>
+                        {{ 'Save' | localize }}
+                    </button> -->
+                </nb-card-footer>
+            </nb-card>
+        </form>
+        </div>
+    </div>
+    
+

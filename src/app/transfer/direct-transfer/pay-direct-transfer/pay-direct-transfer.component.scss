@@ -1,0 +1,46 @@
+@import '../../../../@theme/styles/themes';
+
+@include nb-install-component() {
+    // nb-card {
+    //     width: 40rem;
+    // }
+    nb-card-body{
+        min-height: 60vh;
+    }
+
+    .taken-photo{
+        border: 2px #6200ee dashed;
+        // width: 90%;
+        // height: auto;
+        margin: 5px;
+    }
+
+
+    .upload-img{
+        position: relative;
+        width:200px;
+        height: 177px;;
+    }
+    
+    .upload-img img {
+        
+        border: 2px #6200ee dashed;
+        
+    }
+
+    .upload-img .upload-img-trash{
+        position:absolute; 
+        top:5px; 
+        left:5px;
+        cursor: pointer;
+        color: #b00020;
+    }
+
+    .upload-img .upload-img-view{
+        position:absolute; 
+        top:5px; 
+        left:25px;
+        cursor: pointer;
+        color: #6200ee;
+    }
+}

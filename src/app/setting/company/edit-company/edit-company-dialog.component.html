@@ -1,0 +1,153 @@
+<form class="form-horizontal" autocomplete="off" #createCompanyForm="ngForm" (ngSubmit)="save()">
+    <nb-card>
+        <nb-card-header>
+            {{'EditCompany' | localize}}
+        </nb-card-header>
+        <nb-card-body>
+            <tabset>
+                <tab [heading]="'CompanyInfo' | localize" class="pt-3 px-2">
+                    <!--Name-->
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="name">
+                            {{ "Name" | localize }}
+                        </label>
+                        <div  class="col-md-9">
+                            <input nbInput type="text" class="form-control"
+                            fullWidth
+                            name="name" 
+                            id="name" 
+                            minlength="2" 
+                            required 
+                            [(ngModel)]="company.name" 
+                            #nameModel="ngModel" 
+                            #nameEl />
+                            <abp-validation-summary [control]="nameModel" [controlEl]="nameEl">
+                            </abp-validation-summary>
+                        </div>
+                    </div>
+                    <!--Phone-->
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="phone">
+                            {{ "PhoneNumber" | localize }}
+                        </label>
+                        <div  class="col-md-9">
+                            <input 
+                            nbInput
+                            fullWidth
+                            type="text"
+                            class="form-control"
+                            name="phone" 
+                            id="phone" 
+                            minlength="2" 
+                            required 
+                            [(ngModel)]="company.phone" 
+                            #phoneModel="ngModel" 
+                            #phoneEl />
+                            <abp-validation-summary [control]="phoneModel" [controlEl]="phoneEl">
+                            </abp-validation-summary>
+                        </div>
+                    </div>
+                    <!--Address-->
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="address">
+                            {{ "Address" | localize }}
+                        </label>
+                        <div  class="col-md-9">
+                            <input 
+                            nbInput
+                            fullWidth
+                            type="text"
+                            class="form-control"
+                            name="address" 
+                            id="address" 
+                            minlength="2" 
+                            required 
+                            [(ngModel)]="company.address" 
+                            #addressModel="ngModel" 
+                            #addressEl />
+                            <abp-validation-summary [control]="addressModel" [controlEl]="addressEl">
+                            </abp-validation-summary>
+                        </div>
+                    </div>
+                </tab>
+                <!-- Company Balances -->
+                <tab [heading]="'CompanyBalances' | localize" class="pt-3 px-2">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="name">
+                                    {{ "Currency" | localize }}
+                                </label>
+                                <div class="col-md-9">
+                                    <ejs-dropdownlist name="currencyId" id="currencyId" [dataSource]='currencies'
+                                        [fields]='currencyFields' cssClass="as-sy-input" [enableRtl]='true'
+                                        [(ngModel)]="companyBalance.currencyId"></ejs-dropdownlist>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="name">
+                                    {{ "Balance" | localize }}
+                                </label>
+                                <div class="col-md-9">
+                                    <ejs-numerictextbox [showSpinButton]="false"  format='N' name="balance" [enableRtl]="true"
+                                        cssClass="as-sy-input" id="balance" [(ngModel)]="companyBalance.balance">
+                                    </ejs-numerictextbox>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <ejs-switch name="forHim" id="forHim" onLabel="له" offLabel="عليه" [enableRtl]='true' [(ngModel)]="forHim">
+                            </ejs-switch>
+                            <label *ngIf="forHim == true" class="col-md-3 col-form-label" for="forHim">
+                                {{ "ForHim" | localize }}
+                            </label>
+                            <label *ngIf="forHim == false" class="col-md-3 col-form-label" for="forHim">
+                                {{ "OnHim" | localize }}
+                            </label>
+                        </div>
+                        <div class="col-md-1">
+                            <a nbButton shape="round" status="primary" (click)="saveCompanyBalance($event)"><i
+                                    class="fa fa-save"></i></a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>{{'Currency' | localize}}</th>
+                                        <th>{{'Balance' | localize}}</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let companyBalance of company.companyBalances">
+                                        <td><span class="v-text-primary">
+                                            {{getCurrencyName(companyBalance.currencyId)}}</span>
+                                        </td>
+                                        <td>
+                                            <span class="v-text-primary">{{ getBalance(companyBalance.balance) }}</span>
+                                        </td>
+                                        
+                                        <td>
+                                            <span><a (click)="editCompanyBalance(companyBalance)" style="cursor: point;">
+                                                    <nb-icon status="primary" icon="edit-outline"></nb-icon>
+                                                </a></span>
+                                            </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </tab>
+            </tabset>
+        </nb-card-body>
+        <nb-card-footer>
+            <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!createCompanyForm.form.valid || saving"
+            (onCancelClick)="dialogRef.close()"></abp-modal-footer>
+        </nb-card-footer>
+    </nb-card>
+</form>
+

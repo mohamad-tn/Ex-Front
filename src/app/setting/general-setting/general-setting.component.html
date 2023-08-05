@@ -1,0 +1,84 @@
+<form class="form-horizontal" autocomplete="off" #editCountryForm="ngForm" (ngSubmit)="save()">
+    <nb-card>
+        <nb-card-header>
+            <nb-actions>
+                <nb-action class="control-item" icon="settings-outline"></nb-action>
+                <nb-action class="control-item ">
+                    <h4>{{ "الاعدادات" | localize }} <small>هذه الاعدادات خاصة بمدير النظام  </small></h4> 
+                </nb-action>
+            </nb-actions>
+        </nb-card-header>
+        <nb-card-body>
+            <div class="row">
+                <div class="col-md-6">
+                    <!--Name-->
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="companyName">
+                            {{ "الشركة" | localize }}
+                        </label>
+                        <div class="col-md-9">
+                            <input nbInput type="text" class="form-control" name="companyName" id="companyName" minlength="2"
+                                required [(ngModel)]="generalSetting.companyName" #companyNameModel="ngModel" #companyNameEl />
+                            <abp-validation-summary [control]="companyNameModel" [controlEl]="companyNameEl">
+                            </abp-validation-summary>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <!--Password-->
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="editPassword">
+                            {{ "كلمة مرور التعديل" | localize }}
+                        </label>
+                        <div class="col-md-9">
+                            <input nbInput type="password" class="form-control" name="editPassword" id="editPassword" minlength="2"
+                                required [(ngModel)]="generalSetting.editPassword" #editPasswordModel="ngModel" #editPasswordEl />
+                            <abp-validation-summary [control]="editPasswordModel" [controlEl]="editPasswordEl">
+                            </abp-validation-summary>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <!--Password-->
+                    <div class="form-group row ">
+                        <label class="col-md-3 col-form-label" for="dbSuffex">
+                            {{ "اسم قاعدة البيانات" | localize }}
+                        </label>
+                        <div class="col-md-9">
+                            <input nbInput type="text" class="form-control" name="dbSuffex" id="dbSuffex" minlength="2"
+                                [(ngModel)]="generalSetting.dbSuffex" #dbSuffexModel="ngModel" #dbSuffexEl />
+                            <abp-validation-summary [control]="dbSuffexModel" [controlEl]="dbSuffexEl">
+                            </abp-validation-summary>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    
+                </div>
+            </div>
+        </nb-card-body>
+        <nb-card-footer>
+            <div class="btn-footer justify-content-between">
+                <button nbButton status="primary" type="submit" [disabled]="!editCountryForm.form.valid || saving">
+                    <nb-icon icon="save-outline"></nb-icon>
+                    {{'Save' | localize}}
+                </button>
+
+                <button nbButton type="button" status="danger" [disabled]="saving" (click)="resetDb()">
+                    <nb-icon icon="clipboard-outline"></nb-icon>
+                    تصفير قاعدة البيانات
+                </button>
+            </div>
+        </nb-card-footer>
+    </nb-card>
+</form>

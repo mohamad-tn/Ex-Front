@@ -1,0 +1,179 @@
+<form class="form-horizontal" autocomplete="off" #createClientForm="ngForm" (ngSubmit)="save()">
+    <nb-card>
+        <nb-card-header>
+            {{'EditClient' | localize}}
+        </nb-card-header>
+        <nb-card-body>
+            <tabset>
+                <tab [heading]="'ClientInfo' | localize" class="pt-3 px-2">
+                    <!--Name-->
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="name">
+                            {{ "Name" | localize }}
+                        </label>
+                        <div class="col-md-9">
+                            <input nbInput type="text" class="form-control" fullWidth name="name" id="name"
+                                minlength="2" required [(ngModel)]="client.name" #nameModel="ngModel" #nameEl />
+                            <abp-validation-summary [control]="nameModel" [controlEl]="nameEl">
+                            </abp-validation-summary>
+                        </div>
+                    </div>
+                    <!--Address-->
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="address">
+                            {{ "Address" | localize }}
+                        </label>
+                        <div class="col-md-9">
+                            <input nbInput type="text" class="form-control" fullWidth name="address" id="address"
+                                minlength="2" required [(ngModel)]="client.address" #addressModel="ngModel"
+                                #addressEl />
+                            <abp-validation-summary [control]="addressModel" [controlEl]="addressEl">
+                            </abp-validation-summary>
+                        </div>
+                    </div>
+                    <!--Province-->
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="provice">
+                            {{ "Province" | localize }}
+                        </label>
+                        <div class="col-md-9">
+                            <ejs-dropdownlist #provinceDropdown cssClass="as-sy-input" id='provice' [enableRtl]="true"
+                                [(ngModel)]="client.provinceId" #proviceModel="ngModel" #proviceEl name='provice'
+                                [dataSource]='provinces' [fields]='provinceFields'></ejs-dropdownlist>
+
+                            <abp-validation-summary [control]="proviceModel" [controlEl]="proviceEl">
+                            </abp-validation-summary>
+                        </div>
+                    </div>
+                    <!-- Activated-->
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="activated">
+                            {{ "Activated" | localize }}
+                        </label>
+                        <div class="col-md-9">
+                            <nb-checkbox status="primary" (valueChange)="onActivatedValueChanged($event)"
+                                [checked]="client.activated"></nb-checkbox>
+                        </div>
+                    </div>
+                </tab>
+                <!-- Client Balances -->
+                <tab [heading]="'ClientBalances' | localize" class="pt-3 px-2">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="name">
+                                    {{ "Currency" | localize }}
+                                </label>
+                                <div class="col-md-9">
+                                    <ejs-dropdownlist name="currencyId" id="currencyId" [dataSource]='currencies'
+                                        [fields]='currencyFields' cssClass="as-sy-input" [enableRtl]='true'
+                                        [(ngModel)]="clientBalance.currencyId"></ejs-dropdownlist>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="name">
+                                    {{ "Balance" | localize }}
+                                </label>
+                                <div class="col-md-9">
+                                    <ejs-numerictextbox [showSpinButton]="false"  format='N' name="balance" [enableRtl]="true"
+                                        cssClass="as-sy-input" id="balance" [(ngModel)]="clientBalance.balance">
+                                    </ejs-numerictextbox>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <ejs-switch name="forHim" id="forHim" onLabel="له" offLabel="عليه" [enableRtl]='true' [(ngModel)]="forHim">
+                            </ejs-switch>
+                            <label *ngIf="forHim == true" class="col-md-3 col-form-label" for="forHim">
+                                {{ "ForHim" | localize }}
+                            </label>
+                            <label *ngIf="forHim == false" class="col-md-3 col-form-label" for="forHim">
+                                {{ "OnHim" | localize }}
+                            </label>
+                        </div>
+                        <div class="col-md-1">
+                            <a nbButton shape="round" status="primary" (click)="saveClientBalance($event)"><i
+                                    class="fa fa-save"></i></a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>{{'Currency' | localize}}</th>
+                                        <th>{{'Balance' | localize}}</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let clientBalance of client.clientBalances">
+                                        <td><span class="v-text-primary">
+                                            {{getCurrencyName(clientBalance.currencyId)}}</span>
+                                        </td>
+                                        <td>
+                                            <span class="v-text-primary">{{ getBalance(clientBalance.balance) }}</span>
+                                        </td>
+                                        
+                                        <td>
+                                            <span><a (click)="editClientBalance(clientBalance)" style="cursor: point;">
+                                                    <nb-icon status="primary" icon="edit-outline"></nb-icon>
+                                                </a></span>
+                                            </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </tab>
+                <!-- Client Phones -->
+                <tab [heading]="'ClientPhones' | localize" class="pt-3 px-2">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="phoneNumber">
+                                    {{ "PhoneNumber" | localize }}
+                                </label>
+                                <div class="col-md-9">
+                                    <input nbInput type="text" class="form-control" name="phoneNumber" id="phoneNumber"
+                                        [(ngModel)]="clientPhone.phoneNumber" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <a nbButton shape="round" status="primary" (click)="addClientPhone($event)"><i
+                                    class="fa fa-plus"></i></a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>{{'PhoneNumber' | localize}}</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let clientPhone of client.clientPhones">
+                                        <td><span class="v-text-primary"> {{clientPhone.phoneNumber}}</span></td>
+                                        <td><span><a (click)="removeClientPhone(clientPhone.phoneNumber)">
+                                                    <nb-icon status="danger" icon="trash-2-outline"></nb-icon>
+                                                </a></span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </tab>
+            </tabset>
+        </nb-card-body>
+        <nb-card-footer>
+            <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!createClientForm.form.valid || saving"
+                (onCancelClick)="dialogRef.close()"></abp-modal-footer>
+        </nb-card-footer>
+    </nb-card>
+</form>

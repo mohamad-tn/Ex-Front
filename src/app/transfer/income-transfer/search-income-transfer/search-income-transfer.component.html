@@ -1,0 +1,99 @@
+<form class="form-horizontal" autocomplete="off" #searshIncomeForm="ngForm" (ngSubmit)="search()">
+    <nb-card class="as-case-card">
+        <nb-card-header>
+            <nb-actions>
+                <nb-action class="control-item" icon="search-outline"></nb-action>
+                <nb-action class="control-item ">
+                    <h5>{{ "Search" | localize }}</h5>
+                </nb-action>
+            </nb-actions>
+            
+        </nb-card-header>
+        <nb-card-body class="as-case-card-body">
+            <div class="row">
+                
+                <div class="col-md-6">
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="fromDate">
+                            {{ "FromDate" | localize }}
+                        </label>
+                        <div  class="col-md-9">
+                            <ejs-datepicker [format]="'dd/MM/yyyy'" 
+                            id='fromDate' 
+                            name='fromDate' 
+                            cssClass="as-sy-input"
+                            locale='en'
+                            placeholder="{{ 'SelectDate' | localize }}"
+                            [(ngModel)]="fromDate"
+                            #fromDateModel="ngModel" 
+                            #fromDateEl
+                            ></ejs-datepicker>
+                            <abp-validation-summary [control]="fromDateModel" [controlEl]="fromDateEl">
+                            </abp-validation-summary>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row ">
+                        <label class="col-md-3 col-form-label" for="toDate">
+                            {{ "ToDate" | localize }}
+                        </label>
+                        <div  class="col-md-9">
+                            <ejs-datepicker [format]="'dd/MM/yyyy'" 
+                            id='toDate' 
+                            name='toDate' 
+                            cssClass="as-sy-input"
+                            locale='en'
+                            placeholder="{{ 'SelectDate' | localize }}"
+                            [(ngModel)]="toDate"
+                            #toDateModel="ngModel" 
+                            #toDateEl
+                            ></ejs-datepicker>
+                            <abp-validation-summary [control]="toDateModel" [controlEl]="toDateEl">
+                            </abp-validation-summary>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="companyId">
+                            {{ "FromCompany" | localize }}
+                        </label>
+                        <div  class="col-md-9">
+                            <ejs-dropdownlist 
+                            id='companyId' 
+                            name='companyId' 
+                            cssClass="as-sy-input"
+                            [dataSource]='companies' 
+                            [enableRtl]="true" 
+                            [fields]='fields' 
+                            [(ngModel)]="companyId"
+                            #companyIdModel="ngModel" 
+                            #companyIdEl
+                            ></ejs-dropdownlist>
+                            <abp-validation-summary [control]="companyIdModel" [controlEl]="companyIdEl">
+                            </abp-validation-summary>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="fromDate">
+                            {{ "FaxNumber" | localize }}
+                        </label>
+                        <div  class="col-md-9">
+                            <ejs-numerictextbox [showSpinButton]="false"  id='number' name='number' cssClass="as-sy-input"
+                                [enableRtl]="true" format="N"
+                                [(ngModel)]="number" ></ejs-numerictextbox>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nb-card-body>
+        <nb-card-footer>
+            <abp-modal-footer [saveDisabled]="checkDisabled()"
+            (onCancelClick)="dialogRef.close()"></abp-modal-footer>
+    </nb-card-footer>
+    </nb-card>
+</form>
+

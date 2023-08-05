@@ -1,0 +1,14 @@
+@import "../../../@theme/styles/themes";
+
+.fa-ico-po{
+    margin-left:5px;
+    margin-right:5px;
+    display: inline-block;
+    position: relative;
+}
+.fa-ico-po > .fa-slash{
+    position: absolute;
+    top: 3px;
+    left: -4px;
+}
+

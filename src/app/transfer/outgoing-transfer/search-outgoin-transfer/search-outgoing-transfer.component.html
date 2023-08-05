@@ -1,0 +1,164 @@
+<form class="form-horizontal" autocomplete="off" #searchTransferForm="ngForm" (ngSubmit)="search()">
+    <div class="row">
+        <div class="col-md-12">
+            <nb-card class="as-case-card">
+                <nb-card-header>
+                    <div class="header-container">
+                        <nb-actions>
+                            <nb-action class="control-item" icon="swap-outline"></nb-action>
+                            <nb-action class="control-item ">
+                                <h5>{{ "SearchOutgoingTransfers" | localize }}</h5>
+                            </nb-action>
+                        </nb-actions>
+                    </div>
+                    
+                </nb-card-header>
+                <nb-card-body class="as-case-card-body">
+                    <!-- <ejs-accordion #accordion>
+                        <e-accordionitems>
+                            <e-accordionitem expanded="true">
+                                <ng-template #header>
+                                    <div class="as-sy-input">{{ "Search" | localize }}</div>
+                                </ng-template>
+                                <ng-template #content>
+
+                                    
+                                </ng-template>
+                            </e-accordionitem>
+                        </e-accordionitems>
+                    </ejs-accordion> -->
+                    <div class="row">
+                        <div class="col-md-11">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <ejs-numerictextbox [showSpinButton]="false"  id='number' name='number' cssClass="as-sy-input"
+                                        [enableRtl]="true" format="N"
+                                        [(ngModel)]="outgoingTransferInput.number" floatLabelType="Auto"
+                                        placeholder="{{ 'ListNumber' | localize }}"></ejs-numerictextbox>
+                                </div>
+                                <div class="col-md-3">
+                                    <ejs-datepicker [format]="'dd/MM/yyyy'" id='fromDate' name='fromDate' cssClass="as-sy-input"
+                                        required floatLabelType="Auto" placeholder="{{ 'FromDate' | localize }}"
+                                        [(ngModel)]="outgoingTransferInput.fromDate" #fromDateModel="ngModel"
+                                        locale="en" #fromDateEl>
+                                    </ejs-datepicker>
+                                    <abp-validation-summary [control]="fromDateModel" [controlEl]="fromDateEl">
+                                    </abp-validation-summary>
+                                </div>
+                                <div class="col-md-3">
+                                    <ejs-datepicker [format]="'dd/MM/yyyy'" id='toDate' name='toDate' cssClass="as-sy-input" required
+                                        floatLabelType="Auto" placeholder="{{ 'ToDate' | localize }}"
+                                        [(ngModel)]="outgoingTransferInput.toDate" #toDateModel="ngModel"
+                                        locale="en" #toDateEl>
+                                    </ejs-datepicker>
+                                    <abp-validation-summary [control]="toDateModel" [controlEl]="toDateEl">
+                                    </abp-validation-summary>
+                                </div>
+                                <div class="col-md-3">
+                                    <ejs-dropdownlist id='paymentType' name='paymentType' cssClass="as-sy-input"
+                                        [dataSource]='paymentTypes' [enableRtl]="true" [fields]='fields'
+                                        [(ngModel)]="outgoingTransferInput.paymentType" floatLabelType="Auto"
+                                        placeholder="{{ 'PaymentType' | localize }}"></ejs-dropdownlist>
+                                </div>
+                                <div class="col-md-3" *ngIf="outgoingTransferInput.paymentType == 1">
+                                    <ejs-dropdownlist id='clientId' name='clientId' cssClass="as-sy-input"
+                                        [dataSource]='clients' [enableRtl]="true" [fields]='fields'
+                                        [(ngModel)]="outgoingTransferInput.clientId"
+                                        placeholder="{{'Client' | localize}}" floatLabelType="Auto">
+                                    </ejs-dropdownlist>
+                                </div>
+                                <div class="col-md-3" *ngIf="outgoingTransferInput.paymentType == 2">
+                                    <ejs-dropdownlist id='companyId' name='companyId' cssClass="as-sy-input"
+                                        [dataSource]='companies' floatLabelType="Auto" [enableRtl]="true"
+                                        [fields]='fields' [(ngModel)]="outgoingTransferInput.companyId"
+                                        placeholder="{{'Company' | localize}}">
+                                    </ejs-dropdownlist>
+                                </div>
+                                <div class="col-md-3">
+                                    <ejs-dropdownlist id='countryId' name='countryId' cssClass="as-sy-input"
+                                        [dataSource]='countries' floatLabelType="Auto" [enableRtl]="true"
+                                        [fields]='fields' [(ngModel)]="outgoingTransferInput.countryId"
+                                        placeholder="{{'Country' | localize}}">
+                                    </ejs-dropdownlist>
+                                </div>
+                                <div class="col-md-3">
+                                    <ejs-textbox id='beneficiary' name='beneficiary' cssClass="as-sy-input"
+                                        floatLabelType="Auto" [enableRtl]="true"
+                                        [(ngModel)]="outgoingTransferInput.beneficiary"
+                                        placeholder="{{'Beneficiary' | localize}}">
+                                    </ejs-textbox>
+                                </div>
+                                <div class="col-md-3">
+                                    <ejs-textbox id='beneficiaryAddress' name='beneficiaryAddress'
+                                        cssClass="as-sy-input" floatLabelType="Auto" [enableRtl]="true"
+                                        [(ngModel)]="outgoingTransferInput.beneficiaryAddress"
+                                        placeholder="{{'BeneficiaryAddress' | localize}}">
+                                    </ejs-textbox>
+                                </div>
+                                <div class="col-md-3">
+                                    <ejs-textbox id='sender' name='sender' cssClass="as-sy-input"
+                                        floatLabelType="Auto" [enableRtl]="true"
+                                        [(ngModel)]="outgoingTransferInput.sender"
+                                        placeholder="{{'Sender' | localize}}">
+                                    </ejs-textbox>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <br />
+                            <button nbButton status="primary" type="submit"
+                                [disabled]="!searchTransferForm.form.valid">
+                                <nb-icon icon="search"></nb-icon>
+                                {{ 'Search' | localize }}
+                            </button>
+                        </div>
+                    </div>
+                    <br />
+                    <!-- Grid -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ejs-grid id="SearchGrid" #searchGrid [dataSource]="dataSource" [allowPaging]="true"
+                                [enableRtl]='true' height='{{gridHeight}}' width='100%' [pageSettings]="pageSettings">
+                                <e-columns>
+                                    <e-column headerText="{{l('Commands')}}" textAlign='Center' width="150">
+                                        <ng-template #template let-data>
+                                            <nb-actions [size]="'small'">
+                                                <nb-action class="control-item" icon="edit-outline" (click)="showEditPage(data.id)"></nb-action>
+                                                <nb-action class="control-item" icon="trash-2-outline" (click)="delete(data.id)"></nb-action>
+                                            </nb-actions>
+                                        </ng-template>
+                                    </e-column>
+                                    <e-column field="id" headerText="Id" isPrimaryKey="true" [visible]="false">
+                                    </e-column>
+                                    <e-column field="toCompany.name" headerText="{{'ToCompany' | localize}}" width="150"></e-column>
+                                    <e-column field="paymentType" headerText="{{'PaymentType' | localize}}" width="150">
+                                        <ng-template #template let-data>
+                                            <span *ngIf="data.paymentType == 0 ">نقدي</span>
+                                            <span *ngIf="data.paymentType == 1 ">ذمم عملاء</span>
+                                            <span *ngIf="data.paymentType == 2 ">ذمم شركات</span>
+                                        </ng-template>
+                                    </e-column>
+                                    
+                                    <e-column headerText="{{'From-Company-Client' | localize}}" width="150">
+                                        <ng-template #template let-data>
+                                            <span *ngIf="data.client != undefined">{{'Client' | localize}} / {{data.client.name}}</span>
+                                            <span *ngIf="data.company != undefined">{{'Company' | localize}} / {{data.company.name}}</span>
+                                        </ng-template>
+                                        
+                                    </e-column>
+                                    <e-column field="amount" headerText="{{'Amount' | localize}}" width ="150"></e-column>
+                                    <e-column field="commission" headerText="{{'Commission' | localize}}" width ="150"></e-column>
+                                    <e-column field="companyCommission" headerText="{{'CompanyCommission' | localize}}" width ="150"></e-column>
+                                    <e-column field="receivedAmount" headerText="{{'ReceivedAmount' | localize}}" width ="150"></e-column>
+                                    <e-column field="date" headerText="{{'Date' | localize}}" width="200"></e-column>
+                                    
+                                </e-columns>
+                            </ejs-grid>
+                        </div>
+                    </div>
+
+                </nb-card-body>
+            </nb-card>
+        </div>
+    </div>
+</form>

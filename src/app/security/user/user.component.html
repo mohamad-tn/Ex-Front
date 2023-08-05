@@ -1,0 +1,83 @@
+<div [@routerTransition]>
+    <div class="row">
+        <div class="col-md-12">
+            
+            <nb-card class="as-case-card">
+            <nb-card-header>
+                <nb-actions>
+                    <nb-action class="control-item" icon="people-outline"></nb-action>
+                    <nb-action class="control-item ">
+                        <h5>{{ "Users" | localize }}</h5>
+                    </nb-action>
+                </nb-actions>
+            </nb-card-header>
+            <nb-card-body class="as-case-card-body">
+                <ejs-grid id="UserGrid" #userGrid [dataSource]="users" [allowPaging]="true"
+                [allowSorting]="true" [allowFiltering]="true" [enableRtl]='true'
+                [pageSettings]="pageSettings" [filterSettings]='filterOption'>
+                <!--toolbar-->
+                <ng-template #toolbarTemplate>
+                    <ejs-toolbar>
+                        <div>
+                            <div style="width: 5px;"></div>
+                            
+                            <div >
+                                <button nbButton shape="round" status="primary" (click)="showCreateDialog()" *ngIf="permission.isGranted('Pages.Users.Create')"><i class="fa fa-plus"></i></button>
+                            </div>
+                            <div>
+                                <button nbButton shape="round" status="primary" outline (click)="clearFilters()">
+                                    <span class="fa-ico-po">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-slash"  style="color:Tomato"></i>
+                                    </span>
+                                    {{'ClearFilters' | localize}}
+                                </button>
+                            </div>
+                            <div>
+                                <button nbButton shape="round" status="primary" outline (click)="clearSorts()">
+                                    <span class="fa-ico-po">
+                                        <i class="fas fa-sort-amount-up"></i>
+                                        <i class="fas fa-slash" style="color:Tomato"></i>
+                                    </span>
+                                    {{'ClearSorts' | localize}}
+                                </button>
+                            </div>
+                        </div>
+                    </ejs-toolbar>
+                    
+                </ng-template>
+                <!--Columns-->
+                <e-columns>
+                    <e-column headerText="{{l('Commands')}}" textAlign='Center' width="200"
+                        *ngIf="permission.isGranted('Pages.Users.Edit') || permission.isGranted('Pages.Users.Delete') || permission.isGranted('Pages.Users.ResetPassword')">
+                        <ng-template #template let-data>
+                            <nb-actions [size]="'small'">
+                                <nb-action
+                                
+                                nbTooltip="{{'EditUser' | localize}}" nbTooltipStatus="primary" 
+                                class="control-item" icon="edit-outline" (click)="showEditDialog(data.id)" *ngIf="permission.isGranted('Pages.Users.Edit')"></nb-action>
+                                <nb-action nbTooltip="{{'DeleteUser' | localize}}" nbTooltipStatus="danger" class="control-item" icon="trash-2-outline" (click)="delete(data)" *ngIf="permission.isGranted('Pages.Users.Delete')"></nb-action>
+                                <nb-action nbTooltip="{{'ResetPassword' | localize}}" nbTooltipStatus="success" class="control-item" icon="lock-outline" (click)="showResetPasswordUserDialog(data)" *ngIf="permission.isGranted('Pages.Users.ResetPassword')">ffff</nb-action>
+                            </nb-actions>
+                        </ng-template>
+                    </e-column>
+                    <e-column field="id" headerText="Id" isPrimaryKey="true" [visible]="false"></e-column>
+                    <e-column field="userName" headerText="{{l('UserName')}}" textAlign="center" width="300"></e-column>
+                    <e-column field="fullName" headerText='{{ l("FullName") }}' textAlign="center" width="200"></e-column>
+                    <e-column field="emailAddress" headerText='{{ l("EmailAddress") }}' textAlign="center" width="300"></e-column>
+                    
+                    <!-- Is Active -->
+                    <e-column field="isActive" headerText='{{ l("IsActive") }}' textAlign="center" width="200">
+                        <ng-template #template let-data>
+                            <nb-checkbox status="primary" [checked]="data.isActive" disabled></nb-checkbox>
+                        </ng-template>
+                    </e-column>
+                </e-columns>
+                
+            </ejs-grid>
+            </nb-card-body>
+            </nb-card>
+        </div>
+    </div>
+    
+</div>

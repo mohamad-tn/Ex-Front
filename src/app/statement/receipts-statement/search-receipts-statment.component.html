@@ -1,0 +1,115 @@
+<form class="form-horizontal" autocomplete="off" #searchReceiptsForm="ngForm" (ngSubmit)="save()">
+    <nb-card>
+        <nb-card-header>
+            {{'Search' | localize}}
+        </nb-card-header>
+        <nb-card-body>
+            <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    <label class="col-md-12 col-form-label" for="mainAccount">
+                        {{ "MainAccount" | localize }}
+                    </label>
+                    <div class="col-md-12">
+                        <ejs-listbox id='mainAccount' [selectionSettings]="selectionSettings" name='mainAccount' cssClass="as-sy-input as-listbox"
+                            [dataSource]='mainAccounts' [enableRtl]="true" [fields]='fields'
+                            (change)='onMainActionChange($event)' [(ngModel)]="mainAccountIds" #mainAccountModel="ngModel"
+                            #mainAccountEl></ejs-listbox>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row" *ngIf="mainAccountIds.length == 0">
+                    <label class="col-md-12 col-form-label" for="mainAccountClient">
+                        {{ ".." | localize }}
+                    </label>
+                    <div class="col-md-12">
+                        <ejs-listbox id='mainAccountEmpty' name='mainAccountEmpty' cssClass="as-sy-input as-listbox"
+                            [enableRtl]="true" [fields]='fields'></ejs-listbox>
+                    </div>
+                </div>
+
+                <div class="row" *ngIf="mainAccountIds[0] == 0">
+                    <label class="col-md-12 col-form-label" for="mainAccountClient">
+                        {{ "Client" | localize }}
+                    </label>
+                    <div class="col-md-12">
+                        <ejs-listbox id='mainAccountClient' name='mainAccountClient' [selectionSettings]="selectionSettings" cssClass="as-sy-input as-listbox"
+                            [dataSource]='clients' [enableRtl]="true" [fields]='fields'
+                            [(ngModel)]="mainAccountClientIds" #mainAccountClientModel="ngModel" #mainAccountClientEl>
+                        </ejs-listbox>
+
+                    </div>
+                </div>
+
+                <div class="row " *ngIf="mainAccountIds[0] == 1">
+                    <label class="col-md-12 col-form-label" for="mainAccountCompany">
+                        {{ "Company" | localize }}
+                    </label>
+                    <div class="col-md-12">
+                        <ejs-listbox id='mainAccountCompany' name='mainAccountCompany' [selectionSettings]="selectionSettings" cssClass="as-sy-input as-listbox"
+                            [dataSource]='companies' [enableRtl]="true"
+                            [fields]='fields' [(ngModel)]="mainAccountCompaniesIds"
+                            #mainAccountCompanyModel="ngModel" #mainAccountCompanyEl></ejs-listbox>
+                        
+                    </div>
+                </div>
+
+                <!-- <div class="row " *ngIf="mainAccountIds[0] == 4">
+                    <label class="col-md-12 col-form-label" for="beneficiary">
+                        {{ "Beneficiary" | localize }}
+                    </label>
+                    <div class="col-md-12">
+                        <ejs-listbox id='beneficiary' name='beneficiary' [selectionSettings]="selectionSettings" cssClass="as-sy-input as-listbox"
+                            [dataSource]='beneficiaries' [enableRtl]="true" [fields]='fields'
+                            [(ngModel)]="beneficiaryIds" #beneficiaryModel="ngModel" #beneficiaryEl></ejs-listbox>
+                        
+                    </div>
+                </div> -->
+
+                <div class="row " *ngIf="mainAccountIds[0] == 3">
+                    <label class="col-md-12 col-form-label" for="expense">
+                        {{ "Expense" | localize }}
+                    </label>
+                    <div class="col-md-12">
+                        <ejs-listbox id='expense' name='expense' cssClass="as-sy-input as-listbox" [selectionSettings]="selectionSettings" [dataSource]='expenses'
+                            [enableRtl]="true" [fields]='fields' [(ngModel)]="mainAccountExpenseIds"
+                            #expenseModel="ngModel" #expenseEl></ejs-listbox>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="fromDate">
+                        {{ "FromDate" | localize }}
+                    </label>
+                    <div class="col-md-9">
+                        <ejs-datepicker [format]="'dd/MM/yyyy'" id='fromDate' name='fromDate' cssClass="as-sy-input"
+                        placeholder="{{ 'FromDate' | localize }}" [(ngModel)]="fromDate"
+                        #fromDateModel="ngModel" #fromDateEl locale="en"></ejs-datepicker>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="toDate">
+                        {{ "ToDate" | localize }}
+                    </label>
+                    <div class="col-md-9">
+                        <ejs-datepicker [format]="'dd/MM/yyyy'" id='toDate' name='toDate' cssClass="as-sy-input"
+                        placeholder="{{ 'ToDate' | localize }}" [(ngModel)]="toDate"
+                        #toDateModel="ngModel" #toDateEl locale="en"></ejs-datepicker>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </nb-card-body>
+        <nb-card-footer>
+            <abp-modal-footer [cancelDisabled]="saving" [saveLabel]="'تنفيذ'" [saveDisabled]="!searchReceiptsForm.form.valid || saving"
+                (onCancelClick)="dialogRef.close()"></abp-modal-footer>
+        </nb-card-footer>
+    </nb-card>
+</form>

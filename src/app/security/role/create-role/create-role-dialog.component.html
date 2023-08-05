@@ -1,0 +1,429 @@
+<form class="form-horizontal" autocomplete="off" #createRoleForm="ngForm" (ngSubmit)="save()">
+    <nb-card class="nb-card">
+        <nb-card-header>
+            {{'CreateNewRole' | localize}}
+        </nb-card-header>
+        <nb-card-body>
+            <nb-tabset>
+                <nb-tab tabTitle="{{'RoleDetails' | localize}}">
+                    <div>
+                        <!--Name-->
+                        <div class="form-group row required">
+                            <label class="col-md-3 col-form-label" for="name">
+                                {{ "Name" | localize }}
+                            </label>
+                            <div  class="col-md-9">
+                                <input nbInput type="text" class="form-control"
+                                name="name" 
+                                fullWidth
+                                id="name" 
+                                minlength="2" 
+                                required 
+                                [(ngModel)]="role.name" 
+                                #nameModel="ngModel" 
+                                #nameEl />
+                                <abp-validation-summary [control]="nameModel" [controlEl]="nameEl">
+                                </abp-validation-summary>
+                            </div>
+                        </div>
+                        
+                        <!-- Display Name -->
+                        <div class="form-group row required">
+                            <label class="col-md-3 col-form-label" for="displayName">
+                                {{ "DisplayName" | localize }}
+                            </label>
+                            <div class="col-md-9">
+                                <input
+                                    nbInput
+                                    fullWidth
+                                    class="form-control"
+                                    type="text"
+                                    name="displayName"
+                                    id="displayName"
+                                    required
+                                    minlength="2"
+                                    maxlength="32"
+                                    [(ngModel)]="role.displayName"
+                                    #displayNameModel="ngModel"
+                                    #displayNameEl
+                                    />
+                                <abp-validation-summary
+                                [control]="displayNameModel"
+                                [controlEl]="displayNameEl"
+                                ></abp-validation-summary>
+                            </div>
+                        </div>
+                        
+                        <!-- Description -->
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="description">
+                                {{ "RoleDescription" | localize }}
+                            </label>
+                            <div class="col-md-9">
+                                <textarea
+                                    nbInput
+                                    fullWidth
+                                    class="form-control"
+                                    type="text"
+                                    name="description"
+                                    id="description"
+                                    rows="2"
+                                    [(ngModel)]="role.description"
+                                    #descriptionModel="ngModel"
+                                    #descriptionEl
+                                    ></textarea>
+                                <abp-validation-summary
+                                [control]="descriptionModel"
+                                [controlEl]="descriptionEl"
+                                ></abp-validation-summary>
+                            </div>
+                        </div>
+                    </div>
+                </nb-tab>
+                <nb-tab class="tabset-height" tabTitle="{{'Permissions' | localize}}">
+                    <!-- <nb-list-item *ngFor="let permission of permissions; let i = index">
+                        
+                    </nb-list-item> -->
+                    <!-- <table class="table table-striped table-condensed">
+                        <thead>
+                            <tr>
+                                <th><strong class="text-info">{{ "Permission" | localize }}</strong></th>
+                                <th><nb-checkbox (checkedChange)="checkAll($event)"><strong class="text-info">{{ "All" | localize }}</strong></nb-checkbox> </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let perm of permissions;" >
+                                <td>{{perm?.displayName}} </td>
+                                <td><nb-checkbox [checked]="validateChecked(perm.name)" (checkedChange)="onCheckPermision($event, perm.name)"></nb-checkbox> </td>
+                                
+                            </tr>
+                            
+                        </tbody>
+                    </table> -->
+                    <nb-card>
+                        <nb-card-header>
+                            <div style="display: flex;justify-content: space-between;">
+                                <div><span>العمليات الاساسية</span></div>
+                                <div><nb-checkbox (checkedChange)="checkAll($event)"><strong class="text-info">{{ "تحديد الكل" | localize }}</strong></nb-checkbox></div>
+                            </div>      
+                        </nb-card-header>
+                        <nb-card-body>
+                            <div class="row">
+                                <div class="col-md-12 permmision-item">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <nb-checkbox [checked]="validateChecked('Pages.OutgoingTransfers')" (checkedChange)="onCheckPermision($event,'Pages.OutgoingTransfers')">{{ 'OutgoingTransfer' | localize }}</nb-checkbox>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="primary" [checked]="validateChecked('Pages.OutgoingTransfers.Create')" (checkedChange)="onCheckPermision($event,'Pages.OutgoingTransfers.Create')">{{ 'Create' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="info" [checked]="validateChecked('Pages.OutgoingTransfers.Edit')" (checkedChange)="onCheckPermision($event,'Pages.OutgoingTransfers.Edit')">{{ 'Edit' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="danger" [checked]="validateChecked('Pages.OutgoingTransfers.Delete')" (checkedChange)="onCheckPermision($event,'Pages.OutgoingTransfers.Delete')">{{ 'Delete' | localize }}</nb-toggle>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <!-- Income Transfer -->
+                                <div class="col-md-12 permmision-item" >
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <nb-checkbox [checked]="validateChecked('Pages.IncomeTransfers')" (checkedChange)="onCheckPermision($event,'Pages.IncomeTransfers')">{{ 'IncomeTransfers' | localize }}</nb-checkbox>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="primary" [checked]="validateChecked('Pages.IncomeTransfers.Create')" (checkedChange)="onCheckPermision($event,'Pages.IncomeTransfers.Create')">{{ 'Create' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="info" [checked]="validateChecked('Pages.IncomeTransfers.Edit')" (checkedChange)="onCheckPermision($event,'Pages.IncomeTransfers.Edit')">{{ 'Edit' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="danger" [checked]="validateChecked('Pages.IncomeTransfers.Delete')" (checkedChange)="onCheckPermision($event,'Pages.IncomeTransfers.Delete')">{{ 'Delete' | localize }}</nb-toggle>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Treasury Action -->
+                                <div class="col-md-12 permmision-item">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <nb-checkbox [checked]="validateChecked('Pages.TreasuryActions')" (checkedChange)="onCheckPermision($event,'Pages.TreasuryActions')">{{ 'TreasuryActions' | localize }}</nb-checkbox>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="primary" [checked]="validateChecked('Pages.TreasuryActions.Create')" (checkedChange)="onCheckPermision($event,'Pages.TreasuryActions.Create')">{{ 'Create' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="info" [checked]="validateChecked('Pages.TreasuryActions.Edit')" (checkedChange)="onCheckPermision($event,'Pages.TreasuryActions.Edit')">{{ 'Edit' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="danger" [checked]="validateChecked('Pages.TreasuryActions.Delete')" (checkedChange)="onCheckPermision($event,'Pages.TreasuryActions.Delete')">{{ 'Delete' | localize }}</nb-toggle>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <!-- Exchange Currencies -->
+                                <div class="col-md-12 permmision-item">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <nb-checkbox [checked]="validateChecked('Pages.ExchangeCurrencies')" (checkedChange)="onCheckPermision($event,'Pages.ExchangeCurrencies')">{{ 'ExchangeCurrencies' | localize }}</nb-checkbox>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="primary" [checked]="validateChecked('Pages.ExchangeCurrencies.Create')" (checkedChange)="onCheckPermision($event,'Pages.ExchangeCurrencies.Create')">{{ 'Create' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="info" [checked]="validateChecked('Pages.ExchangeCurrencies.Edit')" (checkedChange)="onCheckPermision($event,'Pages.ExchangeCurrencies.Edit')">{{ 'Edit' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="danger" [checked]="validateChecked('Pages.ExchangeCurrencies.Delete')" (checkedChange)="onCheckPermision($event,'Pages.ExchangeCurrencies.Delete')">{{ 'Delete' | localize }}</nb-toggle>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <!-- DirectTransfers -->
+                                <div class="col-md-12 permmision-item">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <nb-checkbox [checked]="validateChecked('Pages.DirectTransfers')" (checkedChange)="onCheckPermision($event,'Pages.DirectTransfers')">{{ 'DirectTransfers' | localize }}</nb-checkbox>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="primary" [checked]="validateChecked('Pages.DirectTransfers.Paid')" (checkedChange)="onCheckPermision($event,'Pages.DirectTransfers.Paid')">{{ 'Paid' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="info" [checked]="validateChecked('Pages.DirectTransfers.ChangeStatus')" (checkedChange)="onCheckPermision($event,'Pages.DirectTransfers.ChangeStatus')">{{ 'ChangeStatus' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </nb-card-body>
+                    </nb-card>
+                    <nb-card>
+                        <nb-card-header>
+                            <div style="display: flex;justify-content: space-between;">
+                                <div><span> الاعدادات</span></div>
+                                <!-- <div><nb-checkbox (checkedChange)="checkAll($event)"><strong class="text-info">{{ "تحديد الكل" | localize }}</strong></nb-checkbox></div> -->
+                            </div>      
+                        </nb-card-header>
+                        <nb-card-body>
+                            <div class="row">
+                                <div class="col-md-12 permmision-item">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <nb-checkbox [checked]="validateChecked('Pages.Companies')" (checkedChange)="onCheckPermision($event,'Pages.Companies')">{{ 'Companies' | localize }}</nb-checkbox>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="primary" [checked]="validateChecked('Pages.Companies.Create')" (checkedChange)="onCheckPermision($event,'Pages.Companies.Create')">{{ 'Create' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="info" [checked]="validateChecked('Pages.Companies.Edit')" (checkedChange)="onCheckPermision($event,'Pages.Companies.Edit')">{{ 'Edit' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="danger" [checked]="validateChecked('Pages.Companies.Delete')" (checkedChange)="onCheckPermision($event,'Pages.Companies.Delete')">{{ 'Delete' | localize }}</nb-toggle>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Clients -->
+                                <div class="col-md-12 permmision-item">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <nb-checkbox [checked]="validateChecked('Pages.Clients')" (checkedChange)="onCheckPermision($event,'Pages.Clients')">{{ 'Clients' | localize }}</nb-checkbox>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="primary" [checked]="validateChecked('Pages.Clients.Create')" (checkedChange)="onCheckPermision($event,'Pages.Clients.Create')">{{ 'Create' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="info" [checked]="validateChecked('Pages.Clients.Edit')" (checkedChange)="onCheckPermision($event,'Pages.Clients.Edit')">{{ 'Edit' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="danger" [checked]="validateChecked('Pages.Clients.Delete')" (checkedChange)="onCheckPermision($event,'Pages.Clients.Delete')">{{ 'Delete' | localize }}</nb-toggle>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Currencies -->
+                                <div class="col-md-12 permmision-item">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <nb-checkbox [checked]="validateChecked('Pages.Currencies')" (checkedChange)="onCheckPermision($event,'Pages.Currencies')">{{ 'Currencies' | localize }}</nb-checkbox>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="primary" [checked]="validateChecked('Pages.Currencies.Create')" (checkedChange)="onCheckPermision($event,'Pages.Currencies.Create')">{{ 'Create' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="info" [checked]="validateChecked('Pages.Currencies.Edit')" (checkedChange)="onCheckPermision($event,'Pages.Currencies.Edit')">{{ 'Edit' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="danger" [checked]="validateChecked('Pages.Currencies.Delete')" (checkedChange)="onCheckPermision($event,'Pages.Currencies.Delete')">{{ 'Delete' | localize }}</nb-toggle>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Countries -->
+                                <div class="col-md-12 permmision-item">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <nb-checkbox [checked]="validateChecked('Pages.Countries')" (checkedChange)="onCheckPermision($event,'Pages.Countries')">{{ 'Countries' | localize }}</nb-checkbox>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="primary" [checked]="validateChecked('Pages.Countries.Create')" (checkedChange)="onCheckPermision($event,'Pages.Countries.Create')">{{ 'Create' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="info" [checked]="validateChecked('Pages.Countries.Edit')" (checkedChange)="onCheckPermision($event,'Pages.Countries.Edit')">{{ 'Edit' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="danger" [checked]="validateChecked('Pages.Countries.Delete')" (checkedChange)="onCheckPermision($event,'Pages.Countries.Delete')">{{ 'Delete' | localize }}</nb-toggle>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Incomes -->
+                                <div class="col-md-12 permmision-item">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <nb-checkbox [checked]="validateChecked('Pages.Incomes')" (checkedChange)="onCheckPermision($event,'Pages.Incomes')">{{ 'Incomes' | localize }}</nb-checkbox>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="primary" [checked]="validateChecked('Pages.Incomes.Create')" (checkedChange)="onCheckPermision($event,'Pages.Incomes.Create')">{{ 'Create' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="info" [checked]="validateChecked('Pages.Incomes.Edit')" (checkedChange)="onCheckPermision($event,'Pages.Incomes.Edit')">{{ 'Edit' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="danger" [checked]="validateChecked('Pages.Incomes.Delete')" (checkedChange)="onCheckPermision($event,'Pages.Incomes.Delete')">{{ 'Delete' | localize }}</nb-toggle>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Expenses -->
+                                <div class="col-md-12 permmision-item">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <nb-checkbox [checked]="validateChecked('Pages.Expenses')" (checkedChange)="onCheckPermision($event,'Pages.Expenses')">{{ 'Expenses' | localize }}</nb-checkbox>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="primary" [checked]="validateChecked('Pages.Expenses.Create')" (checkedChange)="onCheckPermision($event,'Pages.Expenses.Create')">{{ 'Create' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="info" [checked]="validateChecked('Pages.Expenses.Edit')" (checkedChange)="onCheckPermision($event,'Pages.Expenses.Edit')">{{ 'Edit' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="danger" [checked]="validateChecked('Pages.Expenses.Delete')" (checkedChange)="onCheckPermision($event,'Pages.Expenses.Delete')">{{ 'Delete' | localize }}</nb-toggle>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Commisions -->
+                                <div class="col-md-12 permmision-item">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <nb-checkbox [checked]="validateChecked('Pages.Commisions')" (checkedChange)="onCheckPermision($event,'Pages.Commisions')">{{ 'Commisions' | localize }}</nb-checkbox>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="primary" [checked]="validateChecked('Pages.Commisions.Create')" (checkedChange)="onCheckPermision($event,'Pages.Commisions.Create')">{{ 'Create' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="info" [checked]="validateChecked('Pages.Commisions.Edit')" (checkedChange)="onCheckPermision($event,'Pages.Commisions.Edit')">{{ 'Edit' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="danger" [checked]="validateChecked('Pages.Commisions.Delete')" (checkedChange)="onCheckPermision($event,'Pages.Commisions.Delete')">{{ 'Delete' | localize }}</nb-toggle>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- InitialBalances -->
+                                <div class="col-md-12 permmision-item">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <nb-checkbox [checked]="validateChecked('Pages.InitialBalance')" (checkedChange)="onCheckPermision($event,'Pages.InitialBalance')">{{ 'InitialBalance' | localize }}</nb-checkbox>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 permmision-item">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <nb-checkbox [checked]="validateChecked('Pages.ExchangePrices')" (checkedChange)="onCheckPermision($event,'Pages.ExchangePrices')">{{ 'ExchangePrices' | localize }}</nb-checkbox>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </nb-card-body>
+                    </nb-card>
+                    <!-- Security -->
+                        <nb-card>
+                            <nb-card-header >
+                                <div style="display: flex;justify-content: space-between;">
+                                    <div><span>إدارة المستخدمين</span></div>
+                                    <!-- <div><nb-checkbox (checkedChange)="checkAll($event)"><strong class="text-info">{{ "تحديد الكل" | localize }}</strong></nb-checkbox></div> -->
+                                </div>      
+                            </nb-card-header>
+                            <nb-card-body>
+                                <div class="row">
+                                    <div class="col-md-12 permmision-item">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <nb-checkbox [checked]="validateChecked('Pages.Users')" (checkedChange)="onCheckPermision($event,'Pages.Users')">{{ 'Users' | localize }}</nb-checkbox>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <nb-toggle status="primary" [checked]="validateChecked('Pages.Users.Create')" (checkedChange)="onCheckPermision($event,'Pages.Users.Create')">{{ 'Create' | localize }}</nb-toggle>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <nb-toggle status="info" [checked]="validateChecked('Pages.Users.Edit')" (checkedChange)="onCheckPermision($event,'Pages.Users.Edit')">{{ 'Edit' | localize }}</nb-toggle>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <nb-toggle status="danger" [checked]="validateChecked('Pages.Users.Delete')" (checkedChange)="onCheckPermision($event,'Pages.Users.Delete')">{{ 'Delete' | localize }}</nb-toggle>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 permmision-item">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <nb-checkbox [checked]="validateChecked('Pages.Roles')" (checkedChange)="onCheckPermision($event,'Pages.Roles')">{{ 'Roles' | localize }}</nb-checkbox>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <nb-toggle status="primary" [checked]="validateChecked('Pages.Roles.Create')" (checkedChange)="onCheckPermision($event,'Pages.Roles.Create')">{{ 'Create' | localize }}</nb-toggle>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <nb-toggle status="info" [checked]="validateChecked('Pages.Roles.Edit')" (checkedChange)="onCheckPermision($event,'Pages.Roles.Edit')">{{ 'Edit' | localize }}</nb-toggle>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <nb-toggle status="danger" [checked]="validateChecked('Pages.Roles.Delete')" (checkedChange)="onCheckPermision($event,'Pages.Roles.Delete')">{{ 'Delete' | localize }}</nb-toggle>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nb-card-body>
+                        </nb-card>
+                        <!-- Statements -->
+                        <nb-card>
+                            <nb-card-header >
+                                <div style="display: flex;justify-content: space-between;">
+                                    <div><span>الكشوفات</span></div>
+                                    <!-- <div><nb-checkbox (checkedChange)="checkAll($event)"><strong class="text-info">{{ "تحديد الكل" | localize }}</strong></nb-checkbox></div> -->
+                                </div>      
+                            </nb-card-header>
+                            <nb-card-body>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <nb-checkbox [checked]="validateChecked('Pages.ClientBalanceStatement')" (checkedChange)="onCheckPermision($event,'Pages.ClientBalanceStatement')">{{ 'ClientBalanceStatement' | localize }}</nb-checkbox>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <nb-checkbox [checked]="validateChecked('Pages.CompanyBalanceStatement')" (checkedChange)="onCheckPermision($event,'Pages.CompanyBalanceStatement')">{{ 'CompanyBalanceStatement' | localize }}</nb-checkbox>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <nb-checkbox [checked]="validateChecked('Pages.TreasuryBalanceStatement')" (checkedChange)="onCheckPermision($event,'Pages.TreasuryBalanceStatement')">{{ 'TreasuryBalanceStatement' | localize }}</nb-checkbox>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <nb-checkbox [checked]="validateChecked('Pages.SpendsStatement')" (checkedChange)="onCheckPermision($event,'Pages.SpendsStatement')">{{ 'SpendsStatement' | localize }}</nb-checkbox>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <nb-checkbox [checked]="validateChecked('Pages.ReceiptsStatement')" (checkedChange)="onCheckPermision($event,'Pages.ReceiptsStatement')">{{ 'ReceiptsStatement' | localize }}</nb-checkbox>
+                                    </div>
+                                </div>
+                            </nb-card-body>
+                        </nb-card>
+                </nb-tab>
+            </nb-tabset>
+        </nb-card-body>
+        <nb-card-footer>
+            <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!createRoleForm.form.valid || saving"
+            (onCancelClick)="dialogRef.close()"></abp-modal-footer>
+        </nb-card-footer>
+    </nb-card>
+</form>
