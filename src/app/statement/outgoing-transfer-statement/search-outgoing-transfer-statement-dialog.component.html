@@ -13,7 +13,7 @@
                 </div> -->
                 <div class="col-md-6">
                     <ejs-datepicker [format]="'dd/MM/yyyy'" id='fromDate' name='fromDate' cssClass="as-sy-input"
-                        required floatLabelType="Auto" placeholder="{{ 'ToDate' | localize }}"
+                        required floatLabelType="Auto" placeholder="{{ 'FromDate' | localize }}"
                         [(ngModel)]="fromDate" #fromDateModel="ngModel"
                         locale="en" #fromDateEl>
                     </ejs-datepicker>
@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-md-6">
                     <ejs-datepicker [format]="'dd/MM/yyyy'" id='toDate' name='toDate' cssClass="as-sy-input" required
-                        floatLabelType="Auto" placeholder="{{ 'FromDate' | localize }}"
+                        floatLabelType="Auto" placeholder="{{ 'ToDate' | localize }}"
                         [(ngModel)]="toDate" #toDateModel="ngModel"
                         locale="en" #toDateEl>
                     </ejs-datepicker>
