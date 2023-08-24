@@ -242,6 +242,31 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!---->
+                                <!-- Branches -->
+                                <div class="col-md-12 permmision-item">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <nb-checkbox [checked]="validateChecked('Pages.Branches')"
+                                                (checkedChange)="onCheckPermision($event,'Pages.Branches')">{{ 'Branches' | localize }}</nb-checkbox>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="primary" [checked]="validateChecked('Pages.Branches.Create')"
+                                                (checkedChange)="onCheckPermision($event,'Pages.Branches.Create')">{{ 'Create' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="info" [checked]="validateChecked('Pages.Branches.Edit')"
+                                                (checkedChange)="onCheckPermision($event,'Pages.Branches.Edit')">{{ 'Edit' | localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="danger" [checked]="validateChecked('Pages.Branches.Delete')"
+                                                (checkedChange)="onCheckPermision($event,'Pages.Branches.Delete')">{{ 'Delete' | localize }}</nb-toggle>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!---->
+
                                 <!-- Currencies -->
                                 <div class="col-md-12 permmision-item">
                                     <div class="row">

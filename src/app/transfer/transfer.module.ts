@@ -49,6 +49,7 @@ import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { OutgoingImageTakenDialogComponent } from './outgoing-transfer/outgoing-image-taken-dialog/outgoing-image-taken-dialog.component';
 import { PrintOutgoingTransferComponent } from './outgoing-transfer/print-outgoing-transfer/print-outgoing-transfer.component';
 import { NgxPrintModule } from 'ngx-print';
+import { IncomeTransferNotAcceptedComponent } from './income-transfer-notAccepted/income-transfer-not-accepted.component';
 
 const SYNCFUSION_MODULES = [
   GridModule,
@@ -103,7 +104,7 @@ const NB_MODULES = [
     ChangeDirectTransferStatusComponent, 
     PayDirectTransferComponent, 
     ImageTakenDialogComponent, 
-    OutgoingImageTakenDialogComponent, PrintOutgoingTransferComponent
+    OutgoingImageTakenDialogComponent, PrintOutgoingTransferComponent, IncomeTransferNotAcceptedComponent
   ],
   imports: [
     CommonModule,

@@ -118,7 +118,30 @@
                         </div>
                         
                         <div class="row">
-                            
+                            <div class="col-md-6">
+                                <!-- Branch -->
+                                <div class="row required">
+                                    <label class="col-md-3 col-form-label" for="branch">
+                                        {{ "Branch" | localize }}
+                                    </label>
+                                    <div class="col-md-9">
+                                        <ejs-dropdownlist 
+                                            id='branch' 
+                                            name='branch' 
+                                            cssClass="as-sy-input"
+                                            [dataSource]='branches' 
+                                            [enableRtl]="true" 
+                                            [fields]='fields' 
+                                            required
+                                            [(ngModel)]="user.branchId"
+                                            #branchModel="ngModel" 
+                                            #branchEl
+                                            ></ejs-dropdownlist>
+                                            <abp-validation-summary [control]="branchModel" [controlEl]="branchEl">
+                                            </abp-validation-summary>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-md-6">
                                 <div class="form-group row mb-0">
                                     <label class="col-md-3 col-form-label">

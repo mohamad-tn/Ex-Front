@@ -3,18 +3,21 @@ import { AppComponentBase } from '@shared/app-component-base';
 import { OutgoingTransferDto } from '@shared/service-proxies/service-proxies';
 
 @Component({
-  selector: 'app-print-outgoing-transfer',
-  templateUrl: './print-outgoing-transfer.component.html',
-  styleUrls: ['./print-outgoing-transfer.component.scss']
+  selector: "app-print-outgoing-transfer",
+  templateUrl: "./print-outgoing-transfer.component.html",
+  styleUrls: ["./print-outgoing-transfer.component.scss"],
 })
-export class PrintOutgoingTransferComponent extends AppComponentBase implements OnInit {
-
+export class PrintOutgoingTransferComponent
+  extends AppComponentBase
+  implements OnInit
+{
   input: OutgoingTransferDto = new OutgoingTransferDto();
   currencyName: string;
   countryName: string;
   toCompanyName: string;
   fromCompanyName: string;
   fromClientName: string;
+  fromBranchName: string;
   senderName: string;
   paymentTypeName: string;
   beneficiaryName: string;
@@ -23,7 +26,5 @@ export class PrintOutgoingTransferComponent extends AppComponentBase implements 
     super(injector);
   }
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

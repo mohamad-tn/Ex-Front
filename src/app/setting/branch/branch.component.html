@@ -20,7 +20,8 @@
                                     <div style="width: 5px;"></div>
 
                                     <div>
-                                        <button nbButton shape="round" status="primary" (click)="showCreateDialog()"><i
+                                        <button nbButton shape="round" status="primary" (click)="showCreateDialog()" 
+                                        *ngIf="permission.isGranted('Pages.Branches.Create')"><i
                                                 class="fa fa-plus"></i></button>
                                     </div>
                                     <div>
@@ -47,13 +48,13 @@
                         </ng-template>
                         <e-columns>
                             <e-column headerText="{{l('Commands')}}" textAlign='Center' width="150"
-                                *ngIf="permission.isGranted('Pages.Clients.Edit') || permission.isGranted('Pages.Clients.Delete')">
+                                *ngIf="permission.isGranted('Pages.Branches.Edit') || permission.isGranted('Pages.Branches.Delete')">
                                 <ng-template #template let-data>
                                     <nb-actions [size]="'small'">
                                         <nb-action class="control-item" icon="edit-outline" (click)="showEditDialog(data.id)"
-                                            ></nb-action>
+                                            *ngIf="permission.isGranted('Pages.Branches.Edit')"></nb-action>
                                         <nb-action class="control-item" icon="trash-2-outline" (click)="delete(data)"
-                                            ></nb-action>
+                                            *ngIf="permission.isGranted('Pages.Branches.Delete')"></nb-action>
                                     </nb-actions>
                                 </ng-template>
                             </e-column>

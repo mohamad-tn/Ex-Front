@@ -13,7 +13,7 @@
                 <nb-card-body class="as-case-card-body">
                     <ejs-grid id="ClientGrid" #clientGrid [dataSource]="clients" [allowPaging]="true"
                     [allowSorting]="true" [allowFiltering]="true" [enableRtl]='true' 
-                    [pageSettings]="pageSettings" [filterSettings]='filterOption'>
+                    [pageSettings]="pageSettings" [query]="param" [filterSettings]='filterOption'>
                     <!--toolbar-->
                     <ng-template #toolbarTemplate>
                         <ejs-toolbar>

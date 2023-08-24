@@ -260,6 +260,33 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!---->
+                                <div class="col-md-6" *ngIf="outgoingTransfer.paymentType == 3">
+                                    <div class="form-group row required">
+                                        <label class="col-md-3 col-form-label" for="toBranch">
+                                            {{ "ToBranch" | localize }}
+                                        </label>
+                                        <div  class="col-md-9">
+                                            <ejs-dropdownlist 
+                                            id='toBranch' 
+                                            name='toBranch' 
+                                            (change)='onToBranchChange($event)'
+                                            cssClass="as-sy-input"
+                                            [dataSource]='branches' 
+                                            [enableRtl]="true" 
+                                            [fields]='fields' 
+                                            required
+                                            [(ngModel)]="outgoingTransfer.toBranchId"
+                                            #toBranchModel="ngModel" 
+                                            #toBranchEl
+                                            ></ejs-dropdownlist>
+                                            <abp-validation-summary [control]="toBranchModel" [controlEl]="toBranchEl">
+                                            </abp-validation-summary>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!---->
                                 
                                 <div [ngClass]="{'col-md-4' : outgoingTransfer.paymentType == 0 , 'col-md-6' : outgoingTransfer.paymentType != 0}">
                                     <div class="form-group row required">

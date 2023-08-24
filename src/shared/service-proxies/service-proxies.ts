@@ -378,7 +378,7 @@ export class BranchServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    getForGrid(body: DataManagerRequest | undefined): Observable<ReadGrudDto> {
+    getForGrid(body: BWireDataManagerRequest | undefined): Observable<ReadGrudDto> {
         let url_ = this.baseUrl + "/api/services/app/Branch/GetForGrid";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -621,7 +621,7 @@ export class ClientServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    getForGrid(body: DataManagerRequest | undefined): Observable<ReadGrudDto> {
+    getForGrid(body: BWireDataManagerRequest | undefined): Observable<ReadGrudDto> {
         let url_ = this.baseUrl + "/api/services/app/Client/GetForGrid";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1541,7 +1541,7 @@ export class CommisionServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    getForGrid(body: DataManagerRequest | undefined): Observable<ReadGrudDto> {
+    getForGrid(body: BWireDataManagerRequest | undefined): Observable<ReadGrudDto> {
         let url_ = this.baseUrl + "/api/services/app/Commision/GetForGrid";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1948,7 +1948,7 @@ export class CompanyServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    getForGrid(body: DataManagerRequest | undefined): Observable<ReadGrudDto> {
+    getForGrid(body: BWireDataManagerRequest | undefined): Observable<ReadGrudDto> {
         let url_ = this.baseUrl + "/api/services/app/Company/GetForGrid";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2927,7 +2927,7 @@ export class CountryServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    getForGrid(body: DataManagerRequest | undefined): Observable<ReadGrudDto> {
+    getForGrid(body: BWireDataManagerRequest | undefined): Observable<ReadGrudDto> {
         let url_ = this.baseUrl + "/api/services/app/Country/GetForGrid";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3273,7 +3273,7 @@ export class CurrencyServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    getForGrid(body: DataManagerRequest | undefined): Observable<ReadGrudDto> {
+    getForGrid(body: BWireDataManagerRequest | undefined): Observable<ReadGrudDto> {
         let url_ = this.baseUrl + "/api/services/app/Currency/GetForGrid";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -4330,7 +4330,7 @@ export class ExpenseServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    getForGrid(body: DataManagerRequest | undefined): Observable<ReadGrudDto> {
+    getForGrid(body: BWireDataManagerRequest | undefined): Observable<ReadGrudDto> {
         let url_ = this.baseUrl + "/api/services/app/Expense/GetForGrid";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -4851,7 +4851,7 @@ export class IncomeServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    getForGrid(body: DataManagerRequest | undefined): Observable<ReadGrudDto> {
+    getForGrid(body: BWireDataManagerRequest | undefined): Observable<ReadGrudDto> {
         let url_ = this.baseUrl + "/api/services/app/Income/GetForGrid";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -6440,7 +6440,7 @@ export class OutgoingTransferServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    getForGrid(body: DataManagerRequest | undefined): Observable<ReadGrudDto> {
+    getForGrid(body: SearchOutgoingDataManagerRequest | undefined): Observable<ReadGrudDto> {
         let url_ = this.baseUrl + "/api/services/app/OutgoingTransfer/GetForGrid";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -6542,6 +6542,176 @@ export class OutgoingTransferServiceProxy {
             }));
         }
         return _observableOf<number>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getAllNotCompleted(): Observable<ReadOutgoingTransferDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/OutgoingTransfer/GetAllNotCompleted";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllNotCompleted(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllNotCompleted(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ReadOutgoingTransferDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ReadOutgoingTransferDto[]>;
+        }));
+    }
+
+    protected processGetAllNotCompleted(response: HttpResponseBase): Observable<ReadOutgoingTransferDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200.push(ReadOutgoingTransferDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ReadOutgoingTransferDto[]>(null as any);
+    }
+
+    /**
+     * @param outgoingTransferId (optional) 
+     * @return Success
+     */
+    acceptOutgoingTransferFromBranch(outgoingTransferId: number | undefined): Observable<OutgoingTransferDto> {
+        let url_ = this.baseUrl + "/api/services/app/OutgoingTransfer/AcceptOutgoingTransferFromBranch?";
+        if (outgoingTransferId === null)
+            throw new Error("The parameter 'outgoingTransferId' cannot be null.");
+        else if (outgoingTransferId !== undefined)
+            url_ += "outgoingTransferId=" + encodeURIComponent("" + outgoingTransferId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processAcceptOutgoingTransferFromBranch(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processAcceptOutgoingTransferFromBranch(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<OutgoingTransferDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<OutgoingTransferDto>;
+        }));
+    }
+
+    protected processAcceptOutgoingTransferFromBranch(response: HttpResponseBase): Observable<OutgoingTransferDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = OutgoingTransferDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<OutgoingTransferDto>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    getForNotAcceptedGrid(body: DataManagerRequest | undefined): Observable<ReadGrudDto> {
+        let url_ = this.baseUrl + "/api/services/app/OutgoingTransfer/GetForNotAcceptedGrid";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetForNotAcceptedGrid(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetForNotAcceptedGrid(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ReadGrudDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ReadGrudDto>;
+        }));
+    }
+
+    protected processGetForNotAcceptedGrid(response: HttpResponseBase): Observable<ReadGrudDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ReadGrudDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ReadGrudDto>(null as any);
     }
 }
 
@@ -8704,7 +8874,7 @@ export class TreasuryCashFlowServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    getForGrid(body: DataManagerRequest | undefined): Observable<ReadGrudDto> {
+    getForGrid(body: TreasuryCashFlowDataManagerRequest | undefined): Observable<ReadGrudDto> {
         let url_ = this.baseUrl + "/api/services/app/TreasuryCashFlow/GetForGrid";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -9701,6 +9871,746 @@ export interface ICreateBranchDto {
     id: number;
 }
 
+export class UserToken implements IUserToken {
+    tenantId: number | undefined;
+    userId: number;
+    loginProvider: string | undefined;
+    name: string | undefined;
+    value: string | undefined;
+    expireDate: moment.Moment | undefined;
+    id: number;
+
+    constructor(data?: IUserToken) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.tenantId = _data["tenantId"];
+            this.userId = _data["userId"];
+            this.loginProvider = _data["loginProvider"];
+            this.name = _data["name"];
+            this.value = _data["value"];
+            this.expireDate = _data["expireDate"] ? moment(_data["expireDate"].toString()) : <any>undefined;
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): UserToken {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserToken();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["tenantId"] = this.tenantId;
+        data["userId"] = this.userId;
+        data["loginProvider"] = this.loginProvider;
+        data["name"] = this.name;
+        data["value"] = this.value;
+        data["expireDate"] = this.expireDate ? this.expireDate.toISOString() : <any>undefined;
+        data["id"] = this.id;
+        return data;
+    }
+
+    clone(): UserToken {
+        const json = this.toJSON();
+        let result = new UserToken();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserToken {
+    tenantId: number | undefined;
+    userId: number;
+    loginProvider: string | undefined;
+    name: string | undefined;
+    value: string | undefined;
+    expireDate: moment.Moment | undefined;
+    id: number;
+}
+
+export class UserLogin implements IUserLogin {
+    tenantId: number | undefined;
+    userId: number;
+    loginProvider: string;
+    providerKey: string;
+    id: number;
+
+    constructor(data?: IUserLogin) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.tenantId = _data["tenantId"];
+            this.userId = _data["userId"];
+            this.loginProvider = _data["loginProvider"];
+            this.providerKey = _data["providerKey"];
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): UserLogin {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserLogin();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["tenantId"] = this.tenantId;
+        data["userId"] = this.userId;
+        data["loginProvider"] = this.loginProvider;
+        data["providerKey"] = this.providerKey;
+        data["id"] = this.id;
+        return data;
+    }
+
+    clone(): UserLogin {
+        const json = this.toJSON();
+        let result = new UserLogin();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserLogin {
+    tenantId: number | undefined;
+    userId: number;
+    loginProvider: string;
+    providerKey: string;
+    id: number;
+}
+
+export class UserRole implements IUserRole {
+    tenantId: number | undefined;
+    userId: number;
+    roleId: number;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+    id: number;
+
+    constructor(data?: IUserRole) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.tenantId = _data["tenantId"];
+            this.userId = _data["userId"];
+            this.roleId = _data["roleId"];
+            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
+            this.creatorUserId = _data["creatorUserId"];
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): UserRole {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserRole();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["tenantId"] = this.tenantId;
+        data["userId"] = this.userId;
+        data["roleId"] = this.roleId;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["creatorUserId"] = this.creatorUserId;
+        data["id"] = this.id;
+        return data;
+    }
+
+    clone(): UserRole {
+        const json = this.toJSON();
+        let result = new UserRole();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserRole {
+    tenantId: number | undefined;
+    userId: number;
+    roleId: number;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+    id: number;
+}
+
+export class UserClaim implements IUserClaim {
+    tenantId: number | undefined;
+    userId: number;
+    claimType: string | undefined;
+    claimValue: string | undefined;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+    id: number;
+
+    constructor(data?: IUserClaim) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.tenantId = _data["tenantId"];
+            this.userId = _data["userId"];
+            this.claimType = _data["claimType"];
+            this.claimValue = _data["claimValue"];
+            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
+            this.creatorUserId = _data["creatorUserId"];
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): UserClaim {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserClaim();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["tenantId"] = this.tenantId;
+        data["userId"] = this.userId;
+        data["claimType"] = this.claimType;
+        data["claimValue"] = this.claimValue;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["creatorUserId"] = this.creatorUserId;
+        data["id"] = this.id;
+        return data;
+    }
+
+    clone(): UserClaim {
+        const json = this.toJSON();
+        let result = new UserClaim();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserClaim {
+    tenantId: number | undefined;
+    userId: number;
+    claimType: string | undefined;
+    claimValue: string | undefined;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+    id: number;
+}
+
+export class UserPermissionSetting implements IUserPermissionSetting {
+    userId: number;
+    tenantId: number | undefined;
+    name: string;
+    isGranted: boolean;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+    id: number;
+
+    constructor(data?: IUserPermissionSetting) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.userId = _data["userId"];
+            this.tenantId = _data["tenantId"];
+            this.name = _data["name"];
+            this.isGranted = _data["isGranted"];
+            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
+            this.creatorUserId = _data["creatorUserId"];
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): UserPermissionSetting {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserPermissionSetting();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userId"] = this.userId;
+        data["tenantId"] = this.tenantId;
+        data["name"] = this.name;
+        data["isGranted"] = this.isGranted;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["creatorUserId"] = this.creatorUserId;
+        data["id"] = this.id;
+        return data;
+    }
+
+    clone(): UserPermissionSetting {
+        const json = this.toJSON();
+        let result = new UserPermissionSetting();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserPermissionSetting {
+    userId: number;
+    tenantId: number | undefined;
+    name: string;
+    isGranted: boolean;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+    id: number;
+}
+
+export class Setting implements ISetting {
+    tenantId: number | undefined;
+    userId: number | undefined;
+    name: string;
+    value: string | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+    id: number;
+
+    constructor(data?: ISetting) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.tenantId = _data["tenantId"];
+            this.userId = _data["userId"];
+            this.name = _data["name"];
+            this.value = _data["value"];
+            this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
+            this.lastModifierUserId = _data["lastModifierUserId"];
+            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
+            this.creatorUserId = _data["creatorUserId"];
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): Setting {
+        data = typeof data === 'object' ? data : {};
+        let result = new Setting();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["tenantId"] = this.tenantId;
+        data["userId"] = this.userId;
+        data["name"] = this.name;
+        data["value"] = this.value;
+        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
+        data["lastModifierUserId"] = this.lastModifierUserId;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["creatorUserId"] = this.creatorUserId;
+        data["id"] = this.id;
+        return data;
+    }
+
+    clone(): Setting {
+        const json = this.toJSON();
+        let result = new Setting();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ISetting {
+    tenantId: number | undefined;
+    userId: number | undefined;
+    name: string;
+    value: string | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+    id: number;
+}
+
+export class User implements IUser {
+    branch: Branch;
+    branchId: number | undefined;
+    normalizedUserName: string;
+    normalizedEmailAddress: string;
+    concurrencyStamp: string | undefined;
+    tokens: UserToken[] | undefined;
+    deleterUser: User;
+    creatorUser: User;
+    lastModifierUser: User;
+    authenticationSource: string | undefined;
+    userName: string;
+    tenantId: number | undefined;
+    emailAddress: string;
+    name: string;
+    surname: string;
+    readonly fullName: string | undefined;
+    password: string;
+    emailConfirmationCode: string | undefined;
+    passwordResetCode: string | undefined;
+    lockoutEndDateUtc: moment.Moment | undefined;
+    accessFailedCount: number;
+    isLockoutEnabled: boolean;
+    phoneNumber: string | undefined;
+    isPhoneNumberConfirmed: boolean;
+    securityStamp: string | undefined;
+    isTwoFactorEnabled: boolean;
+    logins: UserLogin[] | undefined;
+    roles: UserRole[] | undefined;
+    claims: UserClaim[] | undefined;
+    permissions: UserPermissionSetting[] | undefined;
+    settings: Setting[] | undefined;
+    isEmailConfirmed: boolean;
+    isActive: boolean;
+    isDeleted: boolean;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+    id: number;
+
+    constructor(data?: IUser) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.branch = _data["branch"] ? Branch.fromJS(_data["branch"]) : <any>undefined;
+            this.branchId = _data["branchId"];
+            this.normalizedUserName = _data["normalizedUserName"];
+            this.normalizedEmailAddress = _data["normalizedEmailAddress"];
+            this.concurrencyStamp = _data["concurrencyStamp"];
+            if (Array.isArray(_data["tokens"])) {
+                this.tokens = [] as any;
+                for (let item of _data["tokens"])
+                    this.tokens.push(UserToken.fromJS(item));
+            }
+            this.deleterUser = _data["deleterUser"] ? User.fromJS(_data["deleterUser"]) : <any>undefined;
+            this.creatorUser = _data["creatorUser"] ? User.fromJS(_data["creatorUser"]) : <any>undefined;
+            this.lastModifierUser = _data["lastModifierUser"] ? User.fromJS(_data["lastModifierUser"]) : <any>undefined;
+            this.authenticationSource = _data["authenticationSource"];
+            this.userName = _data["userName"];
+            this.tenantId = _data["tenantId"];
+            this.emailAddress = _data["emailAddress"];
+            this.name = _data["name"];
+            this.surname = _data["surname"];
+            (<any>this).fullName = _data["fullName"];
+            this.password = _data["password"];
+            this.emailConfirmationCode = _data["emailConfirmationCode"];
+            this.passwordResetCode = _data["passwordResetCode"];
+            this.lockoutEndDateUtc = _data["lockoutEndDateUtc"] ? moment(_data["lockoutEndDateUtc"].toString()) : <any>undefined;
+            this.accessFailedCount = _data["accessFailedCount"];
+            this.isLockoutEnabled = _data["isLockoutEnabled"];
+            this.phoneNumber = _data["phoneNumber"];
+            this.isPhoneNumberConfirmed = _data["isPhoneNumberConfirmed"];
+            this.securityStamp = _data["securityStamp"];
+            this.isTwoFactorEnabled = _data["isTwoFactorEnabled"];
+            if (Array.isArray(_data["logins"])) {
+                this.logins = [] as any;
+                for (let item of _data["logins"])
+                    this.logins.push(UserLogin.fromJS(item));
+            }
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles.push(UserRole.fromJS(item));
+            }
+            if (Array.isArray(_data["claims"])) {
+                this.claims = [] as any;
+                for (let item of _data["claims"])
+                    this.claims.push(UserClaim.fromJS(item));
+            }
+            if (Array.isArray(_data["permissions"])) {
+                this.permissions = [] as any;
+                for (let item of _data["permissions"])
+                    this.permissions.push(UserPermissionSetting.fromJS(item));
+            }
+            if (Array.isArray(_data["settings"])) {
+                this.settings = [] as any;
+                for (let item of _data["settings"])
+                    this.settings.push(Setting.fromJS(item));
+            }
+            this.isEmailConfirmed = _data["isEmailConfirmed"];
+            this.isActive = _data["isActive"];
+            this.isDeleted = _data["isDeleted"];
+            this.deleterUserId = _data["deleterUserId"];
+            this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
+            this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
+            this.lastModifierUserId = _data["lastModifierUserId"];
+            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
+            this.creatorUserId = _data["creatorUserId"];
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): User {
+        data = typeof data === 'object' ? data : {};
+        let result = new User();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["branch"] = this.branch ? this.branch.toJSON() : <any>undefined;
+        data["branchId"] = this.branchId;
+        data["normalizedUserName"] = this.normalizedUserName;
+        data["normalizedEmailAddress"] = this.normalizedEmailAddress;
+        data["concurrencyStamp"] = this.concurrencyStamp;
+        if (Array.isArray(this.tokens)) {
+            data["tokens"] = [];
+            for (let item of this.tokens)
+                data["tokens"].push(item.toJSON());
+        }
+        data["deleterUser"] = this.deleterUser ? this.deleterUser.toJSON() : <any>undefined;
+        data["creatorUser"] = this.creatorUser ? this.creatorUser.toJSON() : <any>undefined;
+        data["lastModifierUser"] = this.lastModifierUser ? this.lastModifierUser.toJSON() : <any>undefined;
+        data["authenticationSource"] = this.authenticationSource;
+        data["userName"] = this.userName;
+        data["tenantId"] = this.tenantId;
+        data["emailAddress"] = this.emailAddress;
+        data["name"] = this.name;
+        data["surname"] = this.surname;
+        data["fullName"] = this.fullName;
+        data["password"] = this.password;
+        data["emailConfirmationCode"] = this.emailConfirmationCode;
+        data["passwordResetCode"] = this.passwordResetCode;
+        data["lockoutEndDateUtc"] = this.lockoutEndDateUtc ? this.lockoutEndDateUtc.toISOString() : <any>undefined;
+        data["accessFailedCount"] = this.accessFailedCount;
+        data["isLockoutEnabled"] = this.isLockoutEnabled;
+        data["phoneNumber"] = this.phoneNumber;
+        data["isPhoneNumberConfirmed"] = this.isPhoneNumberConfirmed;
+        data["securityStamp"] = this.securityStamp;
+        data["isTwoFactorEnabled"] = this.isTwoFactorEnabled;
+        if (Array.isArray(this.logins)) {
+            data["logins"] = [];
+            for (let item of this.logins)
+                data["logins"].push(item.toJSON());
+        }
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item.toJSON());
+        }
+        if (Array.isArray(this.claims)) {
+            data["claims"] = [];
+            for (let item of this.claims)
+                data["claims"].push(item.toJSON());
+        }
+        if (Array.isArray(this.permissions)) {
+            data["permissions"] = [];
+            for (let item of this.permissions)
+                data["permissions"].push(item.toJSON());
+        }
+        if (Array.isArray(this.settings)) {
+            data["settings"] = [];
+            for (let item of this.settings)
+                data["settings"].push(item.toJSON());
+        }
+        data["isEmailConfirmed"] = this.isEmailConfirmed;
+        data["isActive"] = this.isActive;
+        data["isDeleted"] = this.isDeleted;
+        data["deleterUserId"] = this.deleterUserId;
+        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
+        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
+        data["lastModifierUserId"] = this.lastModifierUserId;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["creatorUserId"] = this.creatorUserId;
+        data["id"] = this.id;
+        return data;
+    }
+
+    clone(): User {
+        const json = this.toJSON();
+        let result = new User();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUser {
+    branch: Branch;
+    branchId: number | undefined;
+    normalizedUserName: string;
+    normalizedEmailAddress: string;
+    concurrencyStamp: string | undefined;
+    tokens: UserToken[] | undefined;
+    deleterUser: User;
+    creatorUser: User;
+    lastModifierUser: User;
+    authenticationSource: string | undefined;
+    userName: string;
+    tenantId: number | undefined;
+    emailAddress: string;
+    name: string;
+    surname: string;
+    fullName: string | undefined;
+    password: string;
+    emailConfirmationCode: string | undefined;
+    passwordResetCode: string | undefined;
+    lockoutEndDateUtc: moment.Moment | undefined;
+    accessFailedCount: number;
+    isLockoutEnabled: boolean;
+    phoneNumber: string | undefined;
+    isPhoneNumberConfirmed: boolean;
+    securityStamp: string | undefined;
+    isTwoFactorEnabled: boolean;
+    logins: UserLogin[] | undefined;
+    roles: UserRole[] | undefined;
+    claims: UserClaim[] | undefined;
+    permissions: UserPermissionSetting[] | undefined;
+    settings: Setting[] | undefined;
+    isEmailConfirmed: boolean;
+    isActive: boolean;
+    isDeleted: boolean;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+    id: number;
+}
+
+export class Branch implements IBranch {
+    name: string | undefined;
+    isActive: boolean;
+    user: User[] | undefined;
+    isDeleted: boolean;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+    id: number;
+
+    constructor(data?: IBranch) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.isActive = _data["isActive"];
+            if (Array.isArray(_data["user"])) {
+                this.user = [] as any;
+                for (let item of _data["user"])
+                    this.user.push(User.fromJS(item));
+            }
+            this.isDeleted = _data["isDeleted"];
+            this.deleterUserId = _data["deleterUserId"];
+            this.deletionTime = _data["deletionTime"] ? moment(_data["deletionTime"].toString()) : <any>undefined;
+            this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
+            this.lastModifierUserId = _data["lastModifierUserId"];
+            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
+            this.creatorUserId = _data["creatorUserId"];
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): Branch {
+        data = typeof data === 'object' ? data : {};
+        let result = new Branch();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["isActive"] = this.isActive;
+        if (Array.isArray(this.user)) {
+            data["user"] = [];
+            for (let item of this.user)
+                data["user"].push(item.toJSON());
+        }
+        data["isDeleted"] = this.isDeleted;
+        data["deleterUserId"] = this.deleterUserId;
+        data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
+        data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
+        data["lastModifierUserId"] = this.lastModifierUserId;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["creatorUserId"] = this.creatorUserId;
+        data["id"] = this.id;
+        return data;
+    }
+
+    clone(): Branch {
+        const json = this.toJSON();
+        let result = new Branch();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IBranch {
+    name: string | undefined;
+    isActive: boolean;
+    user: User[] | undefined;
+    isDeleted: boolean;
+    deleterUserId: number | undefined;
+    deletionTime: moment.Moment | undefined;
+    lastModificationTime: moment.Moment | undefined;
+    lastModifierUserId: number | undefined;
+    creationTime: moment.Moment;
+    creatorUserId: number | undefined;
+    id: number;
+}
+
 export class UserDto implements IUserDto {
     userName: string;
     name: string;
@@ -9708,6 +10618,8 @@ export class UserDto implements IUserDto {
     emailAddress: string;
     isActive: boolean;
     fullName: string | undefined;
+    branch: Branch;
+    branchId: number | undefined;
     lastLoginTime: moment.Moment | undefined;
     creationTime: moment.Moment;
     roleNames: string[] | undefined;
@@ -9730,6 +10642,8 @@ export class UserDto implements IUserDto {
             this.emailAddress = _data["emailAddress"];
             this.isActive = _data["isActive"];
             this.fullName = _data["fullName"];
+            this.branch = _data["branch"] ? Branch.fromJS(_data["branch"]) : <any>undefined;
+            this.branchId = _data["branchId"];
             this.lastLoginTime = _data["lastLoginTime"] ? moment(_data["lastLoginTime"].toString()) : <any>undefined;
             this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
             if (Array.isArray(_data["roleNames"])) {
@@ -9756,6 +10670,8 @@ export class UserDto implements IUserDto {
         data["emailAddress"] = this.emailAddress;
         data["isActive"] = this.isActive;
         data["fullName"] = this.fullName;
+        data["branch"] = this.branch ? this.branch.toJSON() : <any>undefined;
+        data["branchId"] = this.branchId;
         data["lastLoginTime"] = this.lastLoginTime ? this.lastLoginTime.toISOString() : <any>undefined;
         data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
         if (Array.isArray(this.roleNames)) {
@@ -9782,6 +10698,8 @@ export interface IUserDto {
     emailAddress: string;
     isActive: boolean;
     fullName: string | undefined;
+    branch: Branch;
+    branchId: number | undefined;
     lastLoginTime: moment.Moment | undefined;
     creationTime: moment.Moment;
     roleNames: string[] | undefined;
@@ -10193,7 +11111,8 @@ export interface IOnDemandGroupInfo {
     where: WhereFilter[] | undefined;
 }
 
-export class DataManagerRequest implements IDataManagerRequest {
+export class BWireDataManagerRequest implements IBWireDataManagerRequest {
+    userId: number;
     skip: number;
     take: number;
     antiForgery: string | undefined;
@@ -10209,7 +11128,7 @@ export class DataManagerRequest implements IDataManagerRequest {
     onDemandGroupInfo: OnDemandGroupInfo;
     isLazyLoad: boolean;
 
-    constructor(data?: IDataManagerRequest) {
+    constructor(data?: IBWireDataManagerRequest) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -10220,6 +11139,7 @@ export class DataManagerRequest implements IDataManagerRequest {
 
     init(_data?: any) {
         if (_data) {
+            this.userId = _data["userId"];
             this.skip = _data["skip"];
             this.take = _data["take"];
             this.antiForgery = _data["antiForgery"];
@@ -10265,15 +11185,16 @@ export class DataManagerRequest implements IDataManagerRequest {
         }
     }
 
-    static fromJS(data: any): DataManagerRequest {
+    static fromJS(data: any): BWireDataManagerRequest {
         data = typeof data === 'object' ? data : {};
-        let result = new DataManagerRequest();
+        let result = new BWireDataManagerRequest();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["userId"] = this.userId;
         data["skip"] = this.skip;
         data["take"] = this.take;
         data["antiForgery"] = this.antiForgery;
@@ -10319,15 +11240,16 @@ export class DataManagerRequest implements IDataManagerRequest {
         return data;
     }
 
-    clone(): DataManagerRequest {
+    clone(): BWireDataManagerRequest {
         const json = this.toJSON();
-        let result = new DataManagerRequest();
+        let result = new BWireDataManagerRequest();
         result.init(json);
         return result;
     }
 }
 
-export interface IDataManagerRequest {
+export interface IBWireDataManagerRequest {
+    userId: number;
     skip: number;
     take: number;
     antiForgery: string | undefined;
@@ -10521,6 +11443,7 @@ export class ClientDto implements IClientDto {
     name: string | undefined;
     address: string | undefined;
     activated: boolean;
+    branchId: number;
     provinceId: number;
     clientBalances: ClientBalanceDto[] | undefined;
     clientPhones: ClientPhoneDto[] | undefined;
@@ -10540,6 +11463,7 @@ export class ClientDto implements IClientDto {
             this.name = _data["name"];
             this.address = _data["address"];
             this.activated = _data["activated"];
+            this.branchId = _data["branchId"];
             this.provinceId = _data["provinceId"];
             if (Array.isArray(_data["clientBalances"])) {
                 this.clientBalances = [] as any;
@@ -10567,6 +11491,7 @@ export class ClientDto implements IClientDto {
         data["name"] = this.name;
         data["address"] = this.address;
         data["activated"] = this.activated;
+        data["branchId"] = this.branchId;
         data["provinceId"] = this.provinceId;
         if (Array.isArray(this.clientBalances)) {
             data["clientBalances"] = [];
@@ -10594,6 +11519,7 @@ export interface IClientDto {
     name: string | undefined;
     address: string | undefined;
     activated: boolean;
+    branchId: number;
     provinceId: number;
     clientBalances: ClientBalanceDto[] | undefined;
     clientPhones: ClientPhoneDto[] | undefined;
@@ -10687,6 +11613,7 @@ export class CreateClientDto implements ICreateClientDto {
     name: string | undefined;
     address: string | undefined;
     activated: boolean;
+    branchId: number;
     provinceId: number;
     clientBalances: ClientBalanceDto[] | undefined;
     clientPhones: ClientPhoneDto[] | undefined;
@@ -10706,6 +11633,7 @@ export class CreateClientDto implements ICreateClientDto {
             this.name = _data["name"];
             this.address = _data["address"];
             this.activated = _data["activated"];
+            this.branchId = _data["branchId"];
             this.provinceId = _data["provinceId"];
             if (Array.isArray(_data["clientBalances"])) {
                 this.clientBalances = [] as any;
@@ -10733,6 +11661,7 @@ export class CreateClientDto implements ICreateClientDto {
         data["name"] = this.name;
         data["address"] = this.address;
         data["activated"] = this.activated;
+        data["branchId"] = this.branchId;
         data["provinceId"] = this.provinceId;
         if (Array.isArray(this.clientBalances)) {
             data["clientBalances"] = [];
@@ -10760,6 +11689,7 @@ export interface ICreateClientDto {
     name: string | undefined;
     address: string | undefined;
     activated: boolean;
+    branchId: number;
     provinceId: number;
     clientBalances: ClientBalanceDto[] | undefined;
     clientPhones: ClientPhoneDto[] | undefined;
@@ -11232,6 +12162,7 @@ export class CashFlowDataManagerRequest implements ICashFlowDataManagerRequest {
     currencyId: number;
     fromDate: string | undefined;
     toDate: string | undefined;
+    userId: number;
     skip: number;
     take: number;
     antiForgery: string | undefined;
@@ -11262,6 +12193,7 @@ export class CashFlowDataManagerRequest implements ICashFlowDataManagerRequest {
             this.currencyId = _data["currencyId"];
             this.fromDate = _data["fromDate"];
             this.toDate = _data["toDate"];
+            this.userId = _data["userId"];
             this.skip = _data["skip"];
             this.take = _data["take"];
             this.antiForgery = _data["antiForgery"];
@@ -11320,6 +12252,7 @@ export class CashFlowDataManagerRequest implements ICashFlowDataManagerRequest {
         data["currencyId"] = this.currencyId;
         data["fromDate"] = this.fromDate;
         data["toDate"] = this.toDate;
+        data["userId"] = this.userId;
         data["skip"] = this.skip;
         data["take"] = this.take;
         data["antiForgery"] = this.antiForgery;
@@ -11378,6 +12311,7 @@ export interface ICashFlowDataManagerRequest {
     currencyId: number;
     fromDate: string | undefined;
     toDate: string | undefined;
+    userId: number;
     skip: number;
     take: number;
     antiForgery: string | undefined;
@@ -11850,6 +12784,7 @@ export class CompanyDto implements ICompanyDto {
     name: string | undefined;
     phone: string | undefined;
     address: string | undefined;
+    branchId: number;
     companyBalances: CompanyBalanceDto[] | undefined;
     id: number;
 
@@ -11867,6 +12802,7 @@ export class CompanyDto implements ICompanyDto {
             this.name = _data["name"];
             this.phone = _data["phone"];
             this.address = _data["address"];
+            this.branchId = _data["branchId"];
             if (Array.isArray(_data["companyBalances"])) {
                 this.companyBalances = [] as any;
                 for (let item of _data["companyBalances"])
@@ -11888,6 +12824,7 @@ export class CompanyDto implements ICompanyDto {
         data["name"] = this.name;
         data["phone"] = this.phone;
         data["address"] = this.address;
+        data["branchId"] = this.branchId;
         if (Array.isArray(this.companyBalances)) {
             data["companyBalances"] = [];
             for (let item of this.companyBalances)
@@ -11909,6 +12846,7 @@ export interface ICompanyDto {
     name: string | undefined;
     phone: string | undefined;
     address: string | undefined;
+    branchId: number;
     companyBalances: CompanyBalanceDto[] | undefined;
     id: number;
 }
@@ -12043,6 +12981,7 @@ export class CreateCompanyDto implements ICreateCompanyDto {
     name: string | undefined;
     phone: string | undefined;
     address: string | undefined;
+    branchId: number;
     companyBalances: CompanyBalanceDto[] | undefined;
 
     constructor(data?: ICreateCompanyDto) {
@@ -12059,6 +12998,7 @@ export class CreateCompanyDto implements ICreateCompanyDto {
             this.name = _data["name"];
             this.phone = _data["phone"];
             this.address = _data["address"];
+            this.branchId = _data["branchId"];
             if (Array.isArray(_data["companyBalances"])) {
                 this.companyBalances = [] as any;
                 for (let item of _data["companyBalances"])
@@ -12079,6 +13019,7 @@ export class CreateCompanyDto implements ICreateCompanyDto {
         data["name"] = this.name;
         data["phone"] = this.phone;
         data["address"] = this.address;
+        data["branchId"] = this.branchId;
         if (Array.isArray(this.companyBalances)) {
             data["companyBalances"] = [];
             for (let item of this.companyBalances)
@@ -12099,6 +13040,7 @@ export interface ICreateCompanyDto {
     name: string | undefined;
     phone: string | undefined;
     address: string | undefined;
+    branchId: number;
     companyBalances: CompanyBalanceDto[] | undefined;
 }
 
@@ -13170,6 +14112,7 @@ export class ExchangeCurrencyDataManagerRequest implements IExchangeCurrencyData
     companyId: number | undefined;
     clientId: number | undefined;
     currencyId: number | undefined;
+    userId: number;
     skip: number;
     take: number;
     antiForgery: string | undefined;
@@ -13203,6 +14146,7 @@ export class ExchangeCurrencyDataManagerRequest implements IExchangeCurrencyData
             this.companyId = _data["companyId"];
             this.clientId = _data["clientId"];
             this.currencyId = _data["currencyId"];
+            this.userId = _data["userId"];
             this.skip = _data["skip"];
             this.take = _data["take"];
             this.antiForgery = _data["antiForgery"];
@@ -13264,6 +14208,7 @@ export class ExchangeCurrencyDataManagerRequest implements IExchangeCurrencyData
         data["companyId"] = this.companyId;
         data["clientId"] = this.clientId;
         data["currencyId"] = this.currencyId;
+        data["userId"] = this.userId;
         data["skip"] = this.skip;
         data["take"] = this.take;
         data["antiForgery"] = this.antiForgery;
@@ -13325,6 +14270,7 @@ export interface IExchangeCurrencyDataManagerRequest {
     companyId: number | undefined;
     clientId: number | undefined;
     currencyId: number | undefined;
+    userId: number;
     skip: number;
     take: number;
     antiForgery: string | undefined;
@@ -14095,6 +15041,157 @@ export interface IIncomeTransferDetailChangeStatusInput {
     id: number;
 }
 
+export class DataManagerRequest implements IDataManagerRequest {
+    skip: number;
+    take: number;
+    antiForgery: string | undefined;
+    requiresCounts: boolean;
+    table: string | undefined;
+    group: string[] | undefined;
+    select: string[] | undefined;
+    expand: string[] | undefined;
+    sorted: Sort[] | undefined;
+    search: SearchFilter[] | undefined;
+    where: WhereFilter[] | undefined;
+    aggregates: Aggregate[] | undefined;
+    onDemandGroupInfo: OnDemandGroupInfo;
+    isLazyLoad: boolean;
+
+    constructor(data?: IDataManagerRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.skip = _data["skip"];
+            this.take = _data["take"];
+            this.antiForgery = _data["antiForgery"];
+            this.requiresCounts = _data["requiresCounts"];
+            this.table = _data["table"];
+            if (Array.isArray(_data["group"])) {
+                this.group = [] as any;
+                for (let item of _data["group"])
+                    this.group.push(item);
+            }
+            if (Array.isArray(_data["select"])) {
+                this.select = [] as any;
+                for (let item of _data["select"])
+                    this.select.push(item);
+            }
+            if (Array.isArray(_data["expand"])) {
+                this.expand = [] as any;
+                for (let item of _data["expand"])
+                    this.expand.push(item);
+            }
+            if (Array.isArray(_data["sorted"])) {
+                this.sorted = [] as any;
+                for (let item of _data["sorted"])
+                    this.sorted.push(Sort.fromJS(item));
+            }
+            if (Array.isArray(_data["search"])) {
+                this.search = [] as any;
+                for (let item of _data["search"])
+                    this.search.push(SearchFilter.fromJS(item));
+            }
+            if (Array.isArray(_data["where"])) {
+                this.where = [] as any;
+                for (let item of _data["where"])
+                    this.where.push(WhereFilter.fromJS(item));
+            }
+            if (Array.isArray(_data["aggregates"])) {
+                this.aggregates = [] as any;
+                for (let item of _data["aggregates"])
+                    this.aggregates.push(Aggregate.fromJS(item));
+            }
+            this.onDemandGroupInfo = _data["onDemandGroupInfo"] ? OnDemandGroupInfo.fromJS(_data["onDemandGroupInfo"]) : <any>undefined;
+            this.isLazyLoad = _data["isLazyLoad"];
+        }
+    }
+
+    static fromJS(data: any): DataManagerRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new DataManagerRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["skip"] = this.skip;
+        data["take"] = this.take;
+        data["antiForgery"] = this.antiForgery;
+        data["requiresCounts"] = this.requiresCounts;
+        data["table"] = this.table;
+        if (Array.isArray(this.group)) {
+            data["group"] = [];
+            for (let item of this.group)
+                data["group"].push(item);
+        }
+        if (Array.isArray(this.select)) {
+            data["select"] = [];
+            for (let item of this.select)
+                data["select"].push(item);
+        }
+        if (Array.isArray(this.expand)) {
+            data["expand"] = [];
+            for (let item of this.expand)
+                data["expand"].push(item);
+        }
+        if (Array.isArray(this.sorted)) {
+            data["sorted"] = [];
+            for (let item of this.sorted)
+                data["sorted"].push(item.toJSON());
+        }
+        if (Array.isArray(this.search)) {
+            data["search"] = [];
+            for (let item of this.search)
+                data["search"].push(item.toJSON());
+        }
+        if (Array.isArray(this.where)) {
+            data["where"] = [];
+            for (let item of this.where)
+                data["where"].push(item.toJSON());
+        }
+        if (Array.isArray(this.aggregates)) {
+            data["aggregates"] = [];
+            for (let item of this.aggregates)
+                data["aggregates"].push(item.toJSON());
+        }
+        data["onDemandGroupInfo"] = this.onDemandGroupInfo ? this.onDemandGroupInfo.toJSON() : <any>undefined;
+        data["isLazyLoad"] = this.isLazyLoad;
+        return data;
+    }
+
+    clone(): DataManagerRequest {
+        const json = this.toJSON();
+        let result = new DataManagerRequest();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IDataManagerRequest {
+    skip: number;
+    take: number;
+    antiForgery: string | undefined;
+    requiresCounts: boolean;
+    table: string | undefined;
+    group: string[] | undefined;
+    select: string[] | undefined;
+    expand: string[] | undefined;
+    sorted: Sort[] | undefined;
+    search: SearchFilter[] | undefined;
+    where: WhereFilter[] | undefined;
+    aggregates: Aggregate[] | undefined;
+    onDemandGroupInfo: OnDemandGroupInfo;
+    isLazyLoad: boolean;
+}
+
 export class MigrationOutput implements IMigrationOutput {
     success: boolean;
     message: string | undefined;
@@ -14200,11 +15297,14 @@ export class OutgoingTransferDto implements IOutgoingTransferDto {
     countryId: number;
     fromCompanyId: number | undefined;
     fromClientId: number | undefined;
+    toBranchId: number | undefined;
+    fromBranchId: number | undefined;
     treasuryId: number | undefined;
     receivedAmount: number;
     instrumentNo: string | undefined;
     reason: string | undefined;
     note: string | undefined;
+    isAccepted: boolean;
     beneficiary: CustomerDto;
     sender: CustomerDto;
     images: FileUploadDto[] | undefined;
@@ -14235,11 +15335,14 @@ export class OutgoingTransferDto implements IOutgoingTransferDto {
             this.countryId = _data["countryId"];
             this.fromCompanyId = _data["fromCompanyId"];
             this.fromClientId = _data["fromClientId"];
+            this.toBranchId = _data["toBranchId"];
+            this.fromBranchId = _data["fromBranchId"];
             this.treasuryId = _data["treasuryId"];
             this.receivedAmount = _data["receivedAmount"];
             this.instrumentNo = _data["instrumentNo"];
             this.reason = _data["reason"];
             this.note = _data["note"];
+            this.isAccepted = _data["isAccepted"];
             this.beneficiary = _data["beneficiary"] ? CustomerDto.fromJS(_data["beneficiary"]) : <any>undefined;
             this.sender = _data["sender"] ? CustomerDto.fromJS(_data["sender"]) : <any>undefined;
             if (Array.isArray(_data["images"])) {
@@ -14274,11 +15377,14 @@ export class OutgoingTransferDto implements IOutgoingTransferDto {
         data["countryId"] = this.countryId;
         data["fromCompanyId"] = this.fromCompanyId;
         data["fromClientId"] = this.fromClientId;
+        data["toBranchId"] = this.toBranchId;
+        data["fromBranchId"] = this.fromBranchId;
         data["treasuryId"] = this.treasuryId;
         data["receivedAmount"] = this.receivedAmount;
         data["instrumentNo"] = this.instrumentNo;
         data["reason"] = this.reason;
         data["note"] = this.note;
+        data["isAccepted"] = this.isAccepted;
         data["beneficiary"] = this.beneficiary ? this.beneficiary.toJSON() : <any>undefined;
         data["sender"] = this.sender ? this.sender.toJSON() : <any>undefined;
         if (Array.isArray(this.images)) {
@@ -14313,11 +15419,14 @@ export interface IOutgoingTransferDto {
     countryId: number;
     fromCompanyId: number | undefined;
     fromClientId: number | undefined;
+    toBranchId: number | undefined;
+    fromBranchId: number | undefined;
     treasuryId: number | undefined;
     receivedAmount: number;
     instrumentNo: string | undefined;
     reason: string | undefined;
     note: string | undefined;
+    isAccepted: boolean;
     beneficiary: CustomerDto;
     sender: CustomerDto;
     images: FileUploadDto[] | undefined;
@@ -14383,6 +15492,7 @@ export class ReadOutgoingTransferDto implements IReadOutgoingTransferDto {
     instrumentNo: string | undefined;
     reason: string | undefined;
     note: string | undefined;
+    isAccepted: boolean;
     countryId: number;
     country: CountryDto;
     currencyId: number;
@@ -14399,6 +15509,10 @@ export class ReadOutgoingTransferDto implements IReadOutgoingTransferDto {
     toCompany: CompanyDto;
     fromClientId: number | undefined;
     fromClient: ClientDto;
+    fromBranchId: number | undefined;
+    fromBranch: BranchDto;
+    toBranchId: number | undefined;
+    toBranch: BranchDto;
     id: number;
 
     constructor(data?: IReadOutgoingTransferDto) {
@@ -14423,6 +15537,7 @@ export class ReadOutgoingTransferDto implements IReadOutgoingTransferDto {
             this.instrumentNo = _data["instrumentNo"];
             this.reason = _data["reason"];
             this.note = _data["note"];
+            this.isAccepted = _data["isAccepted"];
             this.countryId = _data["countryId"];
             this.country = _data["country"] ? CountryDto.fromJS(_data["country"]) : <any>undefined;
             this.currencyId = _data["currencyId"];
@@ -14439,6 +15554,10 @@ export class ReadOutgoingTransferDto implements IReadOutgoingTransferDto {
             this.toCompany = _data["toCompany"] ? CompanyDto.fromJS(_data["toCompany"]) : <any>undefined;
             this.fromClientId = _data["fromClientId"];
             this.fromClient = _data["fromClient"] ? ClientDto.fromJS(_data["fromClient"]) : <any>undefined;
+            this.fromBranchId = _data["fromBranchId"];
+            this.fromBranch = _data["fromBranch"] ? BranchDto.fromJS(_data["fromBranch"]) : <any>undefined;
+            this.toBranchId = _data["toBranchId"];
+            this.toBranch = _data["toBranch"] ? BranchDto.fromJS(_data["toBranch"]) : <any>undefined;
             this.id = _data["id"];
         }
     }
@@ -14463,6 +15582,7 @@ export class ReadOutgoingTransferDto implements IReadOutgoingTransferDto {
         data["instrumentNo"] = this.instrumentNo;
         data["reason"] = this.reason;
         data["note"] = this.note;
+        data["isAccepted"] = this.isAccepted;
         data["countryId"] = this.countryId;
         data["country"] = this.country ? this.country.toJSON() : <any>undefined;
         data["currencyId"] = this.currencyId;
@@ -14479,6 +15599,10 @@ export class ReadOutgoingTransferDto implements IReadOutgoingTransferDto {
         data["toCompany"] = this.toCompany ? this.toCompany.toJSON() : <any>undefined;
         data["fromClientId"] = this.fromClientId;
         data["fromClient"] = this.fromClient ? this.fromClient.toJSON() : <any>undefined;
+        data["fromBranchId"] = this.fromBranchId;
+        data["fromBranch"] = this.fromBranch ? this.fromBranch.toJSON() : <any>undefined;
+        data["toBranchId"] = this.toBranchId;
+        data["toBranch"] = this.toBranch ? this.toBranch.toJSON() : <any>undefined;
         data["id"] = this.id;
         return data;
     }
@@ -14503,6 +15627,7 @@ export interface IReadOutgoingTransferDto {
     instrumentNo: string | undefined;
     reason: string | undefined;
     note: string | undefined;
+    isAccepted: boolean;
     countryId: number;
     country: CountryDto;
     currencyId: number;
@@ -14519,7 +15644,206 @@ export interface IReadOutgoingTransferDto {
     toCompany: CompanyDto;
     fromClientId: number | undefined;
     fromClient: ClientDto;
+    fromBranchId: number | undefined;
+    fromBranch: BranchDto;
+    toBranchId: number | undefined;
+    toBranch: BranchDto;
     id: number;
+}
+
+export class SearchOutgoingDataManagerRequest implements ISearchOutgoingDataManagerRequest {
+    number: number;
+    fromDate: string | undefined;
+    toDate: string | undefined;
+    paymentType: number;
+    clientId: number;
+    companyId: number;
+    countryId: number;
+    beneficiary: string | undefined;
+    beneficiaryAddress: string | undefined;
+    sender: string | undefined;
+    userId: number;
+    skip: number;
+    take: number;
+    antiForgery: string | undefined;
+    requiresCounts: boolean;
+    table: string | undefined;
+    group: string[] | undefined;
+    select: string[] | undefined;
+    expand: string[] | undefined;
+    sorted: Sort[] | undefined;
+    search: SearchFilter[] | undefined;
+    where: WhereFilter[] | undefined;
+    aggregates: Aggregate[] | undefined;
+    onDemandGroupInfo: OnDemandGroupInfo;
+    isLazyLoad: boolean;
+
+    constructor(data?: ISearchOutgoingDataManagerRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.number = _data["number"];
+            this.fromDate = _data["fromDate"];
+            this.toDate = _data["toDate"];
+            this.paymentType = _data["paymentType"];
+            this.clientId = _data["clientId"];
+            this.companyId = _data["companyId"];
+            this.countryId = _data["countryId"];
+            this.beneficiary = _data["beneficiary"];
+            this.beneficiaryAddress = _data["beneficiaryAddress"];
+            this.sender = _data["sender"];
+            this.userId = _data["userId"];
+            this.skip = _data["skip"];
+            this.take = _data["take"];
+            this.antiForgery = _data["antiForgery"];
+            this.requiresCounts = _data["requiresCounts"];
+            this.table = _data["table"];
+            if (Array.isArray(_data["group"])) {
+                this.group = [] as any;
+                for (let item of _data["group"])
+                    this.group.push(item);
+            }
+            if (Array.isArray(_data["select"])) {
+                this.select = [] as any;
+                for (let item of _data["select"])
+                    this.select.push(item);
+            }
+            if (Array.isArray(_data["expand"])) {
+                this.expand = [] as any;
+                for (let item of _data["expand"])
+                    this.expand.push(item);
+            }
+            if (Array.isArray(_data["sorted"])) {
+                this.sorted = [] as any;
+                for (let item of _data["sorted"])
+                    this.sorted.push(Sort.fromJS(item));
+            }
+            if (Array.isArray(_data["search"])) {
+                this.search = [] as any;
+                for (let item of _data["search"])
+                    this.search.push(SearchFilter.fromJS(item));
+            }
+            if (Array.isArray(_data["where"])) {
+                this.where = [] as any;
+                for (let item of _data["where"])
+                    this.where.push(WhereFilter.fromJS(item));
+            }
+            if (Array.isArray(_data["aggregates"])) {
+                this.aggregates = [] as any;
+                for (let item of _data["aggregates"])
+                    this.aggregates.push(Aggregate.fromJS(item));
+            }
+            this.onDemandGroupInfo = _data["onDemandGroupInfo"] ? OnDemandGroupInfo.fromJS(_data["onDemandGroupInfo"]) : <any>undefined;
+            this.isLazyLoad = _data["isLazyLoad"];
+        }
+    }
+
+    static fromJS(data: any): SearchOutgoingDataManagerRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new SearchOutgoingDataManagerRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["number"] = this.number;
+        data["fromDate"] = this.fromDate;
+        data["toDate"] = this.toDate;
+        data["paymentType"] = this.paymentType;
+        data["clientId"] = this.clientId;
+        data["companyId"] = this.companyId;
+        data["countryId"] = this.countryId;
+        data["beneficiary"] = this.beneficiary;
+        data["beneficiaryAddress"] = this.beneficiaryAddress;
+        data["sender"] = this.sender;
+        data["userId"] = this.userId;
+        data["skip"] = this.skip;
+        data["take"] = this.take;
+        data["antiForgery"] = this.antiForgery;
+        data["requiresCounts"] = this.requiresCounts;
+        data["table"] = this.table;
+        if (Array.isArray(this.group)) {
+            data["group"] = [];
+            for (let item of this.group)
+                data["group"].push(item);
+        }
+        if (Array.isArray(this.select)) {
+            data["select"] = [];
+            for (let item of this.select)
+                data["select"].push(item);
+        }
+        if (Array.isArray(this.expand)) {
+            data["expand"] = [];
+            for (let item of this.expand)
+                data["expand"].push(item);
+        }
+        if (Array.isArray(this.sorted)) {
+            data["sorted"] = [];
+            for (let item of this.sorted)
+                data["sorted"].push(item.toJSON());
+        }
+        if (Array.isArray(this.search)) {
+            data["search"] = [];
+            for (let item of this.search)
+                data["search"].push(item.toJSON());
+        }
+        if (Array.isArray(this.where)) {
+            data["where"] = [];
+            for (let item of this.where)
+                data["where"].push(item.toJSON());
+        }
+        if (Array.isArray(this.aggregates)) {
+            data["aggregates"] = [];
+            for (let item of this.aggregates)
+                data["aggregates"].push(item.toJSON());
+        }
+        data["onDemandGroupInfo"] = this.onDemandGroupInfo ? this.onDemandGroupInfo.toJSON() : <any>undefined;
+        data["isLazyLoad"] = this.isLazyLoad;
+        return data;
+    }
+
+    clone(): SearchOutgoingDataManagerRequest {
+        const json = this.toJSON();
+        let result = new SearchOutgoingDataManagerRequest();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ISearchOutgoingDataManagerRequest {
+    number: number;
+    fromDate: string | undefined;
+    toDate: string | undefined;
+    paymentType: number;
+    clientId: number;
+    companyId: number;
+    countryId: number;
+    beneficiary: string | undefined;
+    beneficiaryAddress: string | undefined;
+    sender: string | undefined;
+    userId: number;
+    skip: number;
+    take: number;
+    antiForgery: string | undefined;
+    requiresCounts: boolean;
+    table: string | undefined;
+    group: string[] | undefined;
+    select: string[] | undefined;
+    expand: string[] | undefined;
+    sorted: Sort[] | undefined;
+    search: SearchFilter[] | undefined;
+    where: WhereFilter[] | undefined;
+    aggregates: Aggregate[] | undefined;
+    onDemandGroupInfo: OnDemandGroupInfo;
+    isLazyLoad: boolean;
 }
 
 export class ProvinceForDropdownDto implements IProvinceForDropdownDto {
@@ -16068,6 +17392,7 @@ export class TreasuryActionDataManagerRequest implements ITreasuryActionDataMana
     expenseId: number | undefined;
     incomeId: number | undefined;
     incomeTransferDetailId: number | undefined;
+    userId: number;
     skip: number;
     take: number;
     antiForgery: string | undefined;
@@ -16105,6 +17430,7 @@ export class TreasuryActionDataManagerRequest implements ITreasuryActionDataMana
             this.expenseId = _data["expenseId"];
             this.incomeId = _data["incomeId"];
             this.incomeTransferDetailId = _data["incomeTransferDetailId"];
+            this.userId = _data["userId"];
             this.skip = _data["skip"];
             this.take = _data["take"];
             this.antiForgery = _data["antiForgery"];
@@ -16170,6 +17496,7 @@ export class TreasuryActionDataManagerRequest implements ITreasuryActionDataMana
         data["expenseId"] = this.expenseId;
         data["incomeId"] = this.incomeId;
         data["incomeTransferDetailId"] = this.incomeTransferDetailId;
+        data["userId"] = this.userId;
         data["skip"] = this.skip;
         data["take"] = this.take;
         data["antiForgery"] = this.antiForgery;
@@ -16235,6 +17562,7 @@ export interface ITreasuryActionDataManagerRequest {
     expenseId: number | undefined;
     incomeId: number | undefined;
     incomeTransferDetailId: number | undefined;
+    userId: number;
     skip: number;
     take: number;
     antiForgery: string | undefined;
@@ -16584,6 +17912,173 @@ export interface ITreasuryCashFlowDto {
     id: number;
 }
 
+export class TreasuryCashFlowDataManagerRequest implements ITreasuryCashFlowDataManagerRequest {
+    currencyId: number;
+    fromDate: string | undefined;
+    toDate: string | undefined;
+    userId: number;
+    skip: number;
+    take: number;
+    antiForgery: string | undefined;
+    requiresCounts: boolean;
+    table: string | undefined;
+    group: string[] | undefined;
+    select: string[] | undefined;
+    expand: string[] | undefined;
+    sorted: Sort[] | undefined;
+    search: SearchFilter[] | undefined;
+    where: WhereFilter[] | undefined;
+    aggregates: Aggregate[] | undefined;
+    onDemandGroupInfo: OnDemandGroupInfo;
+    isLazyLoad: boolean;
+
+    constructor(data?: ITreasuryCashFlowDataManagerRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.currencyId = _data["currencyId"];
+            this.fromDate = _data["fromDate"];
+            this.toDate = _data["toDate"];
+            this.userId = _data["userId"];
+            this.skip = _data["skip"];
+            this.take = _data["take"];
+            this.antiForgery = _data["antiForgery"];
+            this.requiresCounts = _data["requiresCounts"];
+            this.table = _data["table"];
+            if (Array.isArray(_data["group"])) {
+                this.group = [] as any;
+                for (let item of _data["group"])
+                    this.group.push(item);
+            }
+            if (Array.isArray(_data["select"])) {
+                this.select = [] as any;
+                for (let item of _data["select"])
+                    this.select.push(item);
+            }
+            if (Array.isArray(_data["expand"])) {
+                this.expand = [] as any;
+                for (let item of _data["expand"])
+                    this.expand.push(item);
+            }
+            if (Array.isArray(_data["sorted"])) {
+                this.sorted = [] as any;
+                for (let item of _data["sorted"])
+                    this.sorted.push(Sort.fromJS(item));
+            }
+            if (Array.isArray(_data["search"])) {
+                this.search = [] as any;
+                for (let item of _data["search"])
+                    this.search.push(SearchFilter.fromJS(item));
+            }
+            if (Array.isArray(_data["where"])) {
+                this.where = [] as any;
+                for (let item of _data["where"])
+                    this.where.push(WhereFilter.fromJS(item));
+            }
+            if (Array.isArray(_data["aggregates"])) {
+                this.aggregates = [] as any;
+                for (let item of _data["aggregates"])
+                    this.aggregates.push(Aggregate.fromJS(item));
+            }
+            this.onDemandGroupInfo = _data["onDemandGroupInfo"] ? OnDemandGroupInfo.fromJS(_data["onDemandGroupInfo"]) : <any>undefined;
+            this.isLazyLoad = _data["isLazyLoad"];
+        }
+    }
+
+    static fromJS(data: any): TreasuryCashFlowDataManagerRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new TreasuryCashFlowDataManagerRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["currencyId"] = this.currencyId;
+        data["fromDate"] = this.fromDate;
+        data["toDate"] = this.toDate;
+        data["userId"] = this.userId;
+        data["skip"] = this.skip;
+        data["take"] = this.take;
+        data["antiForgery"] = this.antiForgery;
+        data["requiresCounts"] = this.requiresCounts;
+        data["table"] = this.table;
+        if (Array.isArray(this.group)) {
+            data["group"] = [];
+            for (let item of this.group)
+                data["group"].push(item);
+        }
+        if (Array.isArray(this.select)) {
+            data["select"] = [];
+            for (let item of this.select)
+                data["select"].push(item);
+        }
+        if (Array.isArray(this.expand)) {
+            data["expand"] = [];
+            for (let item of this.expand)
+                data["expand"].push(item);
+        }
+        if (Array.isArray(this.sorted)) {
+            data["sorted"] = [];
+            for (let item of this.sorted)
+                data["sorted"].push(item.toJSON());
+        }
+        if (Array.isArray(this.search)) {
+            data["search"] = [];
+            for (let item of this.search)
+                data["search"].push(item.toJSON());
+        }
+        if (Array.isArray(this.where)) {
+            data["where"] = [];
+            for (let item of this.where)
+                data["where"].push(item.toJSON());
+        }
+        if (Array.isArray(this.aggregates)) {
+            data["aggregates"] = [];
+            for (let item of this.aggregates)
+                data["aggregates"].push(item.toJSON());
+        }
+        data["onDemandGroupInfo"] = this.onDemandGroupInfo ? this.onDemandGroupInfo.toJSON() : <any>undefined;
+        data["isLazyLoad"] = this.isLazyLoad;
+        return data;
+    }
+
+    clone(): TreasuryCashFlowDataManagerRequest {
+        const json = this.toJSON();
+        let result = new TreasuryCashFlowDataManagerRequest();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ITreasuryCashFlowDataManagerRequest {
+    currencyId: number;
+    fromDate: string | undefined;
+    toDate: string | undefined;
+    userId: number;
+    skip: number;
+    take: number;
+    antiForgery: string | undefined;
+    requiresCounts: boolean;
+    table: string | undefined;
+    group: string[] | undefined;
+    select: string[] | undefined;
+    expand: string[] | undefined;
+    sorted: Sort[] | undefined;
+    search: SearchFilter[] | undefined;
+    where: WhereFilter[] | undefined;
+    aggregates: Aggregate[] | undefined;
+    onDemandGroupInfo: OnDemandGroupInfo;
+    isLazyLoad: boolean;
+}
+
 export class CreateUserDto implements ICreateUserDto {
     userName: string;
     name: string;
@@ -16592,6 +18087,7 @@ export class CreateUserDto implements ICreateUserDto {
     isActive: boolean;
     roleNames: string[] | undefined;
     password: string;
+    branchId: number;
 
     constructor(data?: ICreateUserDto) {
         if (data) {
@@ -16615,6 +18111,7 @@ export class CreateUserDto implements ICreateUserDto {
                     this.roleNames.push(item);
             }
             this.password = _data["password"];
+            this.branchId = _data["branchId"];
         }
     }
 
@@ -16638,6 +18135,7 @@ export class CreateUserDto implements ICreateUserDto {
                 data["roleNames"].push(item);
         }
         data["password"] = this.password;
+        data["branchId"] = this.branchId;
         return data;
     }
 
@@ -16657,6 +18155,7 @@ export interface ICreateUserDto {
     isActive: boolean;
     roleNames: string[] | undefined;
     password: string;
+    branchId: number;
 }
 
 export class RoleDtoListResultDto implements IRoleDtoListResultDto {

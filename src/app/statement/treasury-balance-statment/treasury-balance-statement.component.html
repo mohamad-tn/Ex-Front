@@ -66,7 +66,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <ejs-grid id="CashFlowGrid" #cashFlowGrid [dataSource]="dataSource" [allowPaging]="true"
-                                [enableRtl]='true' [pageSettings]="pageSettings" locale="en" (actionComplete)="onActionComplete($event)" > 
+                                [enableRtl]='true' [query]="param" [pageSettings]="pageSettings" locale="en" (actionComplete)="onActionComplete($event)" > 
 
                                 <e-columns>
                                     <e-column field="id" headerText="Id" isPrimaryKey="true" [visible]="false">

@@ -10,57 +10,72 @@ import { AppComponentBase } from '@shared/app-component-base';
 import {
   UserDto,
   RoleDto,
-  UserServiceProxy
+  UserServiceProxy,
+  BranchDto,
+  BranchServiceProxy
 } from '@shared/service-proxies/service-proxies';
 import { NbDialogRef } from '@nebular/theme';
 import { AbpValidationError } from '@shared/components/validation/abp-validation.api';
 import { forEach as _forEach, map as _map, includes as _includes } from 'lodash-es';
 
 @Component({
-  templateUrl: 'edit-user-dialog.component.html',
-  styleUrls:['edit-user-dialog.component.scss'],
-  providers:[UserServiceProxy]
+  templateUrl: "edit-user-dialog.component.html",
+  styleUrls: ["edit-user-dialog.component.scss"],
+  providers: [UserServiceProxy],
 })
-export class EditUserDialogComponent extends AppComponentBase
-  implements OnInit {
+export class EditUserDialogComponent
+  extends AppComponentBase
+  implements OnInit
+{
   saving = false;
   roles: RoleDto[] = [];
   user: UserDto = new UserDto();
+  public fields: Object = { text: "name", value: "id" };
+  branches: BranchDto[] = [];
   id: number;
   passwordValidationErrors: Partial<AbpValidationError>[] = [
     {
-      name: 'pattern',
+      name: "pattern",
       localizationKey:
-        'PasswordsMustBeAtLeast8CharactersContainLowercaseUppercaseNumber',
+        "PasswordsMustBeAtLeast8CharactersContainLowercaseUppercaseNumber",
     },
   ];
   confirmPasswordValidationErrors: Partial<AbpValidationError>[] = [
     {
-      name: 'validateEqual',
-      localizationKey: 'PasswordsDoNotMatch',
+      name: "validateEqual",
+      localizationKey: "PasswordsDoNotMatch",
     },
   ];
-  
+
   @Output() onSave = new EventEmitter<any>();
 
   constructor(
     injector: Injector,
     public _userService: UserServiceProxy,
+    private _branchAppService: BranchServiceProxy,
     public dialogRef: NbDialogRef<EditUserDialogComponent>
   ) {
     super(injector);
   }
 
   ngOnInit(): void {
+    this.initialBranches();
     this.getRoles();
     this._userService.get(this.id).subscribe((result) => {
+      console.log(result);
       this.user = result;
     });
   }
 
+  initialBranches() {
+    this._branchAppService
+      .getAll()
+      .subscribe((result) => (this.branches = result));
+  }
+
   save(): void {
     this.saving = true;
-    
+
     this._userService
       .update(this.user)
       .pipe(
@@ -69,32 +84,31 @@ export class EditUserDialogComponent extends AppComponentBase
         })
       )
       .subscribe(() => {
-        this.notify.info(this.l('SavedSuccessfully'));
-        this.dialogRef.componentRef
+        this.notify.info(this.l("SavedSuccessfully"));
+        this.dialogRef.componentRef;
         this.dialogRef.close();
         this.onSave.emit();
       });
   }
-  onActiveChecked(checked: boolean){
+  onActiveChecked(checked: boolean) {
     this.user.isActive = checked;
   }
-  getRoles(){
+  getRoles() {
     this._userService.getRoles().subscribe((result) => {
       this.roles = result.items;
     });
   }
-  onRoleChecked(checked: boolean,role: RoleDto){
-    if(checked){
+  onRoleChecked(checked: boolean, role: RoleDto) {
+    if (checked) {
       this.user.roleNames.push(role.normalizedName);
-    }else{
-      let index:number = this.user.roleNames.indexOf(role.normalizedName);
-      if(index !== -1){
+    } else {
+      let index: number = this.user.roleNames.indexOf(role.normalizedName);
+      if (index !== -1) {
         this.user.roleNames.splice(index, 1);
       }
     }
   }
-  isRoleChecked(normalizedName: string): boolean{
+  isRoleChecked(normalizedName: string): boolean {
     return _includes(this.user.roleNames, normalizedName);
   }
-  
 }

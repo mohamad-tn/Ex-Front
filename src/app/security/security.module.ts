@@ -39,6 +39,8 @@ import { RoleComponent } from './role/role.component';
 import { CreateRoleDialogComponent } from './role/create-role/create-role-dialog.component';
 import { EditRoleDialogComponent } from './role/edit-role/edit-role-dialog.component';
 import { PermissionRoleComponent } from './role/permission-role/permission-role.component';
+import { DropDownListModule } from "@syncfusion/ej2-angular-dropdowns";
+
 
 const NB_MODULES = [
   NbActionsModule,
@@ -58,6 +60,7 @@ const NB_MODULES = [
 const SYNCFUSION_MODULES = [
   GridModule,
   ToolbarModule,
+  DropDownListModule,
 ];
 
 const SYNCFUSION_SERVICES = [

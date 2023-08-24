@@ -8,6 +8,8 @@ import {
 import { finalize } from 'rxjs/operators';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
+  BranchDto,
+  BranchServiceProxy,
   CreateUserDto,
   RoleDto,
   UserServiceProxy
@@ -17,35 +19,40 @@ import { AbpValidationError } from '@shared/components/validation/abp-validation
 import { forEach as _forEach, map as _map } from 'lodash-es';
 
 @Component({
-  templateUrl: 'create-user-dialog.component.html',
-  styleUrls:['create-user-dialog.component.scss'],
-  providers:[UserServiceProxy]
+  templateUrl: "create-user-dialog.component.html",
+  styleUrls: ["create-user-dialog.component.scss"],
+  providers: [UserServiceProxy],
 })
-export class CreateUserDialogComponent extends AppComponentBase
-  implements OnInit {
+export class CreateUserDialogComponent
+  extends AppComponentBase
+  implements OnInit
+{
   saving = false;
   isActive: boolean = true;
   roles: RoleDto[] = [];
+  public fields: Object = { text: "name", value: "id" };
+  branches: BranchDto[] = [];
   user: CreateUserDto = new CreateUserDto();
   passwordValidationErrors: Partial<AbpValidationError>[] = [
     {
-      name: 'pattern',
+      name: "pattern",
       localizationKey:
-        'PasswordsMustBeAtLeast8CharactersContainLowercaseUppercaseNumber',
+        "PasswordsMustBeAtLeast8CharactersContainLowercaseUppercaseNumber",
     },
   ];
   confirmPasswordValidationErrors: Partial<AbpValidationError>[] = [
     {
-      name: 'validateEqual',
-      localizationKey: 'PasswordsDoNotMatch',
+      name: "validateEqual",
+      localizationKey: "PasswordsDoNotMatch",
     },
   ];
-  
+
   @Output() onSave = new EventEmitter<any>();
 
   constructor(
     injector: Injector,
     public _userService: UserServiceProxy,
+    private _branchAppService: BranchServiceProxy,
     public dialogRef: NbDialogRef<CreateUserDialogComponent>
   ) {
     super(injector);
@@ -53,7 +60,14 @@ export class CreateUserDialogComponent extends AppComponentBase
 
   ngOnInit(): void {
     this.user.isActive = true;
+    this.initialBranches();
     this.getRoles();
+  }
+
+  initialBranches() {
+    this._branchAppService
+      .getAll()
+      .subscribe((result) => (this.branches = result));
   }
 
   save(): void {
@@ -66,29 +80,28 @@ export class CreateUserDialogComponent extends AppComponentBase
         })
       )
       .subscribe(() => {
-        this.notify.info(this.l('SavedSuccessfully'));
-        this.dialogRef.componentRef
+        this.notify.info(this.l("SavedSuccessfully"));
+        this.dialogRef.componentRef;
         this.dialogRef.close();
         this.onSave.emit();
       });
   }
-  onActiveChecked(checked: boolean){
+  onActiveChecked(checked: boolean) {
     this.user.isActive = checked;
   }
-  getRoles(){
+  getRoles() {
     this._userService.getRoles().subscribe((result) => {
       this.roles = result.items;
     });
   }
-  onRoleChecked(checked: boolean,role: RoleDto){
-    if(checked){
+  onRoleChecked(checked: boolean, role: RoleDto) {
+    if (checked) {
       this.user.roleNames.push(role.normalizedName);
-    }else{
-      let index:number = this.user.roleNames.indexOf(role.normalizedName);
-      if(index !== -1){
+    } else {
+      let index: number = this.user.roleNames.indexOf(role.normalizedName);
+      if (index !== -1) {
         this.user.roleNames.splice(index, 1);
       }
     }
   }
-  
 }

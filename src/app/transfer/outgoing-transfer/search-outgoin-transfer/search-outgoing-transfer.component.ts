@@ -1,12 +1,10 @@
 import { AfterViewInit, Component, Inject, Injector, OnInit, Optional, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppComponentBase } from '@shared/app-component-base';
-import { LocalizationHelper } from '@shared/localization/localization-helper';
 import { API_BASE_URL, ClientDto, ClientServiceProxy, CompanyDto, CompanyServiceProxy, CountryDto, CountryServiceProxy, OutgoingTransferDto, OutgoingTransferServiceProxy } from '@shared/service-proxies/service-proxies';
 import { AccordionComponent } from '@syncfusion/ej2-angular-navigations';
 import { GridComponent, PageSettingsModel } from '@syncfusion/ej2-angular-grids';
 import { DataManager, UrlAdaptor, Query, Predicate  } from '@syncfusion/ej2-data';
-import { L10n, setCulture, loadCldr } from '@syncfusion/ej2-base';
 import { SearchOutgoingTransferInput } from './search-outgoing-transfer-input';
 import { finalize } from 'rxjs/operators';
 import { NbDialogService } from '@nebular/theme';
@@ -25,7 +23,6 @@ export class SearchOutgoingTransferComponent extends AppComponentBase implements
   private baseUrl: string;
   public pageSettings: PageSettingsModel;
   public pageSizes: number[] = [10, 20, 100];
-  filterParams: Predicate;
   outgoingTransferInput: SearchOutgoingTransferInput = new SearchOutgoingTransferInput();
   expanded: boolean = true;
   paymentTypes: object[] = [];
@@ -35,6 +32,7 @@ export class SearchOutgoingTransferComponent extends AppComponentBase implements
   filtering: boolean = false;
   gridHeight: string = '30vh';
   public fields: Object = { text: 'name', value: 'id' };
+  public param: Query; 
 
   constructor(
     injector: Injector,
@@ -58,6 +56,11 @@ export class SearchOutgoingTransferComponent extends AppComponentBase implements
       adaptor: new UrlAdaptor()
     });
 
+    this.param = new Query().addParams(
+      "userId",
+      this.appSession.userId.toString()
+    );
+
     this.outgoingTransferInput.fromDate = new Date().toISOString();
     this.outgoingTransferInput.toDate = new Date().toISOString();
     this.initialCompanies();
@@ -68,6 +71,7 @@ export class SearchOutgoingTransferComponent extends AppComponentBase implements
       {'name' : 'نقدي' , 'id' : 0},
       {'name' : 'ذمم عملاء' , 'id' : 1},
       {'name' : 'ذمم شركات' , 'id' : 2},
+      {'name' : 'فرع' , 'id' : 3},
     ];
 
   }
@@ -110,53 +114,19 @@ export class SearchOutgoingTransferComponent extends AppComponentBase implements
     if(this.accordionInstance != undefined){
       this.accordionInstance.expandItem(false,0);
     }
-    
-    this.filterParams = undefined;
-    if(this.outgoingTransferInput.number != undefined){
-      this.addToFilterParams('number','equal',this.outgoingTransferInput.number);
-    }
-    if(this.outgoingTransferInput.fromDate != undefined){
-      this.addToFilterParams('fromDate','equal',this.outgoingTransferInput.fromDate);
-    }
-    if(this.outgoingTransferInput.toDate != undefined){
-      this.addToFilterParams('toDate','equal',this.outgoingTransferInput.toDate);
-    }
-    if(this.outgoingTransferInput.paymentType != undefined){
-      this.addToFilterParams('paymentType','equal',this.outgoingTransferInput.paymentType);
-    }
-    if(this.outgoingTransferInput.clientId != undefined && this.outgoingTransferInput.paymentType == 1){
-      this.addToFilterParams('clientId','equal',this.outgoingTransferInput.clientId);
-    }
-    if(this.outgoingTransferInput.companyId != undefined  && this.outgoingTransferInput.paymentType == 2){
-      this.addToFilterParams('companyId','equal',this.outgoingTransferInput.companyId);
-    }
-    if(this.outgoingTransferInput.countryId != undefined){
-      this.addToFilterParams('countryId','equal',this.outgoingTransferInput.countryId);
-    }
-    if(this.outgoingTransferInput.beneficiary != undefined){
-      this.addToFilterParams('beneficiary','equal',this.outgoingTransferInput.beneficiary);
-    }
-    if(this.outgoingTransferInput.beneficiaryAddress != undefined){
-      this.addToFilterParams('beneficiaryAddress','equal',this.outgoingTransferInput.beneficiaryAddress);
-    }
-    if(this.outgoingTransferInput.sender != undefined){
-      this.addToFilterParams('sender','equal',this.outgoingTransferInput.sender);
-    }
 
-    if(this.filtering){
-      this.gridInstance.query = new Query().where(this.filterParams);
-      //this.dataSource.executeQuery(new Query().where(this.filterParams));
-      this.gridInstance.refresh();
-    }
-  }
-
-  addToFilterParams(key: string,op: string,value: any){
-    this.filtering = true;
-    if(this.filterParams == undefined){
-      this.filterParams= new Predicate(key, op, value, true); 
-    }else{
-      this.filterParams= this.filterParams.and(key, op, value, true);
-    }
+    this.param = new Query()
+      .addParams("userId", this.appSession.userId.toString())
+      .addParams("number", this.outgoingTransferInput.number?.toString())
+      .addParams("fromDate", this.outgoingTransferInput.fromDate)
+      .addParams("toDate", this.outgoingTransferInput.toDate)
+      .addParams("paymentType",this.outgoingTransferInput.paymentType?.toString())
+      .addParams("clientId",this.outgoingTransferInput.clientId?.toString())
+      .addParams("companyId",this.outgoingTransferInput.companyId?.toString())
+      .addParams("countryId",this.outgoingTransferInput.countryId?.toString())
+      .addParams("beneficiary", this.outgoingTransferInput.beneficiary)
+      .addParams("beneficiaryAddress",this.outgoingTransferInput.beneficiaryAddress)
+      .addParams("sender", this.outgoingTransferInput.sender);
   }
 
   openEditPage(id){
