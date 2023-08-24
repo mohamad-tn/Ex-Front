@@ -1,0 +1,54 @@
+
+<div class="row">
+    <div class="col-md-12">
+        <nb-card class="as-case-card">
+            <nb-card-header>
+                <div class="as-head">
+                    <div class="header-container">
+                        <nb-actions>
+                            <nb-action class="control-item" icon="swap-outline"></nb-action>
+                            <nb-action class="control-item ">
+                                <h5>{{'DefaultersOfPayment' | localize}}</h5> 
+                            </nb-action>
+                        </nb-actions>
+                    </div>
+                    <div class="header-container">
+                        <nb-actions>
+                            <nb-action class="control-item" (click)="showSearchDialog()"><i class="fa fa-binoculars as-icon-primary" aria-hidden="true"></i></nb-action>
+                        </nb-actions>
+                    </div>
+                </div>
+            </nb-card-header>
+            <nb-card-body class="as-case-card-body">
+                <div class="row">
+                    <table class="table table-bordered">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>{{l('Client')}}</th>
+                                <th>تاريخ آخر حركة</th>
+                                <th width="40"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of dataSource" >
+                                <td>
+                                    <span>{{ item.clientName }}</span>
+                                </td>
+                                <td >
+                                    <span>{{item.lastActionDate | date: 'dd/MM/yyyy'}}</span>
+                                </td>
+                                <td width="40">
+                                    <a style="cursor: pointer;"><nb-icon status="primary" icon="search-outline" (click)="showSearchDetailDialog(item)"></nb-icon></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
+                                
+            </nb-card-body>
+        </nb-card>
+    
+    </div>
+</div>
+

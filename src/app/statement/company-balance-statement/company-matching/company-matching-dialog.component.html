@@ -1,0 +1,50 @@
+<form class="form-horizontal" autocomplete="off" #matchForm="ngForm" (ngSubmit)="save()">
+    <nb-card>
+        <nb-card-header>
+            {{'Matching' | localize}}
+        </nb-card-header>
+        <nb-card-body>
+            <div class="form-group row required">
+                <label class="col-md-3 col-form-label" for="matchingBy">
+                    {{ "MatchingBy" | localize }}
+                </label>
+                <div class="col-md-9">
+                    <input type="text" id='matchingBy' name='matchingBy' class="e-input as-sy-input" autocomplete="off"
+                        required [(ngModel)]="matchingDto.matchingBy" #matchingByModel="ngModel" #matchingByEl />
+                    <abp-validation-summary [control]="matchingByModel" [controlEl]="matchingByEl">
+                    </abp-validation-summary>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="matchingWith">
+                    {{ "MatchingWith" | localize }}
+                </label>
+                <div class="col-md-9">
+                    <input type="text" id='matchingWith' name='matchingWith' class="e-input as-sy-input"
+                        autocomplete="off" [(ngModel)]="matchingDto.matchingWith" #matchingWithModel="ngModel"
+                        #matchingWithEl />
+                    <abp-validation-summary [control]="matchingWithModel" [controlEl]="matchingWithEl">
+                    </abp-validation-summary>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="description">
+                    {{ "Description" | localize }}
+                </label>
+                <div class="col-md-9">
+                    <textarea id='description' name='description' class="e-input as-sy-input" autocomplete="off"
+                        [(ngModel)]="matchingDto.description" #descriptionModel="ngModel" #descriptionEl></textarea>
+                    <abp-validation-summary [control]="descriptionModel" [controlEl]="descriptionEl">
+                    </abp-validation-summary>
+                </div>
+            </div>
+
+        </nb-card-body>
+        <nb-card-footer>
+            <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!matchForm.form.valid || saving"
+                (onCancelClick)="dialogRef.close()"></abp-modal-footer>
+        </nb-card-footer>
+    </nb-card>
+</form>

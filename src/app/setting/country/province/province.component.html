@@ -1,0 +1,10 @@
+
+<ejs-grid id="proviceGrid" #offerGrid [dataSource]='provinces'  (actionBegin)='actionBegin($event)' (actionComplete)='actionComplete($event)'
+[allowSorting]="true" width='100%' [allowPaging]="true" [editSettings]='editSettings' [toolbar]='toolbar'
+[pageSettings]="pageSettings">
+    <e-columns>
+        <e-column field="id" headerText="Id" isPrimaryKey="true" [visible]="false"></e-column>
+        <e-column field='name' headerText='{{"ProviceName" | localize}}' textAlign='center'></e-column>
+        
+    </e-columns>
+</ejs-grid>

@@ -1,0 +1,295 @@
+.as-case-card{
+    width: 100%;
+    font-family: 'Cairo';
+}
+.as-case-template{
+    width: 100%;
+}
+
+.as-m-r-1{
+    margin-right: 5px;
+}
+.as-m-l-1{
+    margin-left: 5px;
+}
+.as-m-l-2{
+    margin-left: 10px;
+}
+.as-m-r-2{
+    margin-right: 10px;
+}
+
+.as-p-1{
+    margin: 5px;
+}
+.as-p-2{
+    margin: 10px;
+}
+
+.as-m-1{
+    margin: 5px;
+}
+.as-m-2{
+    margin: 10px;
+}
+
+.as-case-card-body{
+    min-height: 70vh;
+    padding-bottom: 0.5rem;
+    overflow-y: scroll;
+}
+.as-case-card-body-bg{
+    background-color:nb-theme(layout-background-color);
+}
+
+.as-grid{
+    min-height: 60vh;
+}
+
+.fa-ico-po{
+    display: inline-block;
+    position: relative;
+}
+.fa-ico-po > .fa-slash{
+    position: absolute;
+    top: 5px;
+    left: -4px;
+}
+
+.as-status{
+    padding: 0px 8px 0px 8px;
+    border-radius: 5px;
+    color:nb-theme(text-control-color);
+}
+
+.as-status-success{
+    background-color:nb-theme(color-success-default);
+}
+.as-status-primary{
+    background-color:nb-theme(color-primary-default);
+}
+.as-status-danger{
+    background-color:nb-theme(color-danger-default);
+}
+
+// Syncfusion
+.e-grid .e-headercelldiv,    //for header
+.e-grid .e-rowcell,              //for content
+.e-grid .e-summarycell,     //for summary
+.e-grid .e-row .e-input-group .e-input.e-field {  //for edit state
+    font-size: 14px;
+    font-family: 'Cairo';
+}
+
+.as-sy-input, .as-sy-input.e-ddl .e-input { 
+    font-family: Cairo; 
+    font-size: 0.9375rem;
+    font-weight: 600;
+    //width:100%;
+} 
+
+.as-breadcrumbs-previous{
+    color: gray;
+    cursor: default;
+    margin-left: 5px;
+}
+.as-breadcrumbs-name{
+    color: nb-theme(color-primary-default);
+    cursor: default;
+    margin-left: 5px;
+}
+
+/// buttons
+.as-btn-text{
+    font-family: 'Cairo';
+}
+////primay
+.as-btn-primary  {
+    background-color: nb-theme(color-primary-default);
+    color: nb-theme(text-control-color);
+}
+
+.as-btn-primary:hover{
+    background-color: nb-theme(color-primary-hover);
+}
+
+.as-btn-primary:focus{
+    background-color: nb-theme(color-primary-focus);
+}
+
+.as-btn-primary:active{
+    background-color: nb-theme(color-primary-active);
+}
+
+.as-btn-primary span{
+    color: nb-theme(text-control-color)
+}
+
+/// Button Group
+
+///primary outline
+.as-btn-primary-outline  {
+    background-color: nb-theme(color-primary-transparent-focus);
+    color: nb-theme(text-primary-color);
+    border-color:nb-theme(color-primary-transparent-default-border);
+    border-radius: 0.9375rem;
+}
+
+.as-btn-primary-outline:hover{
+    background-color: nb-theme(color-primary-transparent-hover);
+    border-color:nb-theme(color-primary-transparent-hover-border);
+    color: nb-theme(text-primary-color);
+}
+.as-btn-primary-outline:focus{
+    background-color: nb-theme(color-primary-transparent-focus);
+    border-color:nb-theme(color-primary-transparent-focus-border);
+    color: nb-theme(text-primary-color);
+}
+
+.as-btn-primary-outline:active{
+    background-color: nb-theme(color-primary-transparent-active);
+    border-color:nb-theme(color-primary-transparent-active-border);
+    color: nb-theme(text-primary-color);
+}
+
+.as-btn-primary-outline span{
+    color: nb-theme(text-primary-color)
+}
+///success
+.as-btn-success  {
+    background-color: nb-theme(color-success-default);
+    color: nb-theme(text-control-color);
+}
+
+.as-btn-success:hover{
+    background-color: nb-theme(color-success-hover);
+}
+
+.as-btn-success:focus{
+    background-color: nb-theme(color-success-focus);
+}
+
+.as-btn-success:active{
+    background-color: nb-theme(color-success-active);
+}
+
+.as-btn-success span{
+    color: nb-theme(text-control-color)
+}
+///success outline
+.as-btn-success-outline  {
+    background-color: nb-theme(color-success-transparent-focus);
+    color: nb-theme(text-success-color);
+    border-color:nb-theme(color-success-transparent-default-border);
+}
+
+.as-btn-success-outline:hover{
+    background-color: nb-theme(color-success-transparent-hover);
+    border-color:nb-theme(color-success-transparent-hover-border);
+    color: nb-theme(text-success-color);
+}
+.as-btn-success-outline:focus{
+    background-color: nb-theme(color-success-transparent-focus);
+    border-color:nb-theme(color-success-transparent-focus-border);
+    color: nb-theme(text-success-color);
+}
+
+.as-btn-success-outline:active{
+    background-color: nb-theme(color-success-transparent-active);
+    border-color:nb-theme(color-success-transparent-active-border);
+    color: nb-theme(text-success-color);
+}
+
+.as-btn-success-outline span{
+    color: nb-theme(text-success-color)
+}
+
+///danger
+.as-btn-danger  {
+    background-color: nb-theme(color-danger-default);
+    color: nb-theme(text-control-color);
+}
+
+.as-btn-danger:hover{
+    background-color: nb-theme(color-danger-hover);
+}
+
+.as-btn-danger:focus{
+    background-color: nb-theme(color-danger-focus);
+}
+
+.as-btn-danger:active{
+    background-color: nb-theme(color-danger-active);
+}
+
+.as-btn-danger span{
+    color: nb-theme(text-control-color)
+}
+///danger outline
+.as-btn-danger-outline  {
+    background-color: nb-theme(color-danger-transparent-focus);
+    color: nb-theme(text-danger-color);
+    border-color:nb-theme(color-danger-transparent-default-border);
+}
+
+.as-btn-danger-outline:hover{
+    background-color: nb-theme(color-danger-transparent-hover);
+    border-color:nb-theme(color-danger-transparent-hover-border);
+    color: nb-theme(text-danger-color);
+}
+.as-btn-danger-outline:focus{
+    background-color: nb-theme(color-danger-transparent-focus);
+    border-color:nb-theme(color-danger-transparent-focus-border);
+    color: nb-theme(text-danger-color);
+}
+
+.as-btn-danger-outline:active{
+    background-color: nb-theme(color-danger-transparent-active);
+    border-color:nb-theme(color-danger-transparent-active-border);
+    color: nb-theme(text-danger-color);
+}
+
+.as-btn-danger-outline span{
+    color: nb-theme(text-danger-color)
+}
+//icons
+.e-plus::before {
+    content: "\e823";
+}
+.e-search:before{
+    content: "\e70a";
+}
+.e-upload:before{
+    content: '\e725';
+}
+.e-font:before{
+    content: '\e34c';
+}
+.e-filter-clear-3:before{
+    content: '\e738';
+}
+
+.e-filter-clear-2:before{
+    content: '\ea82';
+}
+.e-filter-clear:before{
+    content: '\e72c';
+}
+.e-sorting:before{
+    content: '\e890';
+}
+.e-edit:before{
+    content: '\e891';
+}
+.e-trash:before{
+    content: '\eb00';
+}
+.e-eye:before{
+    content: '\e345';
+}
+
+.as-list-number{
+    font-family: Cairo; 
+    font-size: 0.9375rem;
+    color:nb-theme(color-primary-default);
+}

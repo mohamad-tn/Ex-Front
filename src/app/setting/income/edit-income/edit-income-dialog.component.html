@@ -1,0 +1,33 @@
+<form class="form-horizontal" autocomplete="off" #editIncomeForm="ngForm" (ngSubmit)="save()">
+    <nb-card>
+        <nb-card-header>
+            {{'EditIncome' | localize}}
+        </nb-card-header>
+        <nb-card-body>
+            <!--Name-->
+        <div class="form-group row required">
+            <label class="col-md-3 col-form-label" for="name">
+                {{ "Name" | localize }}
+            </label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" 
+                nbInput
+                name="name" 
+                id="name" 
+                minlength="2" 
+                required 
+                [(ngModel)]="income.name" 
+                #nameModel="ngModel" 
+                #nameEl />
+                <abp-validation-summary [control]="nameModel" [controlEl]="nameEl">
+                </abp-validation-summary>
+            </div>
+        </div>
+        </nb-card-body>
+        <nb-card-footer>
+            <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!editIncomeForm.form.valid || saving"
+            (onCancelClick)="dialogRef.close()"></abp-modal-footer>
+        </nb-card-footer>
+    </nb-card>
+</form>
+

@@ -1,0 +1,81 @@
+@import '../../../../@theme/styles/themes';
+
+@include nb-install-component() {
+
+    .as-group{
+        margin-bottom: 20px;
+        margin-top: 20px;
+        font-family: Cairo; 
+        font-size: 0.9375rem;
+        font-weight: 600;
+        
+    }
+    .as-group-elements {
+        width: 100%; 
+        text-align: center; 
+        border-bottom: 1px solid rgba(0,0,0,.1); 
+        line-height: 0.1em;
+        margin: 10px 0 20px; 
+    } 
+    
+    
+    .as-group-elements span { 
+        background-color: #fff;
+        padding:0 10px; 
+        //border: 1px solid nb-theme(color-info-default);
+        //border-radius: 3px;
+    }
+}
+
+.balance-text{
+    color:silver;
+}
+.balance-box{
+    background-color: #6200ee;
+    color: #ffffff;
+    border : 0.15rem solid #edf1f7;
+    border-radius: 8px;
+    padding-top: 0.6rem;
+}
+
+.taken-photo{
+    border: 2px #6200ee dashed;
+    // width: 90%;
+    // height: auto;
+    margin: 5px;
+}
+
+
+.upload-img{
+    position: relative;
+    width:150px;
+    height: 127px;;
+}
+
+.upload-img img {
+    border: 2px #6200ee dashed;
+    
+}
+
+.upload-img .upload-img-trash{
+    position:absolute; 
+    top:8px; 
+    left:7px;
+    cursor: pointer;
+    color: #b00020;
+}
+
+.upload-img .upload-img-view{
+    position:absolute; 
+    top:8px; 
+    left:30px;
+    cursor: pointer;
+    color: #6200ee;
+}
+
+.as-head{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+

@@ -1,0 +1,41 @@
+@import '../../../@theme/styles/themes';
+
+.fa-ico-po{
+    margin-left:5px;
+    margin-right:5px;
+    display: inline-block;
+    position: relative;
+}
+.fa-ico-po > .fa-slash{
+    position: absolute;
+    top: 3px;
+    left: -4px;
+}
+
+@include nb-install-component() {
+    .user-status{
+        padding: 0.1rem 0.5rem;
+        border-radius: 1rem;
+        font-weight: 500;
+        border-style: solid;
+        border-width: 0.06rem;
+        color: nb-theme(text-control-color);
+    }
+    .us-danger{
+        background-color: nb-theme(color-danger-default);
+    }
+    .us-primary{
+        background-color: nb-theme(color-primary-default);
+    }
+    .us-success{
+        background-color: nb-theme(color-success-default);
+    }
+    .us-info{
+        background-color: nb-theme(color-info-default);
+    }
+    .us-warning{
+        background-color: nb-theme(color-warning-default);
+    }
+}
+
+

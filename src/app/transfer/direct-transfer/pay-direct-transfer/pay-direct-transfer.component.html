@@ -1,0 +1,230 @@
+<form class="form-horizontal" autocomplete="off" #changeStatusForm="ngForm" (ngSubmit)="save()">
+    <nb-card>
+        <nb-card-header>
+            {{'تسديد حوالات' | localize}}
+        </nb-card-header>
+        <nb-card-body>
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row ">
+                                <label class="col-md-3 col-form-label" for="currency">
+                                    {{ "Currency" | localize }}
+                                </label>
+                                <div  class="col-md-9">
+                                    <input 
+                                    id='currency' 
+                                    name='currency' 
+                                    nbInput
+                                    fullWidth 
+                                    [(ngModel)]="currencyName" 
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="amount">
+                                    {{ "Amount" | localize }}
+                                </label>
+                                <div  class="col-md-9">
+                                    <ejs-numerictextbox [showSpinButton]="false"  
+                                    id='amount' 
+                                    name='amount' 
+                                    format='N'
+                                    [readonly]='true'
+                                    cssClass="as-sy-input"
+                                    [enableRtl]="true" 
+                                    [(ngModel)]="treasuryAction.amount"
+                                    ></ejs-numerictextbox>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row required">
+                                <label class="col-md-3 col-form-label" for="exchangeParty">
+                                    {{ "ExchangeParty" | localize }}
+                                </label>
+                                <div  class="col-md-9">
+                                    <ejs-dropdownlist 
+                                    id='exchangeParty' 
+                                    name='exchangeParty' 
+                                    cssClass="as-sy-input"
+                                    [dataSource]='exchangeParties' 
+                                    [enableRtl]="true" 
+                                    [fields]='exchangePartyFields' 
+                                    required
+                                    (change)="onExchangePartyChange($event)"
+                                    [(ngModel)]="exchangeParty.exchangePartyId"
+                                    #exchangePartyModel="ngModel" 
+                                    #exchangePartyEl
+                                    >
+                                    <ng-template #itemTemplateHeader let-data></ng-template>
+                                    <ng-template #itemTemplate let-data>
+                                        <div>
+                                            <span>{{data.name}}</span>
+                                            <span style="float: left;">{{l(data.group)}}</span>
+                                        </div>
+                                    </ng-template>
+                                </ejs-dropdownlist>
+                                    <abp-validation-summary [control]="exchangePartyModel" [controlEl]="exchangePartyEl">
+                                    </abp-validation-summary>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="instrumentNo">
+                                    {{ "InstrumentNo" | localize }}
+                                </label>
+                                <div  class="col-md-9">
+                                    <input
+                                    type="text"
+                                    id='instrumentNo' 
+                                    name='instrumentNo' 
+                                    class="e-input as-sy-input"
+                                    autocomplete="off"  
+                                    [(ngModel)]="treasuryAction.instrumentNo"
+                                    #instrumentNoModel="ngModel" 
+                                    #instrumentNoEl
+                                    />
+                                    <abp-validation-summary [control]="instrumentNoModel" [controlEl]="instrumentNoEl">
+                                    </abp-validation-summary>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="identificationNumber">
+                                    {{ "IdentificationNumber" | localize }}
+                                </label>
+                                <div  class="col-md-9">
+                                    <input
+                                    type="text"
+                                    id='identificationNumber' 
+                                    name='identificationNumber' 
+                                    class="e-input as-sy-input"
+                                    autocomplete="off"  
+                                    [(ngModel)]="treasuryAction.identificationNumber"
+                                    #identificationNumberModel="ngModel" 
+                                    #identificationNumberEl
+                                    />
+                                    <abp-validation-summary [control]="identificationNumberModel" [controlEl]="identificationNumberEl">
+                                    </abp-validation-summary>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="issuer">
+                                    {{ "Issuer" | localize }}
+                                </label>
+                                <div  class="col-md-9">
+                                    <input
+                                    type="text"
+                                    id='issuer' 
+                                    name='issuer' 
+                                    class="e-input as-sy-input"
+                                    autocomplete="off"  
+                                    [(ngModel)]="treasuryAction.issuer"
+                                    #issuerModel="ngModel" 
+                                    #issuerEl
+                                    />
+                                    <abp-validation-summary [control]="issuerModel" [controlEl]="issuerEl">
+                                    </abp-validation-summary>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="phoneNumber">
+                                    {{ "PhoneNumber" | localize }}
+                                </label>
+                                <div  class="col-md-9">
+                                    <input
+                                    type="text"
+                                    id='phoneNumber' 
+                                    name='phoneNumber' 
+                                    class="e-input as-sy-input"
+                                    autocomplete="off"  
+                                    [(ngModel)]="payDirectTransferInput.phoneNumber"
+                                    #phoneNumberModel="ngModel" 
+                                    #phoneNumberEl
+                                    />
+                                    <abp-validation-summary [control]="phoneNumberModel" [controlEl]="phoneNumberEl">
+                                    </abp-validation-summary>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="note">
+                                    {{ "Note" | localize }}
+                                </label>
+                                <div  class="col-md-9">
+                                    <textarea
+                                    id='note' 
+                                    name='note' 
+                                    class="e-input as-sy-input"
+                                    autocomplete="off"  
+                                    [(ngModel)]="treasuryAction.note"
+                                    #noteModel="ngModel" 
+                                    #noteEl
+                                    ></textarea>
+                                    <abp-validation-summary [control]="noteModel" [controlEl]="noteEl">
+                                    </abp-validation-summary>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Photo -->
+                <div class="col-md-5">
+                    <div class="row">
+                        <!-- <div class="col-md-12">
+                            <a nbButton status="primary" outline (click)="takePhoto();" title="Take Picture">
+                                <nb-icon icon="camera-outline"></nb-icon>
+                            </a>
+                            <hr />
+                        </div> -->
+                        <div [ngClass]="'col-md-6'" >
+                            <div class="snapshot">
+                                <img class="taken-photo" width="200" height="177" src="assets/img/take-photo.jpg" (click)="takePhoto();" />
+                            </div>
+                        </div>
+                        <div [ngClass]="'col-md-6'"  *ngFor="let image of payDirectTransferInput.images" >
+                            <div *ngIf="payDirectTransferInput.images.length > 0">
+                                <!-- <img class="taken-photo" [src]="image.fileAsBase64" width="200" height="177" /> -->
+                                <div class="upload-img">
+                                    <img [src]="getSrc(image)" width="200" (click)="showUploadImageDialog($event)"
+                                        height="177" />
+    
+                                    <div class="upload-img-trash">
+                                        <a (click)="deletePhoto(image)"><nb-icon icon="trash-2-outline"></nb-icon></a>
+                                    </div>
+                                    <div class="upload-img-view">
+                                        <a [nbPopover]="templateRef" nbPopoverTrigger="hint" nbPopoverPlacement="right"><nb-icon icon="maximize-outline"></nb-icon></a>
+                                        <ng-template #templateRef>
+                                            <div style="padding: 10px; background-color:darkslategrey;border-radius: 0.25rem;">
+                                                <img [src]="getSrc(image)" style="width: 40rem;border-radius: 0.25rem;" />
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </nb-card-body>
+        <nb-card-footer>
+            <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!changeStatusForm.form.valid || saving"
+            ></abp-modal-footer>
+            
+        </nb-card-footer>
+    </nb-card>
+</form>

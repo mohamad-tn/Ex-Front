@@ -1,0 +1,84 @@
+<form class="form-horizontal" autocomplete="off" #addCommisionForm="ngForm" (ngSubmit)="save()">
+    <nb-card>
+        <nb-card-header>
+            {{'CreateNewCommision' | localize}}
+        </nb-card-header>
+        <nb-card-body>
+            <div>
+                <!-- Currency -->
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="currencyId">
+                        {{ "Currency" | localize }}
+                    </label>
+
+                    <div class="col-md-9">
+                        <ejs-dropdownlist name="currencyId" id="currencyId" [dataSource]='currencies' [fields]='fields'
+                            cssClass="as-sy-input" [enableRtl]='true' required [(ngModel)]="commision.currencyId"
+                            #currencyIdModel="ngModel" #currencyIdEl></ejs-dropdownlist>
+                        <abp-validation-summary [control]="currencyIdModel" [controlEl]="currencyIdEl"
+                            [elementType]="'nb'"></abp-validation-summary>
+                    </div>
+                </div>
+
+                <!--From-->
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="from">
+                        {{ "From" | localize }}
+                    </label>
+                    <div class="col-md-9">
+                        <ejs-numerictextbox [showSpinButton]="false"  format='N' name="from" cssClass="as-sy-input" id="from" required
+                            [(ngModel)]="commision.from" #fromModel="ngModel" #fromEl></ejs-numerictextbox>
+                        <abp-validation-summary [control]="fromModel" [controlEl]="fromEl" [elementType]="'nb'">
+                        </abp-validation-summary>
+                    </div>
+                </div>
+
+                <!--To-->
+                <div class="form-group row required">
+                    <label class="col-md-3 col-form-label" for="to">
+                        {{ "To" | localize }}
+                    </label>
+                    <div class="col-md-9">
+                        <ejs-numerictextbox [showSpinButton]="false"  format='N' name="to" id="to" cssClass="as-sy-input" required
+                            [(ngModel)]="commision.to" #toModel="ngModel" #toEl></ejs-numerictextbox>
+                        <abp-validation-summary [control]="toModel" [controlEl]="toEl" [elementType]="'nb'">
+                        </abp-validation-summary>
+                    </div>
+                </div>
+
+                <!--Percentage-->
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="percentage">
+                        {{ "Percentage" | localize }}
+                    </label>
+                    <div class="col-md-9">
+                        <ejs-numerictextbox [showSpinButton]="false"  format='N' name="percentage" cssClass="as-sy-input" id="percentage"
+                            [(ngModel)]="commision.percentage" #percentageModel="ngModel" #percentageEl>
+                        </ejs-numerictextbox>
+                        <abp-validation-summary [control]="percentageModel" [controlEl]="percentageEl"
+                            [elementType]="'nb'">
+                        </abp-validation-summary>
+                    </div>
+                </div>
+
+                <!--Value-->
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="value">
+                        {{ "Value" | localize }}
+                    </label>
+                    <div class="col-md-9">
+                        <ejs-numerictextbox [showSpinButton]="false"  format='N' name="value" id="value" cssClass="as-sy-input"
+                            [(ngModel)]="commision.value" #valueModel="ngModel" #valueEl></ejs-numerictextbox>
+                        <abp-validation-summary [control]="valueModel" [controlEl]="valueEl" [elementType]="'nb'">
+                        </abp-validation-summary>
+                    </div>
+                </div>
+
+            </div>
+        </nb-card-body>
+        <nb-card-footer>
+            <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!addCommisionForm.form.valid || saving"
+                (onCancelClick)="dialogRef.close()"></abp-modal-footer>
+        </nb-card-footer>
+    </nb-card>
+</form>

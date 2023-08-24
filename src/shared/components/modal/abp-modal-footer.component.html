@@ -1,0 +1,26 @@
+<div class="btn-footer justify-content-between">
+  <button nbButton status="primary" type="submit" [disabled]="saveDisabled">
+    <nb-icon icon="save"></nb-icon>
+    {{ saveLabel }}
+  </button>
+
+  <button
+    nbButton
+    type="button"
+    status="danger"
+    [disabled]="cancelDisabled"
+    (click)="onCancelClick.emit()"
+    
+  >
+  <nb-icon icon="close"></nb-icon>
+    {{ cancelLabel }}
+  </button>
+</div>
+  
+
+
+  
+  
+  
+  
+

@@ -1,0 +1,76 @@
+<form class="form-horizontal" autocomplete="off" #editCountryForm="ngForm" (ngSubmit)="save()">
+    <nb-card>
+        <nb-card-header>
+            {{'CreateNewCountry' | localize}}
+        </nb-card-header>
+        <nb-card-body>
+            <tabset>
+                <tab [heading]="'CountryInfo' | localize" class="pt-3 px-2">
+                    <!--Name-->
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="name">
+                            {{ "Name" | localize }}
+                        </label>
+                        <div  class="col-md-9">
+                            <input nbInput type="text" class="form-control"
+                            name="name" 
+                            id="name" 
+                            minlength="2" 
+                            required 
+                            [(ngModel)]="country.name" 
+                            #nameModel="ngModel" 
+                            #nameEl />
+                            <abp-validation-summary [control]="nameModel" [controlEl]="nameEl">
+                            </abp-validation-summary>
+                        </div>
+                    </div>
+                </tab>
+                <!-- Provinces -->
+                <tab [heading]="'Provinces' | localize" class="pt-3 px-2">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="form-group row">
+                                <label class="col-md-3 col-form-label" for="name">
+                                    {{ "ProvinceName" | localize }}
+                                </label>
+                                <div  class="col-md-9">
+                                    <input nbInput type="text" class="form-control"
+                                    name="provinceName" 
+                                    id="provinceName" 
+                                    [(ngModel)]="provinceName" 
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <a nbButton shape="round" status="primary" (click)="addProvince($event)"><i class="fa fa-plus"></i></a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                    <th>{{'Province' | localize}}</th>
+                                    <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let province of country.provinces" [value]="province.name">
+                                        <td><span class="v-text-primary"> {{province.name}}</span></td>
+                                        <td><span><a  (click)="removeProvince(province.name)"><nb-icon status="danger" icon="trash-2-outline"></nb-icon></a></span></td>
+                                    </tr>
+                                </tbody>
+                            </table> 
+                        </div>
+                    </div>
+                </tab>
+            </tabset>
+            
+        </nb-card-body>
+        <nb-card-footer>
+            <abp-modal-footer [cancelDisabled]="saving" [saveDisabled]="!editCountryForm.form.valid || saving"
+            (onCancelClick)="dialogRef.close()"></abp-modal-footer>
+        </nb-card-footer>
+    </nb-card>
+</form>

@@ -1,0 +1,32 @@
+@import '../../../@theme/styles/themes';
+
+.as-head{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.as-icon-primary{
+    font-size:24px;
+    cursor: pointer;
+    color:nb-theme(color-primary-default);
+    text-shadow: 2px 2px 2px #8f9bb3;
+}
+
+.table th {
+    text-align: center; 
+    vertical-align: middle; 
+    border-color: #8a949d91; 
+}
+
+.table td {
+    text-align: center; 
+    vertical-align: middle;  
+    border-color: #8a949d91;
+}
+
+.table .tfoot-light td {
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #8a949d91;
+    font-weight: bold;
+}

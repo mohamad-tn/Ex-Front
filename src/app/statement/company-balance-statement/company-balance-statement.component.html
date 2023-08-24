@@ -1,0 +1,148 @@
+<form class="form-horizontal" autocomplete="off" >
+    <div class="row">
+        <div class="col-md-12">
+            <nb-card class="as-case-card">
+                <nb-card-header>
+                    <nb-actions>
+                        <nb-action class="control-item" icon="file-text-outline"></nb-action>
+                        <nb-action class="control-item ">
+                            <h5>{{ "CompanyBalanceStatement" | localize }}</h5> 
+                        </nb-action>
+                    </nb-actions>
+                </nb-card-header>
+                <nb-card-body class="as-case-card-body">
+                    <!-- Search Box -->
+                        <div class="row">
+                            <div class="col-md-10 balance-box">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group row">
+                                            <label class="col-md-3  col-form-label" for="companyName">
+                                                {{ "Company" | localize }}
+                                            </label>
+                                            <div  class="col-md-9">
+                                                <input class="e-input as-sy-input" type="text" tabindex="-1"  value="{{ companyName }}" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group row">
+                                            <label class="col-md-3  col-form-label" for="companyBalance">
+                                                {{ "CurrentBalance" | localize }}
+                                            </label>
+                                            <div  class="col-md-9">
+                                                <input class="e-input as-sy-input" type="text" tabindex="-1"  value="{{ currenctBalance }}" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group row">
+                                            <label class="col-md-3 col-form-label" for="companyBalance">
+                                                {{ "للفترة من" | localize }}
+                                            </label>
+                                            <div  class="col-md-9">
+                                                <div class="e-input-group" >
+                                                    <input nbInput class="e-input as-sy-input" type="text"  [value]="getDate(fromDate,'dd/MM/yyyy')" readonly />
+                                                    <span class="e-input-group-icon e-date-icon" ></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group row">
+                                            <label class="col-md-3  col-form-label" for="companyBalance">
+                                                {{ "إلى" | localize }}
+                                            </label>
+                                            <div  class="col-md-9">
+                                                <div class="e-input-group">
+                                                    <input nbInput class="e-input as-sy-input " type="text" tabindex="-1"  [value]="getDate(toDate,'dd/MM/yyyy')" readonly />
+                                                    <span class="e-input-group-icon e-date-icon" ></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-2">
+                                <a nbButton status="primary" (click)="showMatchingDialog($event)" >
+                                    <nb-icon icon="save"></nb-icon>
+                                    {{ 'تثبيت المطابقة' | localize }}
+                                </a>
+                            </div>
+                        </div>
+                    <hr />
+                    
+                    <!-- Grid -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ejs-grid id="CashFlowGrid" #cashFlowGrid [dataSource]="dataSource" [gridLines]='"Both"' [allowPaging]="true"
+                            [enableRtl]='true' height='35vh' width='100%' [query]="param" 
+                            [pageSettings]="pageSettings" locale="en" >
+                                
+                                <e-columns>
+                                    <e-column field="id" headerText="Id" isPrimaryKey="true" [visible]="false"></e-column>
+                                    <e-column headerText="{{l('Matching')}}" textAlign="center" width=120>
+                                        <ng-template #template let-data>
+                                            <!-- <nb-icon *ngIf="data.cashFlowMatching" icon="done-all-outline" [options]="{ animation: { type: 'zoom' } }" status="primary"></nb-icon> -->
+                                            <nb-checkbox *ngIf="data.id > 0" [checked]="data.matched" (checkedChange)="checkedMatched($event, data.id)" status="primary"></nb-checkbox>
+                                        </ng-template>
+                                    </e-column>
+                                    <e-column field="balance" headerText="{{l('Balance')}}" textAlign="center" width=150>
+                                        <ng-template #template let-data>{{ getBalance(data.balance) }}</ng-template>
+                                    </e-column>
+                                    <e-column headerText="{{l('له')}}" textAlign="center" width=120>
+                                        <ng-template #template let-data>
+                                            <span *ngIf="data.amount < 0">
+                                                {{ numberWithCommasAndAbs(data.amount) }}
+                                            </span>
+                                        </ng-template>
+                                    </e-column>
+                                    <e-column headerText="{{l('عليه')}}" textAlign="center" width=120>
+                                        <ng-template #template let-data>
+                                            <span *ngIf="data.amount > 0">
+                                                {{ numberWithCommasAndAbs(data.amount) }}
+                                            </span>
+                                        </ng-template>
+                                    </e-column>
+                                    <e-column headerText="{{l('Commission')}}" textAlign="center" width=120>
+                                        <ng-template #template let-data>
+                                            <span *ngIf="data.commission">{{ getBalance(data.commission) }}</span>
+                                            <span *ngIf="!data.commission">{{ getBalance(data.companyCommission) }}</span>
+                                        </ng-template>
+                                    </e-column>
+                                    <e-column field="type" headerText="{{l('Type')}}" textAlign="center" width=120></e-column>
+                                    <e-column field="date" format='dd/MM/yyyy hh:mm' type='date' headerText="{{l('Date')}}" width="200" textAlign="center">
+                                    </e-column>
+                                    <!-- <e-column field="creatorUser" headerText="{{l('Creator')}}" width=150></e-column> -->
+                                    <e-column field="note" headerText="{{l('Note')}}" textAlign="center" width=250></e-column>
+                                    <e-column field="instrumentNo" headerText="{{l('InstrumentNo')}}" textAlign="center" width=120></e-column>
+                                    <e-column   headerText="{{l('Matcher')}}" textAlign="center" width=150>
+                                        <ng-template #template let-data>
+                                            <span *ngIf="data.cashFlowMatching" [nbPopover]="templateRef" nbPopoverPlacement="top">{{ data.cashFlowMatching?.matchingBy }}</span>
+                                            <ng-template #templateRef >
+                                                <div style="padding: 0.5rem;">
+                                                    <div style="margin: 0.5rem;">
+                                                        <span>{{ "MatchingBy" | localize }}: </span><span>{{data.cashFlowMatching?.matchingBy  }}</span>
+                                                    </div>
+                                                    <div style="margin: 0.5rem;">
+                                                        <span>{{ "MatchingWith" | localize }}: </span><span>{{data.cashFlowMatching?.matchingWith  }}</span>
+                                                    </div>
+                                                    <div style="margin: 0.5rem;">
+                                                        <span>{{ "Description" | localize }}: </span><span>{{data.cashFlowMatching?.description  }}</span>
+                                                    </div>
+                                                </div>
+                                            </ng-template>
+                                        </ng-template>
+                                    </e-column>
+                                </e-columns>
+                            </ejs-grid>
+                        </div>
+                    </div>
+                    
+                </nb-card-body>
+            </nb-card>
+        </div>
+    </div>
+
+</form>

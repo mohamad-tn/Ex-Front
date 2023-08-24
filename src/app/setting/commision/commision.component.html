@@ -1,0 +1,73 @@
+<div [@routerTransition]>
+    <div class="row">
+        <div class="col-md-12">
+            <nb-card class="as-case-card">
+                <nb-card-header>
+                    <nb-actions>
+                        <nb-action class="control-item" icon="percent-outline"></nb-action>
+                        <nb-action class="control-item ">
+                            <h5>{{ "Commision" | localize }}</h5> 
+                        </nb-action>
+                    </nb-actions>
+                </nb-card-header>
+                <nb-card-body class="as-case-card-body">
+                    <ejs-grid id="commisionGrid" #commisionGrid [dataSource]="commisions" [allowPaging]="true"
+                    [allowSorting]="true" [allowFiltering]="true" [enableRtl]='true' 
+                    [pageSettings]="pageSettings" [filterSettings]='filterOption'>
+                    <!--toolbar-->
+                    <ng-template #toolbarTemplate>
+                        <ejs-toolbar>
+                            <div>
+                                <div style="width: 5px;"></div>
+                                
+                                <div >
+                                    <button nbButton shape="round" status="primary"  (click)="showCreateDialog()" *ngIf="permission.isGranted('Pages.Commisions.Create')"><i class="fa fa-plus"></i></button>
+                                </div>
+                                <div>
+                                    <button nbButton shape="round" status="primary" outline (click)="clearFilters()">
+                                        <span class="fa-ico-po">
+                                            <i class="fas fa-filter"></i>
+                                            <i class="fas fa-slash"  style="color:Tomato"></i>
+                                        </span>
+                                        {{'ClearFilters' | localize}}
+                                    </button>
+                                </div>
+                                <div>
+                                    <button nbButton shape="round" status="primary" outline (click)="clearSorts()">
+                                        <span class="fa-ico-po">
+                                            <i class="fas fa-sort-amount-up"></i>
+                                            <i class="fas fa-slash" style="color:Tomato"></i>
+                                        </span>
+                                        {{'ClearSorts' | localize}}
+                                    </button>
+                                </div>
+                            </div>
+                        </ejs-toolbar>
+                        
+                    </ng-template>
+                        <!--Columns-->
+                        <e-columns>
+                            <e-column headerText="{{l('Commands')}}" textAlign='Center' width="150"
+                                *ngIf="permission.isGranted('Pages.Commisions.Edit') || permission.isGranted('Pages.Commisions.Delete')">
+                                <ng-template #template let-data>
+                                    <nb-actions [size]="'small'">
+                                        <nb-action class="control-item" icon="edit-outline" (click)="showEditDialog(data.id)" *ngIf="permission.isGranted('Pages.Commisions.Edit')"></nb-action>
+                                        <nb-action class="control-item" icon="trash-2-outline" (click)="delete(data)" *ngIf="permission.isGranted('Pages.Commisions.Delete')"></nb-action>
+                                    </nb-actions>
+                                </ng-template>
+                            </e-column>
+                            <e-column field="id" headerText="Id" isPrimaryKey="true" [visible]="false"></e-column>
+                            <e-column field="currency.name" headerText="{{'Currency' | localize}}" textAlign="center"></e-column>
+                            <e-column field="from" headerText="{{'From' | localize}}" textAlign="center" format='N2'></e-column>
+                            <e-column field="to" headerText="{{'To' | localize}}" textAlign="center" format='N2'></e-column>
+                            <e-column field="percentage" headerText="{{'Percentage' | localize}}" textAlign="center" format='N2'  >
+                            </e-column>
+                            <e-column field="value" headerText="{{'Value' | localize}}" textAlign="center" format='N2'></e-column>
+                        </e-columns>
+                    </ejs-grid>
+                </nb-card-body>
+            </nb-card>
+        </div>
+    </div>
+    
+</div>

@@ -1,0 +1,61 @@
+<div class="row">
+    <div class="col-md-12">
+        <nb-card class="as-case-card">
+            <nb-card-header>
+                <div class="header-container">
+                    <nb-actions>
+                        <nb-action class="control-item" icon="swap-outline"></nb-action>
+                        <nb-action class="control-item ">
+                            <h5>{{ "بحث الصندوق" | localize }}</h5>
+                        </nb-action>
+                    </nb-actions>
+                </div>
+                
+            </nb-card-header>
+            <nb-card-body class="as-case-card-body">
+                <!-- Grid -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <ejs-grid id="SearchGrid" #searchGrid [dataSource]="dataSource" [query]="param" [allowPaging]="true"
+                            [enableRtl]='true' height='{{gridHeight}}' width='100%' [pageSettings]="pageSettings">
+                            <e-columns>
+                                <e-column headerText="{{l('Commands')}}" textAlign='Center' width="150">
+                                    <ng-template #template let-data>
+                                        <nb-actions [size]="'small'">
+                                            <nb-action class="control-item" icon="edit-outline" (click)="showDialog(data.id,'edit')"></nb-action>
+                                            <nb-action class="control-item" icon="trash-2-outline" (click)="showDialog(data.id,'delete')"></nb-action>
+                                        </nb-actions>
+                                    </ng-template>
+                                </e-column>
+                                <e-column field="id" headerText="Id" isPrimaryKey="true" [visible]="false">
+                                </e-column>
+                                <e-column field="actionType" headerText="{{'ActionType' | localize}}" width="150">
+                                    <ng-template #template let-data>
+                                        <span *ngIf="data.actionType == 0 ">صرف</span>
+                                        <span *ngIf="data.actionType == 1 ">قبض</span>
+                                    </ng-template>
+                                </e-column>
+                                
+                                <e-column headerText="{{'MainAccount' | localize}}" width="150">
+                                    <ng-template #template let-data>
+                                        <span *ngIf="data.mainAccountClientId != undefined">{{'Client' | localize}} / {{data.mainAccountClient.name}}</span>
+                                        <span *ngIf="data.mainAccountCompanyId != undefined">{{'Company' | localize}} / {{data.mainAccountCompany.name}}</span>
+                                        <span *ngIf="data.expenseId != undefined">{{'Expence' | localize}} / {{data.expense.name}}</span>
+                                        <span *ngIf="data.incomeId != undefined">{{'Income' | localize}} / {{data.income.name}}</span>
+                                        <span *ngIf="data.incomeTransferDetailId != undefined">{{'DirectTransfer' | localize}} / {{data.incomeTransferDetailId}}</span>
+                                    </ng-template>
+                                    
+                                </e-column>
+                                <e-column field="amount" headerText="{{'Amount' | localize}}" width ="150"></e-column>
+                                <e-column field="currency.name" headerText="{{'Currency' | localize}}" width ="150"></e-column>
+                                <e-column field="date" headerText="{{'Date' | localize}}" width="200"></e-column>
+                                
+                            </e-columns>
+                        </ejs-grid>
+                    </div>
+                </div>
+
+            </nb-card-body>
+        </nb-card>
+    </div>
+</div>
