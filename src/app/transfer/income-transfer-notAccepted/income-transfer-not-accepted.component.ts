@@ -3,6 +3,7 @@ import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/app-component-base';
 import { API_BASE_URL, OutgoingTransferServiceProxy, ReadOutgoingTransferDto } from '@shared/service-proxies/service-proxies';
 import { FilterSettingsModel, GridComponent, PageSettingsModel, ToolbarItems } from '@syncfusion/ej2-angular-grids';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: "app-income-transfer-not-accepted",
@@ -56,8 +57,10 @@ export class IncomeTransferNotAcceptedComponent
   }
 
   AcceptTransfer(data: ReadOutgoingTransferDto) {
-    console.log(this.transfers);
-    console.log(data);
+    this._outGoingTransferServiceProxy.acceptOutgoingTransferFromBranch(data.id)
+    .pipe(finalize(()=>{
+      this.grid.refresh()
+    }))
   }
 }
     

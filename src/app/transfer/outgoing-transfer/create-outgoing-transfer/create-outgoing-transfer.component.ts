@@ -204,6 +204,9 @@ export class CreateOutgoingTransferComponent
 
   onPaymentTypeChange(args: any) {
     this.outgoingTransfer.receivedAmount = 0;
+    if (args.itemData.id !== 3) {
+      this.initialCompanies();
+    }
   }
 
   onChangeBeneficiary(args: any) {
@@ -309,16 +312,12 @@ export class CreateOutgoingTransferComponent
   }
 
   onToBranchChange(args: any) {
-    if (
-      args.itemData != undefined &&
-      args.itemData.id != undefined &&
-      this.outgoingTransfer.toBranchId != undefined
-    ) {
-      this.getToBranchBalance(
-        args.itemData.id,
-        this.outgoingTransfer.currencyId
-      );
-    }
+
+      this._companyAppService
+        .gatAllByBranchId(args.itemData.id)
+        .subscribe((result) => {
+          this.companies = result;
+        });
   }
 
   onAmountChange(args: any) {

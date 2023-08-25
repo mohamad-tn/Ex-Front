@@ -2343,6 +2343,69 @@ export class CompanyServiceProxy {
         }
         return _observableOf<void>(null as any);
     }
+
+    /**
+     * @param branchId (optional) 
+     * @return Success
+     */
+    gatAllByBranchId(branchId: number | undefined): Observable<CompanyDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/Company/GatAllByBranchId?";
+        if (branchId === null)
+            throw new Error("The parameter 'branchId' cannot be null.");
+        else if (branchId !== undefined)
+            url_ += "branchId=" + encodeURIComponent("" + branchId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGatAllByBranchId(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGatAllByBranchId(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<CompanyDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<CompanyDto[]>;
+        }));
+    }
+
+    protected processGatAllByBranchId(response: HttpResponseBase): Observable<CompanyDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200.push(CompanyDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CompanyDto[]>(null as any);
+    }
 }
 
 @Injectable()
@@ -6656,62 +6719,6 @@ export class OutgoingTransferServiceProxy {
             }));
         }
         return _observableOf<OutgoingTransferDto>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    getForNotAcceptedGrid(body: DataManagerRequest | undefined): Observable<ReadGrudDto> {
-        let url_ = this.baseUrl + "/api/services/app/OutgoingTransfer/GetForNotAcceptedGrid";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_ : any = {
-            body: content_,
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
-                "Accept": "text/plain"
-            })
-        };
-
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetForNotAcceptedGrid(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetForNotAcceptedGrid(response_ as any);
-                } catch (e) {
-                    return _observableThrow(e) as any as Observable<ReadGrudDto>;
-                }
-            } else
-                return _observableThrow(response_) as any as Observable<ReadGrudDto>;
-        }));
-    }
-
-    protected processGetForNotAcceptedGrid(response: HttpResponseBase): Observable<ReadGrudDto> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (response as any).error instanceof Blob ? (response as any).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ReadGrudDto.fromJS(resultData200);
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<ReadGrudDto>(null as any);
     }
 }
 
