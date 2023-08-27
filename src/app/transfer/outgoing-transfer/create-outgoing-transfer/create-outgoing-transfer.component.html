@@ -342,7 +342,7 @@
                             
                         </div>
                         
-                        <div class="col-md-4 balance-box" *ngIf="outgoingTransfer.paymentType != 0">
+                        <div class="col-md-4 balance-box" *ngIf="outgoingTransfer.paymentType != 0 && outgoingTransfer.paymentType != 3">
                             <div class="form-group row" >
                                     <label class="col-md-5 balance-text col-form-label" for="companyBalance">
                                         {{ "PreviousBalance" | localize }}

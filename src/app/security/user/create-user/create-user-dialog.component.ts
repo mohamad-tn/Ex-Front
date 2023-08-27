@@ -33,6 +33,8 @@ export class CreateUserDialogComponent
   public fields: Object = { text: "name", value: "id" };
   branches: BranchDto[] = [];
   user: CreateUserDto = new CreateUserDto();
+  rolesNames: string[]=[];
+
   passwordValidationErrors: Partial<AbpValidationError>[] = [
     {
       name: "pattern",
@@ -96,7 +98,9 @@ export class CreateUserDialogComponent
   }
   onRoleChecked(checked: boolean, role: RoleDto) {
     if (checked) {
-      this.user.roleNames.push(role.normalizedName);
+      this.rolesNames.push(role.normalizedName);
+      this.user.roleNames = this.rolesNames;
+      console.log(this.user);
     } else {
       let index: number = this.user.roleNames.indexOf(role.normalizedName);
       if (index !== -1) {

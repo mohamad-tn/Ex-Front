@@ -47,20 +47,16 @@ export class IncomeTransferNotAcceptedComponent
     };
 
     this.toolbar = ["Search"];
-
-    // this.transfers = new DataManager({
-    //   url:
-    //     this.baseUrl +
-    //     "/api/services/app/OutgoingTransfer/GetForNotAcceptedGrid",
-    //   adaptor: new UrlAdaptor(),
-    // });
   }
 
   AcceptTransfer(data: ReadOutgoingTransferDto) {
     this._outGoingTransferServiceProxy.acceptOutgoingTransferFromBranch(data.id)
     .pipe(finalize(()=>{
-      this.grid.refresh()
-    }))
+      this.grid.refresh();
+    })).subscribe((result)=>{
+      console.log(result);
+      this.ngOnInit();
+    })
   }
 }
     
