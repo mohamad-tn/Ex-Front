@@ -70,7 +70,7 @@ export class EditOutgoingTransferComponent
     ];
 
     this.initialCurrencies();
-    this.initialCompanies();
+    // this.initialCompanies();
     this.initialCountries();
     this.initialClients();
     this.initialCustomers();
@@ -92,6 +92,17 @@ export class EditOutgoingTransferComponent
           .subscribe((result) => {
             console.log(result);
             this.outgoingTransfer = result;
+            /////
+            if (result.paymentType === 3) {
+              this._companyAppService
+                .gatAllByBranchId(result.toBranchId)
+                .subscribe((result) => {
+                  this.companies = result;
+                });
+            }else{
+              this.initialCompanies();
+            }
+            /////
             var dateMomentObject = moment(
               this.outgoingTransfer.date,
               "DD/MM/YYYY hh:mm:ss a"
@@ -180,6 +191,9 @@ export class EditOutgoingTransferComponent
   onPaymentTypeChange(args: any) {
     if (args.item?.id != 1) {
       this.outgoingTransfer.receivedAmount = 0;
+      if (args.itemData.id !== 3) {
+        this.initialCompanies();
+      }
     }
   }
 
@@ -207,18 +221,12 @@ export class EditOutgoingTransferComponent
   }
 
   onToBranchChange(args: any) {
-    if (
-      args.itemData != undefined &&
-      args.itemData.id != undefined &&
-      this.outgoingTransfer.toBranchId != undefined
-    ) {
-      this.getToBranchBalance(
-        args.itemData.id,
-        this.outgoingTransfer.currencyId
-      );
-    }
+    this._companyAppService
+      .gatAllByBranchId(args.itemData.id)
+      .subscribe((result) => {
+        this.companies = result;
+      });
   }
-  getToBranchBalance(toBranchId, currencyId) {}
 
   onCurrencyChange(args: any) {
     if (args.itemData != undefined && args.itemData.id != undefined) {

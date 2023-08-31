@@ -1,10 +1,23 @@
-import { AppComponentBase } from '@shared/app-component-base';
-import { Component, EventEmitter, Injector, OnInit, Output } from '@angular/core';
-import { BranchServiceProxy, CreateBranchDto } from '@shared/service-proxies/service-proxies';
-import { finalize } from 'rxjs/operators';
-import { NbDialogRef } from '@nebular/theme';
-
-
+import { AppComponentBase } from "@shared/app-component-base";
+import {
+  Component,
+  EventEmitter,
+  Injector,
+  OnInit,
+  Output,
+} from "@angular/core";
+import {
+  BranchServiceProxy,
+  CountryDto,
+  CountryServiceProxy,
+  CreateBranchDto,
+  GeneralSettingDto,
+  GeneralSettingServiceProxy,
+  ProvinceGroupDto,
+  ProvinceServiceProxy,
+} from "@shared/service-proxies/service-proxies";
+import { finalize } from "rxjs/operators";
+import { NbDialogRef } from "@nebular/theme";
 
 @Component({
   templateUrl: "create-branch-dialog.component.html",
@@ -17,17 +30,41 @@ export class CreateBranchDialogComponent
 {
   saving = false;
   branch: CreateBranchDto = new CreateBranchDto();
+  provinces: ProvinceGroupDto[] = [];
+  company: string = "";
+  public fields: Object = {
+    groupBy: "group",
+    text: "name",
+    value: "provinceId",
+  };
   @Output() onSave = new EventEmitter<any>();
+  provinceId: any;
 
   constructor(
     injector: Injector,
     public _branchService: BranchServiceProxy,
+    public _provinceService: ProvinceServiceProxy,
+    public _generalSettingService: GeneralSettingServiceProxy,
     public dialogRef: NbDialogRef<CreateBranchDialogComponent>
   ) {
     super(injector);
   }
   ngOnInit(): void {
     this.branch.isActive = true;
+    this.initialProvinces();
+    this.initialCompanyName();
+  }
+
+  initialProvinces() {
+    this._provinceService.getProvinceGroup().subscribe((result) => {
+      this.provinces = result;
+    });
+  }
+
+  initialCompanyName() {
+    this._generalSettingService.get().subscribe((result) => {
+      this.company = result.companyName;
+    });
   }
 
   onActivatedValueChanged(checked) {
@@ -35,6 +72,12 @@ export class CreateBranchDialogComponent
   }
 
   save(): void {
+    this.provinces.forEach((x) => {
+      if (x.provinceId === this.provinceId) {
+        this.branch.countryId = x.countryId;
+        this.branch.name = this.company + "-" + x.name;
+      }
+    });
     this.saving = true;
     this._branchService
       .create(this.branch)

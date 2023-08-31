@@ -1,11 +1,8 @@
 import { Component, Inject, Injector, OnInit, Optional } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CheckEditPasswordComponent } from '@app/setting/general-setting/check-edit-password/check-edit-password.component';
 import { NbDialogService } from '@nebular/theme';
 import { AppComponentBase } from '@shared/app-component-base';
-import { LocalizationHelper } from '@shared/localization/localization-helper';
 import { API_BASE_URL, BranchDto, BranchServiceProxy, ClientDto, ClientServiceProxy, CompanyDto, CompanyServiceProxy, CountryDto, CountryServiceProxy, CurrencyDto, CurrencyServiceProxy, CustomerDto, CustomerServiceProxy, FileUploadDto, OutgoingTransferDto, OutgoingTransferServiceProxy } from '@shared/service-proxies/service-proxies';
-import { L10n, setCulture, loadCldr } from '@syncfusion/ej2-base';
 import { WebcamImage } from 'ngx-webcam';
 import { finalize } from 'rxjs/operators';
 import { OutgoingImageTakenDialogComponent } from '../outgoing-image-taken-dialog/outgoing-image-taken-dialog.component';
@@ -204,6 +201,9 @@ export class CreateOutgoingTransferComponent
 
   onPaymentTypeChange(args: any) {
     this.outgoingTransfer.receivedAmount = 0;
+    if (args.itemData.id !== 3) {
+      this.initialCompanies();
+    }
   }
 
   onChangeBeneficiary(args: any) {
@@ -309,16 +309,12 @@ export class CreateOutgoingTransferComponent
   }
 
   onToBranchChange(args: any) {
-    if (
-      args.itemData != undefined &&
-      args.itemData.id != undefined &&
-      this.outgoingTransfer.toBranchId != undefined
-    ) {
-      this.getToBranchBalance(
-        args.itemData.id,
-        this.outgoingTransfer.currencyId
-      );
-    }
+
+      this._companyAppService
+        .gatAllByBranchId(args.itemData.id)
+        .subscribe((result) => {
+          this.companies = result;
+        });
   }
 
   onAmountChange(args: any) {
