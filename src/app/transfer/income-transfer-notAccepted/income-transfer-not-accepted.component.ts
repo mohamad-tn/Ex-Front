@@ -1,9 +1,25 @@
-import { Component, Inject, Injector, OnInit, Optional, ViewChild } from '@angular/core';
-import { appModuleAnimation } from '@shared/animations/routerTransition';
-import { AppComponentBase } from '@shared/app-component-base';
-import { API_BASE_URL, OutgoingTransferServiceProxy, ReadOutgoingTransferDto } from '@shared/service-proxies/service-proxies';
-import { FilterSettingsModel, GridComponent, PageSettingsModel, ToolbarItems } from '@syncfusion/ej2-angular-grids';
-import { finalize } from 'rxjs/operators';
+import {
+  Component,
+  Inject,
+  Injector,
+  OnInit,
+  Optional,
+  ViewChild,
+} from "@angular/core";
+import { appModuleAnimation } from "@shared/animations/routerTransition";
+import { AppComponentBase } from "@shared/app-component-base";
+import {
+  API_BASE_URL,
+  OutgoingTransferServiceProxy,
+  ReadOutgoingTransferDto,
+} from "@shared/service-proxies/service-proxies";
+import {
+  FilterSettingsModel,
+  GridComponent,
+  PageSettingsModel,
+  ToolbarItems,
+} from "@syncfusion/ej2-angular-grids";
+import { finalize } from "rxjs/operators";
 
 @Component({
   selector: "app-income-transfer-not-accepted",
@@ -46,17 +62,50 @@ export class IncomeTransferNotAcceptedComponent
       pageSizes: this.pageSizes,
     };
 
-    this.toolbar = ["Search"];
+    this.toolbar = ["Search"];    
   }
 
   AcceptTransfer(data: ReadOutgoingTransferDto) {
-    this._outGoingTransferServiceProxy.acceptOutgoingTransferFromBranch(data.id)
-    .pipe(finalize(()=>{
-      this.grid.refresh();
-    })).subscribe((result)=>{
-      console.log(result);
-      this.ngOnInit();
-    })
+    abp.message.confirm(
+      this.l("DoYouWantToAcceptThisIncomeTransfer"),
+      "قبول حوالة",
+      (result: boolean) => {
+        if (result) {
+          this._outGoingTransferServiceProxy
+            .acceptOutgoingTransferFromBranch(data.id)
+            .pipe(
+              finalize(() => {
+                abp.notify.success(this.l("SuccessfullyAccepted"));
+                this.grid.refresh();
+              })
+            )
+            .subscribe(() => {
+              this.ngOnInit();
+            });
+        }
+      }
+    );
+  }
+
+  RejectTransfer(data): void {
+    abp.message.confirm(
+      this.l("DoYouWantToRejectThisIncomeTransfer"),
+      "رفض حوالة",
+      (result: boolean) => {
+        if (result) {
+          this._outGoingTransferServiceProxy
+            .rejectOutgoingTransferFromBranchasync(data.id)
+            .pipe(
+              finalize(() => {
+                abp.notify.success(this.l("SuccessfullyRejected"));
+                this.grid.refresh();
+              })
+            )
+            .subscribe(() => {
+              this.ngOnInit();
+            });
+        }
+      }
+    );
   }
 }
-    

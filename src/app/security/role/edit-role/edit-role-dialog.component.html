@@ -197,6 +197,28 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!---->
+                                <!-- IncomeTransferNotAccepted -->
+                                <div class="col-md-12 permmision-item">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <nb-checkbox [checked]="validateChecked('Pages.IncomeTransferNotAccepted')"
+                                                (checkedChange)="onCheckPermision($event,'Pages.IncomeTransferNotAccepted')">{{
+                                                'IncomeTransferNotAccepted' | localize }}</nb-checkbox>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="primary" [checked]="validateChecked('Pages.IncomeTransferNotAccepted.Accept')"
+                                                (checkedChange)="onCheckPermision($event,'Pages.IncomeTransferNotAccepted.Accept')">{{ 'Accept' |
+                                                localize }}</nb-toggle>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <nb-toggle status="info" [checked]="validateChecked('Pages.IncomeTransferNotAccepted.Reject')"
+                                                (checkedChange)="onCheckPermision($event,'Pages.IncomeTransferNotAccepted.Reject')">{{ 'Reject' |
+                                                localize }}</nb-toggle>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!---->
                             </div>
                         </nb-card-body>
                     </nb-card>

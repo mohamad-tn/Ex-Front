@@ -19,7 +19,7 @@ const routes: Routes = [
       {
         path: "income-transfer-notAccepted",
         component: IncomeTransferNotAcceptedComponent,
-        // data: { permission: "Pages.IncomeTransferNotAccepted" },
+        data: { permission: "Pages.IncomeTransferNotAccepted" },
         canActivate: [AppRouteGuard],
       },
       {

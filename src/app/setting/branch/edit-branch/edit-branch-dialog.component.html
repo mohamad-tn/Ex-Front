@@ -7,7 +7,22 @@
             <tabset>
                 <tab [heading]="'BranchInfo' | localize" class="pt-3 px-2">
                     <!--Name-->
+
                     <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="countryId">
+                            {{ "Province" | localize }}
+                        </label>
+                    
+                        <div class="col-md-9" *ngIf="provinceId != 0">
+                            <ejs-dropdownlist name="countryId" id="countryId" [dataSource]='provinces' [fields]='fields'
+                                cssClass="as-sy-input" [enableRtl]='true' required [(ngModel)]="provinceId" #countryModel="ngModel" #countryEl>
+                            </ejs-dropdownlist>
+                            <abp-validation-summary [control]="countryModel" [controlEl]="countryEl"
+                                [elementType]="'nb'"></abp-validation-summary>
+                        </div>
+                    </div>
+
+                    <!-- <div class="form-group row required">
                         <label class="col-md-3 col-form-label" for="name">
                             {{ "Name" | localize }}
                         </label>
@@ -17,7 +32,7 @@
                             <abp-validation-summary [control]="nameModel" [controlEl]="nameEl">
                             </abp-validation-summary>
                         </div>
-                    </div>
+                    </div> -->
                     <!-- Activated-->
                     <div class="form-group row">
                         <label class="col-md-3 col-form-label" for="activated">
