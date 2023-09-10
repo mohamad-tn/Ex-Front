@@ -894,64 +894,6 @@ export class ClientServiceProxy {
     }
 
     /**
-     * @return Success
-     */
-    getAllForCurrentBranch(): Observable<ClientDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/Client/GetAllForCurrentBranch";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "text/plain"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAllForCurrentBranch(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetAllForCurrentBranch(response_ as any);
-                } catch (e) {
-                    return _observableThrow(e) as any as Observable<ClientDto[]>;
-                }
-            } else
-                return _observableThrow(response_) as any as Observable<ClientDto[]>;
-        }));
-    }
-
-    protected processGetAllForCurrentBranch(response: HttpResponseBase): Observable<ClientDto[]> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (response as any).error instanceof Blob ? (response as any).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200.push(ClientDto.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<ClientDto[]>(null as any);
-    }
-
-    /**
      * @param clientId (optional) 
      * @param currencyId (optional) 
      * @return Success
@@ -2400,64 +2342,6 @@ export class CompanyServiceProxy {
             }));
         }
         return _observableOf<void>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    getAllForCurrentBranch(): Observable<CompanyDto[]> {
-        let url_ = this.baseUrl + "/api/services/app/Company/GetAllForCurrentBranch";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ : any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "text/plain"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processGetAllForCurrentBranch(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetAllForCurrentBranch(response_ as any);
-                } catch (e) {
-                    return _observableThrow(e) as any as Observable<CompanyDto[]>;
-                }
-            } else
-                return _observableThrow(response_) as any as Observable<CompanyDto[]>;
-        }));
-    }
-
-    protected processGetAllForCurrentBranch(response: HttpResponseBase): Observable<CompanyDto[]> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-            (response as any).error instanceof Blob ? (response as any).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            if (Array.isArray(resultData200)) {
-                result200 = [] as any;
-                for (let item of resultData200)
-                    result200.push(CompanyDto.fromJS(item));
-            }
-            else {
-                result200 = <any>null;
-            }
-            return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<CompanyDto[]>(null as any);
     }
 
     /**
@@ -6891,6 +6775,71 @@ export class OutgoingTransferServiceProxy {
             }));
         }
         return _observableOf<OutgoingTransferDto>(null as any);
+    }
+
+    /**
+     * @param userId (optional) 
+     * @return Success
+     */
+    getAllOutgoingTransfersForBranch(userId: number | undefined): Observable<{ [key: string]: number; }> {
+        let url_ = this.baseUrl + "/api/services/app/OutgoingTransfer/GetAllOutgoingTransfersForBranch?";
+        if (userId === null)
+            throw new Error("The parameter 'userId' cannot be null.");
+        else if (userId !== undefined)
+            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllOutgoingTransfersForBranch(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllOutgoingTransfersForBranch(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<{ [key: string]: number; }>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<{ [key: string]: number; }>;
+        }));
+    }
+
+    protected processGetAllOutgoingTransfersForBranch(response: HttpResponseBase): Observable<{ [key: string]: number; }> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (resultData200) {
+                result200 = {} as any;
+                for (let key in resultData200) {
+                    if (resultData200.hasOwnProperty(key))
+                        (<any>result200)[key] = resultData200[key] !== undefined ? resultData200[key] : <any>null;
+                }
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<{ [key: string]: number; }>(null as any);
     }
 }
 
@@ -18086,6 +18035,7 @@ export class TreasuryActionStatementOutputDto implements ITreasuryActionStatemen
     instrumentNo: string | undefined;
     identificationNumber: string | undefined;
     issuer: string | undefined;
+    branchId: number;
     id: number;
 
     constructor(data?: ITreasuryActionStatementOutputDto) {
@@ -18126,6 +18076,7 @@ export class TreasuryActionStatementOutputDto implements ITreasuryActionStatemen
             this.instrumentNo = _data["instrumentNo"];
             this.identificationNumber = _data["identificationNumber"];
             this.issuer = _data["issuer"];
+            this.branchId = _data["branchId"];
             this.id = _data["id"];
         }
     }
@@ -18166,6 +18117,7 @@ export class TreasuryActionStatementOutputDto implements ITreasuryActionStatemen
         data["instrumentNo"] = this.instrumentNo;
         data["identificationNumber"] = this.identificationNumber;
         data["issuer"] = this.issuer;
+        data["branchId"] = this.branchId;
         data["id"] = this.id;
         return data;
     }
@@ -18206,6 +18158,7 @@ export interface ITreasuryActionStatementOutputDto {
     instrumentNo: string | undefined;
     identificationNumber: string | undefined;
     issuer: string | undefined;
+    branchId: number;
     id: number;
 }
 

@@ -70,14 +70,15 @@ export class ListTreasuryActionComponent extends AppComponentBase implements OnI
       this.currencyId = routeData?.currencyId == 'undefined' ? undefined : routeData?.currencyId;;
       
       this.param = new Query()
+        .addParams("userId", this.appSession.userId.toString())
         .addParams("number", this.documentNumber)
         .addParams("actionType", this.actionType)
-        .addParams("mainAccount",this.mainAccount)
-        .addParams("incomeTransferDetailId",this.incomeTransferDetailId)
-        .addParams("expenseId",this.expenseId)
-        .addParams("incomeId",this.incomeId)
-        .addParams("mainAccountCompanyId",this.mainAccountCompanyId)
-        .addParams("mainAccountClientId",this.mainAccountClientId)
+        .addParams("mainAccount", this.mainAccount)
+        .addParams("incomeTransferDetailId", this.incomeTransferDetailId)
+        .addParams("expenseId", this.expenseId)
+        .addParams("incomeId", this.incomeId)
+        .addParams("mainAccountCompanyId", this.mainAccountCompanyId)
+        .addParams("mainAccountClientId", this.mainAccountClientId)
         .addParams("currencyId", this.currencyId)
         .addParams("fromDate", this.fromDate.toISOString())
         .addParams("toDate", this.toDate.toISOString());

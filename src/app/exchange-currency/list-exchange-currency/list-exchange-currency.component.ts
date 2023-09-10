@@ -65,11 +65,12 @@ export class ListExchangeCurrencyComponent extends AppComponentBase implements O
       this.param = new Query()
         .addParams("paymentType", this.paymentType)
         .addParams("actionType", this.actionType)
-        .addParams("companyId",this.companyId)
-        .addParams("clientId",this.clientId)
+        .addParams("companyId", this.companyId)
+        .addParams("clientId", this.clientId)
         .addParams("currencyId", this.currencyId)
         .addParams("fromDate", this.fromDate.toISOString())
-        .addParams("toDate", this.toDate.toISOString());
+        .addParams("toDate", this.toDate.toISOString())
+        .addParams("userId", this.appSession.userId.toString());
 
         //this.gridInstance.refresh();
     }

@@ -42,6 +42,7 @@ export class SearchOutgoingTransferStatementDialogComponent extends AppComponent
       {'name' : 'نقدي' , 'id' : 0},
       {'name' : 'ذمم عملاء' , 'id' : 1},
       {'name' : 'ذمم شركات' , 'id' : 2},
+      {'name' : 'فرع' , 'id' : 3},
     ];
   }
 
