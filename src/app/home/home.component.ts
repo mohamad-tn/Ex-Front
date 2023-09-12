@@ -27,6 +27,7 @@ import { Route, Router } from "@angular/router";
   // animations: [appModuleAnimation()],
   // changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
 export class HomeComponent extends AppComponentBase implements OnInit {
   public readonly materialTheme$: Observable<boolean>;
 
@@ -76,16 +77,18 @@ export class HomeComponent extends AppComponentBase implements OnInit {
   incomeRejected: number;
 
   ngOnInit(): void {
+    console.log(this.isGranted("Pages.BranchTransfersCounter"));
 
-    // if (this.isGranted("")){
-    // }
-    
+    if (this.isGranted("Pages.BranchTransfersCounter")) {
       this.userId = this.appSession.userId;
-    this.branchOutgoingTransfers(this.userId);
+      this.branchOutgoingTransfers(this.userId);
+      this.branchIncomingTransfers(this.userId);
+      console.log(this.isGranted("Pages.BranchTransfersCounter"));
 
-    setTimeout(() => {
-      this.ngOnInit();
-    }, 5000);
+      setTimeout(() => {
+        this.ngOnInit();
+      }, 5000);
+    }
   }
 
   GoTo() {
@@ -104,5 +107,13 @@ export class HomeComponent extends AppComponentBase implements OnInit {
       });
   }
 
-  branchIncomingTransfers() {}
+  branchIncomingTransfers(userId: number) {
+    this._incomingTransfers
+      .getAllIncomeTransfersForBranch(userId)
+      .subscribe((result) => {
+        this.incomePending = result.Pending;
+        this.incomeAccepted = result.Accepted;
+        this.incomeRejected = result.Rejected;
+      });
+  }
 }

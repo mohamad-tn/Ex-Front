@@ -216,6 +216,16 @@
                                     </div>
                                 </div>
                                 <!---->
+                                <!--Counter-->
+                                <div class="col-md-12 permmision-item">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <nb-checkbox [checked]="validateChecked('Pages.BranchTransfersCounter')"
+                                                (checkedChange)="onCheckPermision($event,'Pages.BranchTransfersCounter')">{{ 'BranchTransfersCounter' | localize }}</nb-checkbox>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!---->
                             </div>
                         </nb-card-body>
                     </nb-card>
