@@ -11,13 +11,11 @@ import { TransferModule } from './transfer/transfer.module';
 import { ExchangeCurrencyModule } from './exchange-currency/exchange-currency.module';
 import { TreasuryModule } from './treasury/treasury.module';
 import { SecurityModule } from './security/security.module';
+import { HomeComponent } from './home/home.component';
 
 
 @NgModule({
-  declarations: [
-    AppComponent
-    
-  ],
+  declarations: [AppComponent, HomeComponent],
   imports: [
     AppRoutingModule,
     ThemeModule,
@@ -30,12 +28,8 @@ import { SecurityModule } from './security/security.module';
     SecurityModule,
     ExchangeCurrencyModule
   ],
-  providers: [
-    
-  ],
-  entryComponents: [
-    
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA ]
+  providers: [],
+  entryComponents: [],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}

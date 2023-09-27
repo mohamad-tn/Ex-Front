@@ -1,9 +1,10 @@
-﻿<div class="container">
+﻿<div class="container" *ngIf="permission.isGranted('Pages.BranchTransfersCounter')">
     <div class="row">
         <div class="col-6">
             <div class="row">
-                <h3 style="color: rgb(97, 97, 93);">
-                    الحوالات الصادرة:</h3>
+                <h4 style="color: rgb(97, 97, 93);">
+                    الحوالات الصادرة</h4>
+                <h5 style="color: rgb(97, 97, 93);">(فروع):</h5>
             </div>
             <br>
             <div class="row">
@@ -25,8 +26,9 @@
         </div>
         <div class="col-6">
             <div class="row">
-                <h3 style="color: rgb(97, 97, 93);">
-                    الحوالات الواردة:</h3>
+                <h4 style="color: rgb(97, 97, 93);">
+                    الحوالات الواردة</h4>
+                <h5 style="color: rgb(97, 97, 93);">(فروع):</h5>
             </div>
             <br>
             <div class="row">

@@ -77,8 +77,6 @@ export class HomeComponent extends AppComponentBase implements OnInit {
   incomeRejected: number;
 
   ngOnInit(): void {
-    console.log(this.isGranted("Pages.BranchTransfersCounter"));
-
     if (this.isGranted("Pages.BranchTransfersCounter")) {
       this.userId = this.appSession.userId;
       this.branchOutgoingTransfers(this.userId);
@@ -87,7 +85,7 @@ export class HomeComponent extends AppComponentBase implements OnInit {
 
       setTimeout(() => {
         this.ngOnInit();
-      }, 5000);
+      }, 180000);
     }
   }
 
