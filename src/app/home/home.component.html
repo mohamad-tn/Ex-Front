@@ -1,1 +1,52 @@
-﻿
+﻿<div class="container" *ngIf="permission.isGranted('Pages.BranchTransfersCounter')">
+    <div class="row">
+        <div class="col-6">
+            <div class="row">
+                <h4 style="color: rgb(97, 97, 93);">
+                    الحوالات الصادرة</h4>
+                <h5 style="color: rgb(97, 97, 93);">(فروع):</h5>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-4">
+                    <span>انتظار</span>
+                    <br><br>
+                    <span>مقبولة</span>
+                    <br><br>
+                    <span>مرفوضة</span>
+                </div>
+                <div class="col-4">
+                    <span>{{outgoingPending}}</span>
+                    <br><br>
+                    <span>{{outgoingAccepted}}</span>
+                    <br><br>
+                    <span>{{outgoingRejected}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="row">
+                <h4 style="color: rgb(97, 97, 93);">
+                    الحوالات الواردة</h4>
+                <h5 style="color: rgb(97, 97, 93);">(فروع):</h5>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-4">
+                    <span>انتظار</span>
+                    <br><br>
+                    <span>مقبولة</span>
+                    <br><br>
+                    <span>مرفوضة</span>
+                </div>
+                <div class="col-4">
+                    <span>{{incomePending}}</span>
+                    <br><br>
+                    <span>{{incomeAccepted}}</span>
+                    <br><br>
+                    <span>{{incomeRejected}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -25,6 +25,7 @@
                             <tr>
                                 <th>{{'ToCompany' | localize}}</th>
                                 <th>{{'PaymentType' | localize}}</th>
+                                <th>{{'Status' | localize}}</th>
                                 <th>{{'From-Company-Client' | localize}}</th>
                                 <th>{{'Amount' | localize}}</th>
                                 <th>{{'Commission' | localize}}</th>
@@ -42,6 +43,11 @@
                                     <span *ngIf="item.paymentType == 1 ">ذمم عملاء</span>
                                     <span *ngIf="item.paymentType == 2 ">ذمم شركات</span>
                                     <span *ngIf="item.paymentType == 3 ">فرع</span>
+                                </td>
+                                <td>
+                                    <span *ngIf="item.status == 1 ">قيد الانتظار</span>
+                                    <span *ngIf="item.status == 2 ">مقبولة</span>
+                                    <span *ngIf="item.status == 3 ">مرفوضة</span>
                                 </td>
                                 <td>
                                     <span *ngIf="item.fromClient != undefined">{{'Client' | localize}} / {{item?.fromClient?.name}}</span>

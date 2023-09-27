@@ -46,6 +46,10 @@ export class ExchangeCurrencyStatementComponent extends AppComponentBase impleme
 
   ngOnInit(): void {
     this.pageSettings = {pageSize: 100, pageCount: 100, pageSizes: this.pageSizes};
+    this.param = new Query().addParams(
+      "userId",
+      this.appSession.userId.toString()
+    );
     this.dataSource = new DataManager({
       url: this.baseUrl + '/api/services/app/ExchangeCurrency/GetForGrid',
       adaptor: new UrlAdaptor()
@@ -104,6 +108,7 @@ export class ExchangeCurrencyStatementComponent extends AppComponentBase impleme
         this.paymentType = e.paymentTypeName;
         this.actionType = e.actionTypeName;
         this.param = new Query()
+        .addParams("userId", this.appSession.userId.toString())
         .addParams("paymentType", e.paymentType)
         .addParams("actionType", e.actionType)
         .addParams("companyId",e.companyId)

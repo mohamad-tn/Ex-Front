@@ -11,6 +11,7 @@ import {
 } from 'abp-ng2-module';
 
 import { AppSessionService } from '@shared/session/app-session.service';
+import { round } from 'lodash-es';
 
 export abstract class AppComponentBase {
 
@@ -75,7 +76,8 @@ export abstract class AppComponentBase {
     }
 
     numberWithCommas(number){
-        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        const conv = round(number, 4);
+        return conv.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
     numberWithCommasAndAbs(number){
         var realNumber = Math.abs(number);
