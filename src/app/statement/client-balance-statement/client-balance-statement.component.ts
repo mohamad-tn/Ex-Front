@@ -53,6 +53,7 @@ export class ClientBalanceStatementComponent extends AppComponentBase  implement
       adaptor: new UrlAdaptor()
     });
     
+    
     let routeData = this._route.snapshot.params;
     if(routeData?.clientId != undefined){
 
