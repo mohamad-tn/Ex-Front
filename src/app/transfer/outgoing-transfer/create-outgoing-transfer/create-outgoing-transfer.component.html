@@ -112,7 +112,19 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6" *ngIf="outgoingTransfer.paymentType != 3">
+                                <!--To Branch-->
+                                    <div class="col-md-6">
+                                        <label class="col-md-6" for="ToBranch">
+                                            {{ "ToBranch" | localize }}
+                                        </label>
+                                        <div class="col-md-4">
+                                            <nb-checkbox status="primary" (valueChange)="onToBranchValueChanged($event)"
+                                                ></nb-checkbox>
+                                        </div>
+                                    </div>
+                                <!---->
+
+                                <div class="col-md-6" *ngIf="!toBranch">
                                     <div class="form-group row required">
                                         <label class="col-md-3 col-form-label" for="country">
                                             {{ "Country" | localize }}
@@ -267,15 +279,15 @@
                                     </div>
                                 </div>
                                 <!---->
-                                <div class="col-md-6" *ngIf="outgoingTransfer.paymentType == 3">
+                                <div class="col-md-6" *ngIf="toBranch">
                                     <div class="form-group row required">
-                                        <label class="col-md-3 col-form-label" for="toBranch">
-                                            {{ "ToBranch" | localize }}
+                                        <label class="col-md-3 col-form-label" for="Branche">
+                                            {{ "Branche" | localize }}
                                         </label>
-                                        <div  class="col-md-9">
+                                        <div  class="col-md-6">
                                             <ejs-dropdownlist 
-                                            id='toBranch' 
-                                            name='toBranch' 
+                                            id='Branch' 
+                                            name='Branch' 
                                             (change)='onToBranchChange($event)'
                                             cssClass="as-sy-input"
                                             [dataSource]='branches' 
@@ -283,10 +295,10 @@
                                             [fields]='fields' 
                                             required
                                             [(ngModel)]="outgoingTransfer.toBranchId"
-                                            #toBranchModel="ngModel" 
-                                            #toBranchEl
+                                            #BranchModel="ngModel" 
+                                            #BranchEl
                                             ></ejs-dropdownlist>
-                                            <abp-validation-summary [control]="toBranchModel" [controlEl]="toBranchEl">
+                                            <abp-validation-summary [control]="BranchModel" [controlEl]="BranchEl">
                                             </abp-validation-summary>
                                         </div>
                                     </div>

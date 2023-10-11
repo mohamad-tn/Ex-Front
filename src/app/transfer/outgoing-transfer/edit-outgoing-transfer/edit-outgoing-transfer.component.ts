@@ -66,7 +66,6 @@ export class EditOutgoingTransferComponent
       { name: "نقدي", id: 0 },
       { name: "ذمم", id: 1 },
       { name: "شركة", id: 2 },
-      { name: "فرع", id: 3 },
     ];
 
     this.initialCurrencies();
@@ -93,13 +92,14 @@ export class EditOutgoingTransferComponent
             console.log(result);
             this.outgoingTransfer = result;
             /////
-            if (result.paymentType === 3) {
+            if (result.toBranchId !== null) {
+              this.toBranch = true;
               this._companyAppService
                 .gatAllByBranchId(result.toBranchId)
                 .subscribe((result) => {
                   this.companies = result;
                 });
-            }else{
+            } else {
               this.initialCompanies();
             }
             /////
@@ -175,6 +175,11 @@ export class EditOutgoingTransferComponent
   save() {
     this.outgoingTransfer.date = this.date.toISOString();
     this.saving = true;
+
+    if(this.toBranch === false){
+      this.outgoingTransfer.toBranchId = null;
+    }
+
     this._outgoingTransferAppService
       .update(this.outgoingTransfer)
       .pipe(
@@ -463,6 +468,20 @@ export class EditOutgoingTransferComponent
       (x) => x.fileAsBase64 == file.fileAsBase64
     );
     this.outgoingTransfer.images.splice(index, 1);
+  }
+
+  toBranch: boolean = false;
+  onToBranchValueChanged(event) {
+    this.toBranch = event;
+    if (this.toBranch === true) {
+      this._companyAppService
+        .gatAllByBranchId(this.outgoingTransfer.toBranchId)
+        .subscribe((result) => {
+          this.companies = result;
+        });
+    } else {
+      this.initialCompanies();
+    }
   }
 }
 

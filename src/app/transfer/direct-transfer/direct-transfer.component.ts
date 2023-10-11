@@ -77,7 +77,7 @@ export class DirectTransferComponent
   initialCurrencies() {
     this._currencyAppService.getAll().subscribe((result) => {
       this.currencies.push(
-        new CurrencyDto({ name: "الكل", isMainCurrency: false, id: -1 })
+        new CurrencyDto({ name: "الكل", isMainCurrency: false, id: -1, branchId: null })
       );
       result.forEach((item) => {
         this.currencies.push(item);
