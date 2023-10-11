@@ -12,7 +12,7 @@
                 </nb-card-header>
                 <nb-card-body class="as-case-card-body">
                     <ejs-grid id="expenseGrid" #expenseGrid [dataSource]="expenses" [allowPaging]="true"
-                    [allowSorting]="true" [allowFiltering]="true" [enableRtl]='true' 
+                    [allowSorting]="true" [allowFiltering]="true"  [query]="param" [enableRtl]='true' 
                     [pageSettings]="pageSettings" [filterSettings]='filterOption'>
                     <!--toolbar-->
                     <ng-template #toolbarTemplate>

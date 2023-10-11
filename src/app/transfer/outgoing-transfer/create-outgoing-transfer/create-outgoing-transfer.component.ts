@@ -84,7 +84,6 @@ export class CreateOutgoingTransferComponent
       { name: "نقدي", id: 0 },
       { name: "ذمم", id: 1 },
       { name: "شركة", id: 2 },
-      { name: "فرع", id: 3 },
     ];
 
     this.outgoingTransfer.paymentType = 0;
@@ -173,6 +172,11 @@ export class CreateOutgoingTransferComponent
       return;
     }
     this.saving = true;
+
+    if (this.toBranch === false) {
+      this.outgoingTransfer.toBranchId = null;
+    }
+
     this._outgoingTransferAppService
       .create(this.outgoingTransfer)
       .pipe(
@@ -309,12 +313,11 @@ export class CreateOutgoingTransferComponent
   }
 
   onToBranchChange(args: any) {
-
-      this._companyAppService
-        .gatAllByBranchId(args.itemData.id)
-        .subscribe((result) => {
-          this.companies = result;
-        });
+    this._companyAppService
+      .gatAllByBranchId(args.itemData.id)
+      .subscribe((result) => {
+        this.companies = result;
+      });
   }
 
   onAmountChange(args: any) {
@@ -402,9 +405,7 @@ export class CreateOutgoingTransferComponent
       });
   }
 
-  getToBranchBalance(toBranchId, currencyId) {
-    
-  }
+  getToBranchBalance(toBranchId, currencyId) {}
 
   resolveValues() {
     this.outgoingTransfer.amount =
@@ -574,12 +575,23 @@ export class CreateOutgoingTransferComponent
       case 2: {
         return "شركة";
       }
-      case 3: {
-        return "فرع";
-      }
       default: {
         return "";
       }
+    }
+  }
+
+  toBranch:boolean = false;
+  onToBranchValueChanged(event){
+    this.toBranch = event;
+    if (this.toBranch === true) {
+      this._companyAppService
+        .gatAllByBranchId(this.outgoingTransfer.toBranchId)
+        .subscribe((result) => {
+          this.companies = result;
+        });
+    } else {
+      this.initialCompanies();
     }
   }
 }
