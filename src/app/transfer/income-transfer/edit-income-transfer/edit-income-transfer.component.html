@@ -17,10 +17,13 @@
                 <div class="header-container">
                     <nb-actions>
                         <nb-action class="control-item" (click)="getIncomeTransferByIndex(0,$event)" icon="arrowhead-right-outline" [disabled]="index == 0"></nb-action>
-                        <nb-action class="control-item" (click)="getIncomeTransferByIndex(index - 1,$event)" icon="arrow-ios-forward-outline" [disabled]="index == 0"></nb-action>
+                        <nb-action class="control-item" (click)="index > 0 ? getIncomeTransferByIndex(index - 1,$event) : '' "
+                            icon="arrow-ios-forward-outline" [disabled]="index == 0"></nb-action>
                         <nb-action class="control-item"><input type="text" class="form-control" [value]="index + 1" disabled style="width: 100px;text-align:center;" /></nb-action>
-                        <nb-action class="control-item" (click)="getIncomeTransferByIndex(index + 1,$event)" icon="arrow-ios-back-outline" [disabled]="index == searchResult.length -1"></nb-action>
-                        <nb-action class="control-item" (click)="getIncomeTransferByIndex(searchResult.length -1,$event)" icon="arrowhead-left-outline" [disabled]="index == searchResult.length - 1"></nb-action>
+                        <nb-action class="control-item"
+                            (click)="index < searchResult.length -1 ? getIncomeTransferByIndex(index + 1,$event) : '' "
+                            icon="arrow-ios-back-outline" [disabled]="index >= searchResult.length -1"></nb-action>
+                        <nb-action class="control-item" (click)="getIncomeTransferByIndex(searchResult.length -1,$event)" icon="arrowhead-left-outline" [disabled]="index >= searchResult.length - 1"></nb-action>
                         <nb-action class="control-item" ><span style="font-size:15px;">العدد : {{ searchResult.length }}</span></nb-action>
                         
                     </nb-actions>

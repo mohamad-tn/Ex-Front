@@ -36,7 +36,7 @@
                                     </ng-template>
                                 </e-column>
                                 
-                                <e-column headerText="{{'MainAccount' | localize}}" width="150">
+                                <e-column headerText="{{'MainAccount' | localize}}" width="225">
                                     <ng-template #template let-data>
                                         <span *ngIf="data.mainAccountClientId != undefined">{{'Client' | localize}} / {{data.mainAccountClient.name}}</span>
                                         <span *ngIf="data.mainAccountCompanyId != undefined">{{'Company' | localize}} / {{data.mainAccountCompany.name}}</span>

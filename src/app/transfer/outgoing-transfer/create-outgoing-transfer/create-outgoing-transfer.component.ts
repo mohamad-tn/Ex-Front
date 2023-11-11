@@ -1,4 +1,4 @@
-import { Component, Inject, Injector, OnInit, Optional } from '@angular/core';
+import { Component, ElementRef, Inject, Injector, OnInit, Optional, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbDialogService } from '@nebular/theme';
 import { AppComponentBase } from '@shared/app-component-base';
@@ -7,6 +7,7 @@ import { WebcamImage } from 'ngx-webcam';
 import { finalize } from 'rxjs/operators';
 import { OutgoingImageTakenDialogComponent } from '../outgoing-image-taken-dialog/outgoing-image-taken-dialog.component';
 import { PrintOutgoingTransferComponent } from '../print-outgoing-transfer/print-outgoing-transfer.component';
+import html2canvas from 'html2canvas';
 
 
 @Component({
@@ -258,10 +259,10 @@ export class CreateOutgoingTransferComponent
           this.outgoingTransfer.toCompanyId,
           args.itemData.id
         );
-        this.getFromCompanyBalance(
-          this.outgoingTransfer.fromCompanyId,
-          args.itemData.id
-        );
+        // this.getFromCompanyBalance(
+        //   this.outgoingTransfer.fromCompanyId,
+        //   args.itemData.id
+        // );
       }
     }
   }
@@ -490,31 +491,53 @@ export class CreateOutgoingTransferComponent
     this.outgoingTransfer.images.splice(index, 1);
   }
 
-  print() {
-    this._modalService
-      .open(PrintOutgoingTransferComponent, {
-        context: {
-          input: this.outgoingTransfer,
-          currencyName: this.getCurrencyName(),
-          toCompanyName: this.getCompanyName(this.outgoingTransfer.toCompanyId),
-          fromCompanyName: this.getCompanyName(
-            this.outgoingTransfer.fromCompanyId
-          ),
-          fromClientName: this.getClientName(
-            this.outgoingTransfer.fromClientId
-          ),
-          fromBranchName: this.getBranchName(
-            this.outgoingTransfer.fromBranchId
-          ),
-          senderName: this.getSenderName(),
-          paymentTypeName: this.getPaymentTypeName(),
-          beneficiaryName: this.getBeneficiaryName(),
-        },
-      })
-      .onClose.subscribe((e: any) => {
-        if (e.success == true) {
-        }
-      });
+  // print() {
+  //   this._modalService
+  //     .open(PrintOutgoingTransferComponent, {
+  //       context: {
+  //         input: this.outgoingTransfer,
+  //         currencyName: this.getCurrencyName(),
+  //         toCompanyName: this.getCompanyName(this.outgoingTransfer.toCompanyId),
+  //         fromCompanyName: this.getCompanyName(
+  //           this.outgoingTransfer.fromCompanyId
+  //         ),
+  //         fromClientName: this.getClientName(
+  //           this.outgoingTransfer.fromClientId
+  //         ),
+  //         fromBranchName: this.getBranchName(
+  //           this.outgoingTransfer.fromBranchId
+  //         ),
+  //         senderName: this.getSenderName(),
+  //         paymentTypeName: this.getPaymentTypeName(),
+  //         beneficiaryName: this.getBeneficiaryName(),
+  //       },
+  //     })
+  //     .onClose.subscribe((e: any) => {
+  //       if (e.success == true) {
+  //       }
+  //     });
+  // }
+
+  name = "Outgoing-Transfer-Statement";
+
+  @ViewChild("screen") screen: ElementRef;
+  @ViewChild("canvas") canvas: ElementRef;
+  @ViewChild("downloadLink") downloadLink: ElementRef;
+
+  downloadImage() {
+    document.getElementById("print-section").style.display = "contents";
+    document.getElementById("t4").style.width = "595px";
+    document.getElementById("t4").style.height = "842px";
+    html2canvas(this.screen.nativeElement).then((canvas) => {
+      this.canvas.nativeElement.src = canvas.toDataURL();
+      this.downloadLink.nativeElement.href = canvas.toDataURL("image/png");
+      this.downloadLink.nativeElement.download =
+        "Outgoing-Transfer-Statement.png";
+      this.downloadLink.nativeElement.click();
+    });
+    document.getElementById("print-section").style.display = "none";
+    document.getElementById("t4").style.width = "0px";
+    document.getElementById("t4").style.height = "0px";
   }
 
   getCurrencyName(): string {
@@ -581,8 +604,8 @@ export class CreateOutgoingTransferComponent
     }
   }
 
-  toBranch:boolean = false;
-  onToBranchValueChanged(event){
+  toBranch: boolean = false;
+  onToBranchValueChanged(event) {
     this.toBranch = event;
     if (this.toBranch === true) {
       this._companyAppService

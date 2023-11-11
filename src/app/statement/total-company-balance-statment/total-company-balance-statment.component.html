@@ -14,11 +14,8 @@
                     <div class="header-container">
                         <nb-actions>
                             <nb-action class="control-item" (click)="showSearchDialog()"><i class="fa fa-binoculars as-icon-primary" aria-hidden="true"></i></nb-action>
-                            <nb-action class="control-item">
-                                <button type="button" nbButton status="basic" outline useExistingCss="true"
-                                    printTitle="treasury" printSectionId="print-section" ngxPrint>
-                                    <nb-icon icon="printer-outline"></nb-icon>
-                                </button>
+                            <nb-action class="control-item" (click)="downloadImage()">
+                                <nb-icon icon="printer-outline"></nb-icon>
                             </nb-action>
                         </nb-actions>
                     </div>
@@ -139,113 +136,201 @@
 </div>
 
 <!-- Print ngx print -->
-<div id="print-section" dir="rtl" style="width:100%;display: none;">
-    <div style="width:100%;text-align: center;">
-        <h3>كشف ارصدة الشركات</h3>
+<div id="t2" class="p-4" #screen>
+    <div id="print-section" dir="rtl" style="width:100%;display: none;">
+        <br>
+        <div style="width:100%;text-align: center;">
+            <h3>كشف ارصدة الشركات</h3>
+        </div>
+        <br><br>
+        <div dir="rtl" style="width:45%;float: right;">
+            <table dir="rtl"
+                style="color: #424242;border: 1px solid #dee2e6;width: 100%;margin-bottom: 1rem;background-color: transparent;border-collapse: collapse;display: table;text-indent: initial;border-spacing: 2px;">
+                <thead style="display: table-header-group;vertical-align: middle;border-color: inherit;">
+                    <tr style="display: table-row;vertical-align: inherit;border-color: inherit;">
+                        <th rowspan="2"
+                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{l('ToDate')}}</th>
+                        <th colspan="2"
+                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{toDate | date:'dd/MM/yyyy'}}</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <br />
+        <div dir="rtl" style="width:100%;">
+            <table dir="rtl"
+                style="color: #424242;border: 1px solid #dee2e6;width: 100%;margin-bottom: 1rem;background-color: transparent;border-collapse: collapse;display: table;text-indent: initial;border-spacing: 2px;">
+                <thead style="display: table-header-group;vertical-align: middle;border-color: inherit;">
+                    <tr style="display: table-row;vertical-align: inherit;border-color: inherit;">
+                        <th rowspan="2"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{l('Company')}}</th>
+                        <th *ngIf="showColumnBalance0" colspan="2"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{getColumnName(0)}}</th>
+                        <th *ngIf="showColumnBalance1" colspan="2"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{getColumnName(1)}}</th>
+                        <th *ngIf="showColumnBalance2" colspan="2"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{getColumnName(2)}}</th>
+                        <th *ngIf="showColumnBalance3" colspan="2"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{getColumnName(3)}}</th>
+                        <th *ngIf="showColumnBalance4" colspan="2"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{getColumnName(4)}}</th>
+                    </tr>
+                    <tr style="display: table-row;vertical-align: inherit;border-color: inherit;">
+                        <th *ngIf="showColumnBalance0"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            له</th>
+                        <th *ngIf="showColumnBalance0"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            عليه</th>
+                        <th *ngIf="showColumnBalance1"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            له</th>
+                        <th *ngIf="showColumnBalance1"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            عليه</th>
+                        <th *ngIf="showColumnBalance2"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            له</th>
+                        <th *ngIf="showColumnBalance2"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            عليه</th>
+                        <th *ngIf="showColumnBalance3"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            له</th>
+                        <th *ngIf="showColumnBalance3"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            عليه</th>
+                        <th *ngIf="showColumnBalance4"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            له</th>
+                        <th *ngIf="showColumnBalance4"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            عليه</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of dataSource">
+
+                        <td width="200"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                            <span>{{ item.companyName }}</span>
+                        </td>
+                        <!-- balance 0 -->
+                        <td *ngIf="showColumnBalance0" width="100"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                            <span *ngIf="item.balance0 < 0">{{ numberWithCommasAndAbs(item.balance0) }}</span>
+                        </td>
+                        <td *ngIf="showColumnBalance0" width="100"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                            <span *ngIf="item.balance0 > 0">{{ numberWithCommasAndAbs(item.balance0) }}</span>
+                        </td>
+                        <!-- balance 1 -->
+                        <td *ngIf="showColumnBalance1" width="100"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                            <span *ngIf="item.balance1 < 0">{{ numberWithCommasAndAbs(item.balance1) }}</span>
+                        </td>
+                        <td *ngIf="showColumnBalance1" width="100"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                            <span *ngIf="item.balance1 > 0">{{ numberWithCommasAndAbs(item.balance1) }}</span>
+                        </td>
+                        <!-- balance 2 -->
+                        <td *ngIf="showColumnBalance2" width="100"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                            <span *ngIf="item.balance2 < 0">{{ numberWithCommasAndAbs(item.balance2) }}</span>
+                        </td>
+                        <td *ngIf="showColumnBalance2" width="100"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                            <span *ngIf="(item.balance2 > 0)">{{ numberWithCommasAndAbs(item.balance2) }}</span>
+                        </td>
+                        <!-- balance 3 -->
+                        <td *ngIf="showColumnBalance3" width="100"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                            <span *ngIf="item.balance3 < 0">{{ numberWithCommasAndAbs(item.balance3) }}</span>
+                        </td>
+                        <td *ngIf="showColumnBalance3" width="100"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                            <span *ngIf="item.balance3 > 0 ">{{ numberWithCommasAndAbs(item.balance3) }}</span>
+                        </td>
+                        <!-- balance 4 -->
+                        <td *ngIf="showColumnBalance4" width="100"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                            <span *ngIf="item.balance4 < 0 ">{{ numberWithCommasAndAbs(item.balance4) }}</span>
+                        </td>
+                        <td *ngIf="showColumnBalance4" width="100"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                            <span *ngIf="item.balance4 > 0 ">{{ numberWithCommasAndAbs(item.balance4) }}</span>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot class="tfoot-light">
+                    <tr>
+
+                        <td rowspan="2"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            <span style="font-weight: bold;">الاجمالي</span></td>
+                        <td *ngIf="showColumnBalance0"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{ numberWithCommasAndAbs(totalBalanceForHim0) }}</td>
+                        <td *ngIf="showColumnBalance0"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{ numberWithCommasAndAbs(totalBalanceOnHim0) }}</td>
+                        <td *ngIf="showColumnBalance1"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{ numberWithCommasAndAbs(totalBalanceForHim1) }}</td>
+                        <td *ngIf="showColumnBalance1"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{ numberWithCommasAndAbs(totalBalanceOnHim1) }}</td>
+                        <td *ngIf="showColumnBalance2"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{ numberWithCommasAndAbs(totalBalanceForHim2) }}</td>
+                        <td *ngIf="showColumnBalance2"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{ numberWithCommasAndAbs(totalBalanceOnHim2) }}</td>
+                        <td *ngIf="showColumnBalance3"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{ numberWithCommasAndAbs(totalBalanceForHim3) }}</td>
+                        <td *ngIf="showColumnBalance3"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{ numberWithCommasAndAbs(totalBalanceOnHim3) }}</td>
+                        <td *ngIf="showColumnBalance4"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{ numberWithCommasAndAbs(totalBalanceForHim4) }}</td>
+                        <td *ngIf="showColumnBalance4"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{ numberWithCommasAndAbs(totalBalanceOnHim4) }}</td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="2" *ngIf="showColumnBalance0"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{ getBalance(totalBalanceForHim0 + totalBalanceOnHim0) }}</td>
+                        <td colspan="2" *ngIf="showColumnBalance1"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{ getBalance(totalBalanceForHim1 + totalBalanceOnHim1) }}</td>
+                        <td colspan="2" *ngIf="showColumnBalance2"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{ getBalance(totalBalanceForHim2 + totalBalanceOnHim2) }}</td>
+                        <td colspan="2" *ngIf="showColumnBalance3"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{ getBalance(totalBalanceForHim3 + totalBalanceOnHim3) }}</td>
+                        <td colspan="2" *ngIf="showColumnBalance4"
+                            style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                            {{ getBalance(totalBalanceForHim4 + totalBalanceOnHim4) }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
-    <div dir="rtl" style="width:30%;float: right;">
-        <table dir="rtl" style="color: #424242;border: 1px solid #dee2e6;width: 100%;margin-bottom: 1rem;background-color: transparent;border-collapse: collapse;display: table;text-indent: initial;border-spacing: 2px;">
-            <thead style="display: table-header-group;vertical-align: middle;border-color: inherit;">
-                <tr style="display: table-row;vertical-align: inherit;border-color: inherit;">
-                    <th rowspan="2" style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{l('ToDate')}}</th>
-                    <th colspan="2" style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{toDate | date:'dd/MM/yyyy'}}</th>
-                </tr>
-            </thead>
-        </table>
-    </div>
-    <br />
-    <div dir="rtl" style="width:100%;">
-        <table dir="rtl" style="color: #424242;border: 1px solid #dee2e6;width: 100%;margin-bottom: 1rem;background-color: transparent;border-collapse: collapse;display: table;text-indent: initial;border-spacing: 2px;">
-            <thead style="display: table-header-group;vertical-align: middle;border-color: inherit;">
-                <tr style="display: table-row;vertical-align: inherit;border-color: inherit;">
-                    <th rowspan="2" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{l('Company')}}</th>
-                    <th *ngIf="showColumnBalance0" colspan="2" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{getColumnName(0)}}</th>
-                    <th *ngIf="showColumnBalance1" colspan="2" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{getColumnName(1)}}</th>
-                    <th *ngIf="showColumnBalance2" colspan="2" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{getColumnName(2)}}</th>
-                    <th *ngIf="showColumnBalance3" colspan="2" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{getColumnName(3)}}</th>
-                    <th *ngIf="showColumnBalance4" colspan="2" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{getColumnName(4)}}</th>
-                </tr>
-                <tr style="display: table-row;vertical-align: inherit;border-color: inherit;">
-                    <th *ngIf="showColumnBalance0" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">له</th>
-                    <th *ngIf="showColumnBalance0" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">عليه</th>
-                    <th *ngIf="showColumnBalance1" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">له</th>
-                    <th *ngIf="showColumnBalance1" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">عليه</th>
-                    <th *ngIf="showColumnBalance2" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">له</th>
-                    <th *ngIf="showColumnBalance2" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">عليه</th>
-                    <th *ngIf="showColumnBalance3" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">له</th>
-                    <th *ngIf="showColumnBalance3" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">عليه</th>
-                    <th *ngIf="showColumnBalance4" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">له</th>
-                    <th *ngIf="showColumnBalance4" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">عليه</th>
-                </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let item of dataSource" >
-                
-                <td width="200" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
-                    <span>{{ item.companyName }}</span>
-                </td>
-                <!-- balance 0 -->
-                <td  *ngIf="showColumnBalance0" width="100" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
-                    <span  *ngIf="item.balance0 < 0">{{ numberWithCommasAndAbs(item.balance0) }}</span>
-                </td>
-                <td *ngIf="showColumnBalance0" width="100" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
-                    <span *ngIf="item.balance0 > 0">{{ numberWithCommasAndAbs(item.balance0) }}</span>
-                </td>
-                <!-- balance 1 -->
-                <td *ngIf="showColumnBalance1" width="100" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
-                    <span *ngIf="item.balance1 < 0">{{ numberWithCommasAndAbs(item.balance1) }}</span>
-                </td>
-                <td *ngIf="showColumnBalance1" width="100" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
-                    <span *ngIf="item.balance1 > 0">{{ numberWithCommasAndAbs(item.balance1) }}</span>
-                </td>
-                <!-- balance 2 -->
-                <td *ngIf="showColumnBalance2" width="100" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;"> 
-                    <span *ngIf="item.balance2 < 0">{{ numberWithCommasAndAbs(item.balance2) }}</span>
-                </td>
-                <td *ngIf="showColumnBalance2" width="100" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
-                    <span *ngIf="(item.balance2 > 0)">{{ numberWithCommasAndAbs(item.balance2) }}</span>
-                </td>
-                <!-- balance 3 -->
-                <td *ngIf="showColumnBalance3" width="100" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
-                    <span *ngIf="item.balance3 < 0">{{ numberWithCommasAndAbs(item.balance3) }}</span>
-                </td>
-                <td *ngIf="showColumnBalance3" width="100" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
-                    <span *ngIf="item.balance3 > 0 ">{{ numberWithCommasAndAbs(item.balance3) }}</span>
-                </td>
-                <!-- balance 4 -->
-                <td *ngIf="showColumnBalance4" width="100" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
-                    <span *ngIf="item.balance4 < 0 ">{{ numberWithCommasAndAbs(item.balance4) }}</span>
-                </td>
-                <td *ngIf="showColumnBalance4" width="100" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
-                    <span *ngIf="item.balance4 > 0 ">{{ numberWithCommasAndAbs(item.balance4) }}</span>
-                </td>
-            </tr>
-        </tbody>
-        <tfoot class="tfoot-light">
-            <tr>
-                
-                <td rowspan="2" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;"><span style="font-weight: bold;">الاجمالي</span></td>
-                <td *ngIf="showColumnBalance0" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{ numberWithCommasAndAbs(totalBalanceForHim0) }}</td>
-                <td *ngIf="showColumnBalance0" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{ numberWithCommasAndAbs(totalBalanceOnHim0) }}</td>
-                <td *ngIf="showColumnBalance1" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{ numberWithCommasAndAbs(totalBalanceForHim1) }}</td>
-                <td *ngIf="showColumnBalance1" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{ numberWithCommasAndAbs(totalBalanceOnHim1) }}</td>
-                <td *ngIf="showColumnBalance2" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{ numberWithCommasAndAbs(totalBalanceForHim2) }}</td>
-                <td *ngIf="showColumnBalance2" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{ numberWithCommasAndAbs(totalBalanceOnHim2) }}</td>
-                <td *ngIf="showColumnBalance3" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{ numberWithCommasAndAbs(totalBalanceForHim3) }}</td>
-                <td *ngIf="showColumnBalance3" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{ numberWithCommasAndAbs(totalBalanceOnHim3) }}</td>
-                <td *ngIf="showColumnBalance4" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{ numberWithCommasAndAbs(totalBalanceForHim4) }}</td>
-                <td *ngIf="showColumnBalance4" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{ numberWithCommasAndAbs(totalBalanceOnHim4) }}</td>
-                
-            </tr>
-            <tr>
-                <td colspan="2" *ngIf="showColumnBalance0" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{ getBalance(totalBalanceForHim0 + totalBalanceOnHim0) }}</td>
-                <td colspan="2" *ngIf="showColumnBalance1" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{ getBalance(totalBalanceForHim1 + totalBalanceOnHim1) }}</td>
-                <td colspan="2" *ngIf="showColumnBalance2" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{ getBalance(totalBalanceForHim2 + totalBalanceOnHim2) }}</td>
-                <td colspan="2" *ngIf="showColumnBalance3" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{ getBalance(totalBalanceForHim3 + totalBalanceOnHim3) }}</td>
-                <td colspan="2" *ngIf="showColumnBalance4" style="padding: 0.75rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">{{ getBalance(totalBalanceForHim4 + totalBalanceOnHim4) }}</td>
-            </tr>
-        </tfoot>
-        </table>
-    </div>
-    
+</div>
+<div id="download">
+    <span #canvas></span>
+    <a #downloadLink></a>
 </div>

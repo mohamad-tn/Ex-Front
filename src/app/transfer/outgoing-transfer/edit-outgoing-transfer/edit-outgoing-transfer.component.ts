@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, Inject, Injector, OnInit, Optional } from '@angular/core';
+import { Component, ElementRef, Inject, Injector, OnInit, Optional, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbDialogService } from '@nebular/theme';
 import { AppComponentBase } from '@shared/app-component-base';
@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import { WebcamImage } from 'ngx-webcam';
 import { finalize } from 'rxjs/operators';
 import { OutgoingImageTakenDialogComponent } from '../outgoing-image-taken-dialog/outgoing-image-taken-dialog.component';
+import html2canvas from 'html2canvas';
 
 
 @Component({
@@ -176,7 +177,7 @@ export class EditOutgoingTransferComponent
     this.outgoingTransfer.date = this.date.toISOString();
     this.saving = true;
 
-    if(this.toBranch === false){
+    if (this.toBranch === false) {
       this.outgoingTransfer.toBranchId = null;
     }
 
@@ -482,6 +483,86 @@ export class EditOutgoingTransferComponent
     } else {
       this.initialCompanies();
     }
+  }
+
+  getCurrencyName(): string {
+    if (this.outgoingTransfer.currencyId == undefined) return "";
+
+    return this.currencies.find((x) => x.id == this.outgoingTransfer.currencyId)
+      ?.name;
+  }
+
+  getCompanyName(id): string {
+    if (id == undefined) return "";
+
+    return this.companies.find((x) => x.id == id)?.name;
+  }
+
+  getCountryName(): string {
+    if (this.outgoingTransfer.countryId == undefined) return "";
+
+    return this.countries.find((x) => x.id == this.outgoingTransfer.currencyId)
+      ?.name;
+  }
+
+  getClientName(id): string {
+    if (id == undefined) return "";
+
+    return this.clients.find((x) => x.id == id)?.name;
+  }
+
+  getSenderName(): string {
+    if (this.outgoingTransfer.senderId == undefined) return "";
+
+    return this.customers.find((x) => x.id == this.outgoingTransfer.senderId)
+      ?.name;
+  }
+
+  getPaymentTypeName() {
+    switch (this.outgoingTransfer.paymentType) {
+      case 0: {
+        return "نقدي";
+      }
+      case 1: {
+        return "ذمم";
+      }
+      case 2: {
+        return "شركة";
+      }
+      default: {
+        return "";
+      }
+    }
+  }
+
+  getBeneficiaryName(): string {
+    if (this.outgoingTransfer.beneficiaryId == undefined) return "";
+
+    return this.customers.find(
+      (x) => x.id == this.outgoingTransfer.beneficiaryId
+    )?.name;
+  }
+
+  name = "Outgoing-Transfer-Statement";
+
+  @ViewChild("screen") screen: ElementRef;
+  @ViewChild("canvas") canvas: ElementRef;
+  @ViewChild("downloadLink") downloadLink: ElementRef;
+
+  downloadImage() {
+    document.getElementById("print-section").style.display = "contents";
+    document.getElementById("t5").style.width = "595px";
+    document.getElementById("t5").style.height = "842px";
+    html2canvas(this.screen.nativeElement).then((canvas) => {
+      this.canvas.nativeElement.src = canvas.toDataURL();
+      this.downloadLink.nativeElement.href = canvas.toDataURL("image/png");
+      this.downloadLink.nativeElement.download =
+        "Outgoing-Transfer-Statement.png";
+      this.downloadLink.nativeElement.click();
+    });
+    document.getElementById("print-section").style.display = "none";
+    document.getElementById("t5").style.width = "0px";
+    document.getElementById("t5").style.height = "0px";
   }
 }
 

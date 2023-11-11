@@ -6,57 +6,67 @@ import { TreasuryActionStatementOutputDto, TreasuryActionServiceProxy } from '@s
 import { SearchSpendsStatmentComponent } from './search-spends-statment.component';
 
 @Component({
-  selector: 'app-spends-statment',
-  templateUrl: './spends-statment.component.html',
-  styleUrls: ['./spends-statment.component.scss']
+  selector: "app-spends-statment",
+  templateUrl: "./spends-statment.component.html",
+  styleUrls: ["./spends-statment.component.scss"],
 })
-export class SpendsStatmentComponent extends AppComponentBase implements OnInit {
-
+export class SpendsStatmentComponent
+  extends AppComponentBase
+  implements OnInit
+{
   treasuryActions: TreasuryActionStatementOutputDto[] = [];
+  sumAmount: number = 0;
+
   constructor(
     injector: Injector,
     private _router: Router,
     private _treasuryActionAppService: TreasuryActionServiceProxy,
     private _modalService: NbDialogService
-    ) {
-      super(injector);
-    }
+  ) {
+    super(injector);
+  }
 
   ngOnInit(): void {
-    setTimeout(()=>this.showSearchDialog(),500);
+    setTimeout(() => this.showSearchDialog(), 500);
   }
-  
 
-  initialTreasuryActions(data){
-    this._treasuryActionAppService.getFroStatment(
-      1,
-      data.fromDate,
-      data.toDate,
-      data.mainAccount,
-      data.mainAccountCompanyId,
-      data.mainAccountClientId,
-      undefined,
-      data.incomeId,
-      undefined).subscribe(result =>{
+  initialTreasuryActions(data) {
+    this._treasuryActionAppService
+      .getFroStatment(
+        1,
+        data.fromDate,
+        data.toDate,
+        data.mainAccount,
+        data.mainAccountCompanyId,
+        data.mainAccountClientId,
+        undefined,
+        data.incomeId,
+        undefined
+      )
+      .subscribe((result) => {
         this.treasuryActions = result;
-      })
+
+        this.sumAmount = 0;
+        this.treasuryActions.forEach((element) => {
+          this.sumAmount = this.sumAmount + element.amount;
+        });
+      });
   }
 
   showSearchDialog() {
-    this._modalService.open(
-      SearchSpendsStatmentComponent
-    ).onClose.subscribe((e:any) => {
-      this.initialTreasuryActions(e);
-    });
+    this._modalService
+      .open(SearchSpendsStatmentComponent)
+      .onClose.subscribe((e: any) => {
+        this.initialTreasuryActions(e);
+      });
   }
 
-  showTreasuryAction(item){
-    this._router.navigate(
-      ['/app/treasury/edit-treasury-action',
-        {
-          "id" : item.id,
-        }
-      ]);
+  showTreasuryAction(item) {
+    this._router.navigate([
+      "/app/treasury/edit-treasury-action",
+      {
+        id: item.id,
+      },
+    ]);
   }
-
 }

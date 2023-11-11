@@ -194,7 +194,7 @@ export class CreateIncomeTransferComponent
     //Sender
     let tdSender = this.generateTd("sender-" + index, '500');
     let senderParentDiv = this.generateِDiv(tdSender, "row");
-    let senderDiv = this.generateِDiv(senderParentDiv, "col-md-6");
+    let senderDiv = this.generateِDiv(senderParentDiv, "col-md-12");
     this.generateِAutoComplete({
       parentEle: senderDiv,
       index: index,
@@ -204,7 +204,7 @@ export class CreateIncomeTransferComponent
       placeholder: this.l("Sender"),
     });
 
-    let senderPhoneDiv = this.generateِDiv(senderParentDiv, "col-md-6");
+    let senderPhoneDiv = this.generateِDiv(senderParentDiv, "col-md-12");
     this.generateِTextBox({
       parentEle: senderPhoneDiv,
       index: index,
@@ -231,7 +231,7 @@ export class CreateIncomeTransferComponent
     let tdBeneficiary = this.generateTd("beneficiary-" + index, '500');
     let parentDiv = this.generateِDiv(tdBeneficiary, "row");
 
-    let beneficiaryDiv = this.generateِDiv(parentDiv, "col-md-6");
+    let beneficiaryDiv = this.generateِDiv(parentDiv, "col-md-12");
     this.generateِAutoComplete({
       parentEle: beneficiaryDiv,
       index: index,
@@ -241,7 +241,7 @@ export class CreateIncomeTransferComponent
       placeholder: this.l("Beneficiary"),
     });
 
-    let phoneDiv = this.generateِDiv(parentDiv, "col-md-6");
+    let phoneDiv = this.generateِDiv(parentDiv, "col-md-12");
     this.generateِTextBox({
       parentEle: phoneDiv,
       index: index,
@@ -437,7 +437,7 @@ export class CreateIncomeTransferComponent
       case 0: {
         let parentDiv = this.generateِDiv(tdBeneficiary, "row");
 
-        let beneficiaryDiv = this.generateِDiv(parentDiv, "col-md-6");
+        let beneficiaryDiv = this.generateِDiv(parentDiv, "col-md-12");
         this.generateِAutoComplete(new SyncAutoCompleteModel({
           parentEle: beneficiaryDiv,
           index: Number(index),
@@ -447,7 +447,7 @@ export class CreateIncomeTransferComponent
           onChangeHandler: this.onchangeBeneficiary
         }));
 
-        let phoneDiv = this.generateِDiv(parentDiv, "col-md-6");
+        let phoneDiv = this.generateِDiv(parentDiv, "col-md-12");
         this.generateِTextBox(new SyncTextBoxModel({
           parentEle: phoneDiv,
           index: Number(index),

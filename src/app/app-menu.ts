@@ -133,6 +133,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: "/app/statement/exchange-currency-statement",
       },
       {
+        title: "Management",
+        link: "/app/statement/management-statement",
+      },
+
+      {
         title: "Summary",
         link: "/app/statement/summary-statement",
       },

@@ -101,6 +101,20 @@ implements OnInit
 
   // on change handler
   onchangePaymentType(args) {
+
+    if (args.value == 0) {
+      this.exchangeCurrency.clientId = undefined;
+      this.exchangeCurrency.companyId = undefined;
+    }
+
+    if (args.value == 1) {
+      this.exchangeCurrency.companyId = undefined;
+    }
+
+    if (args.value == 2) {
+      this.exchangeCurrency.clientId = undefined;
+    }
+
     this.onchnage({
       paymentType: args.value,
       actionType: this.exchangeCurrency.actionType,
@@ -192,7 +206,8 @@ implements OnInit
       data.secondCurrencyId != undefined
     ) {
       this.getClientBalanceSecondCurrency(data);
-    } else if (
+    }
+    if (
       data.companyId != undefined &&
       data.firstCurrencyId != undefined
     ) {
@@ -299,7 +314,8 @@ implements OnInit
   onchangeFirstAmount(args) {
     let amount = args.value;
     let value = amount * this.exchangeCurrency.exchangePrice;
-    this.exchangeCurrency.amoutOfSecondCurrency = Math.round(value * 10) / 10;
+    this.exchangeCurrency.amoutOfSecondCurrency = value;
+    // this.exchangeCurrency.amoutOfSecondCurrency = Math.round(value * 10) / 10;
     this.updateCurrentBalance();
   }
 
@@ -307,7 +323,8 @@ implements OnInit
     let amount = args.value;
     if (this.exchangeCurrency.exchangePrice != undefined && this.exchangeCurrency.exchangePrice > 0) {
       let value = amount / this.exchangeCurrency.exchangePrice;
-      this.exchangeCurrency.amountOfFirstCurrency = Math.round(value * 10) / 10;
+      this.exchangeCurrency.amountOfFirstCurrency = value;
+      // this.exchangeCurrency.amountOfFirstCurrency = Math.round(value * 10) / 10;
       this.updateCurrentBalance();
     }
   }
@@ -315,7 +332,7 @@ implements OnInit
   onchangeExchangePrice(args){
     let exchangePrice = args.value;
     this.exchangeCurrency.amoutOfSecondCurrency = this.exchangeCurrency.amountOfFirstCurrency * exchangePrice;
-    this.exchangeCurrency.amoutOfSecondCurrency = Math.round(this.exchangeCurrency.amoutOfSecondCurrency * 10)/10;
+    // this.exchangeCurrency.amoutOfSecondCurrency = Math.round(this.exchangeCurrency.amoutOfSecondCurrency * 10)/10;
   }
   getMainCurrency() {
     this.mainCurrency = this.currencies.find((x) => x.isMainCurrency == true);
@@ -371,8 +388,8 @@ implements OnInit
       }
     }
 
-    this.exchangeCurrency.exchangePrice = Math.round(price * 100000) / 100000;
-    console.log(this.exchangeCurrency.exchangePrice);
+    this.exchangeCurrency.exchangePrice = price;
+    // this.exchangeCurrency.exchangePrice = Math.round(price * 100000) / 100000;
     // update amount
     if(this.exchangeCurrency.amountOfFirstCurrency){
       this.exchangeCurrency.amoutOfSecondCurrency = this.exchangeCurrency.amountOfFirstCurrency * this.exchangeCurrency.exchangePrice;
@@ -384,13 +401,17 @@ implements OnInit
 
   updateCurrentBalance(){
     
-    let firstValue = this.exchangeCurrency.actionType == 0 ? 
-    (-1 * this.exchangeCurrency.amountOfFirstCurrency) : 
-    this.exchangeCurrency.amountOfFirstCurrency;
+    let firstValue =
+      this.exchangeCurrency.actionType == 0
+        ? -1 *
+          (Math.round(this.exchangeCurrency.amountOfFirstCurrency * 10) / 10)
+        : Math.round(this.exchangeCurrency.amountOfFirstCurrency * 10) / 10;
 
-    let secondValue = this.exchangeCurrency.actionType == 0 ? 
-    this.exchangeCurrency.amoutOfSecondCurrency : 
-    (-1 * this.exchangeCurrency.amoutOfSecondCurrency);
+    let secondValue =
+      this.exchangeCurrency.actionType == 0
+        ? Math.round(this.exchangeCurrency.amoutOfSecondCurrency * 10) / 10
+        : (-1 * Math.round(this.exchangeCurrency.amoutOfSecondCurrency * 10)) /
+          10;
 
     this.currentBalanceFirstCurrency = this.previousBalanceFirstCurrency != undefined ? (this.previousBalanceFirstCurrency + firstValue) : firstValue;
     this.currentBalanceSecondCurrency = this.previousBalanceSecondCurrency != undefined ? (this.previousBalanceSecondCurrency + secondValue) : secondValue;

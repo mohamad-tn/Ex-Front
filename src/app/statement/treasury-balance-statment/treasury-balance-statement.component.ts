@@ -1,10 +1,10 @@
-import { Component, Inject, Injector, OnInit, Optional, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, Injector, OnInit, Optional, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
 import { API_BASE_URL, TreasuryDto, CurrencyDto, CurrencyServiceProxy } from '@shared/service-proxies/service-proxies';
 import { GridComponent, PageSettingsModel } from '@syncfusion/ej2-angular-grids';
 import { DataManager, UrlAdaptor, Query, Predicate  } from '@syncfusion/ej2-data';
 import { TreasuryBalanceFilterInput } from './treasury-balance-filter-input'
-
+import html2canvas from "html2canvas";
 
 @Component({
   selector: "app-treasury-balance-statement",
@@ -94,5 +94,29 @@ export class TreasuryBalanceStatementComponent
 
   getRealDate(date): Date {
     return new Date(date);
+  }
+
+  name = "Treasury-Balance-Statement";
+
+  @ViewChild("screen") screen: ElementRef;
+  @ViewChild("canvas") canvas: ElementRef;
+  @ViewChild("downloadLink") downloadLink: ElementRef;
+
+  downloadImage() {
+    document.getElementById("print-section").style.display = "contents";
+    document.getElementById("t3").style.width = "595px";
+    document.getElementById("t3").style.height = "842px";
+    html2canvas(this.screen.nativeElement).then((canvas) => {
+      this.canvas.nativeElement.src = canvas.toDataURL();
+      this.downloadLink.nativeElement.href = canvas.toDataURL("image/png");
+      this.downloadLink.nativeElement.download =
+        "Treasury-Balance-Statement-To_Date : " +
+        this.toDate.toLocaleDateString() +
+        ".png";
+      this.downloadLink.nativeElement.click();
+    });
+    document.getElementById("print-section").style.display = "none";
+    document.getElementById("t3").style.width = "0px";
+    document.getElementById("t3").style.height = "0px";
   }
 }

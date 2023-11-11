@@ -1,0 +1,396 @@
+<div class="container">
+    <div class="row">
+    <nb-card-header>
+        <div class="as-head">
+            <div class="header-container">
+                <nb-actions>
+                    <nb-action class="control-item ">
+                        <h5>الإدارة</h5>
+                    </nb-action>
+                </nb-actions>
+            </div>
+        </div>
+    </nb-card-header>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <div class="row">
+                <h6>الحوالات الصادرة</h6>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <span>
+                        {{outgoingCount}} تغيير
+                        <nb-icon status="primary" icon="search-outline" (click)="getDetail(0)"></nb-icon>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="row">
+                <h6>الحوالات الواردة</h6>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <span>
+                        {{incomeCount}} تغيير
+                        <nb-icon status="primary" icon="search-outline" (click)="getDetail(1)"></nb-icon>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="row">
+                <h6>الصندوق</h6>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <span>
+                        {{treasuryCount}} تغيير
+                        <nb-icon status="primary" icon="search-outline" (click)="getDetail(2)"></nb-icon>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="row">
+                <h6>الصرافة</h6>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <span>
+                        {{exchangeCount}} تغيير
+                        <nb-icon status="primary" icon="search-outline" (click)="getDetail(3)"></nb-icon>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row" *ngIf="loading">        
+        <div class="col-md-12">
+        <nb-card-body class="as-case-card-body">
+            <ejs-grid *ngIf="type == 0" id="managementGrid" #managementGrid [query]="param" [dataSource]="dataSource" [allowPaging]="true"
+                 [enableRtl]='true' [pageSettings]="pageSettings">
+                <!--toolbar-->
+                <!-- <ng-template #toolbarTemplate>
+                    <ejs-toolbar>
+                        <div>
+                            <div style="width: 5px;"></div>
+                            <div>
+                                <button nbButton shape="round" status="primary" outline (click)="clearFilters()">
+                                    <span class="fa-ico-po">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-slash" style="color:Tomato"></i>
+                                    </span>
+                                    {{'ClearFilters' | localize}}
+                                </button>
+                            </div>
+                            <div>
+                                <button nbButton shape="round" status="primary" outline (click)="clearSorts()">
+                                    <span class="fa-ico-po">
+                                        <i class="fas fa-sort-amount-up"></i>
+                                        <i class="fas fa-slash" style="color:Tomato"></i>
+                                    </span>
+                                    {{'ClearSorts' | localize}}
+                                </button>
+                            </div>
+                        </div>
+                    </ejs-toolbar>        
+                </ng-template> -->
+                <!--Columns-->
+                <e-columns>
+                    <e-column field="id" headerText="Id" isPrimaryKey="true" [visible]="false"></e-column>
+                    <e-column headerText="{{l('Type')}}" textAlign="center" width="150">
+                        <ng-template #template let-data>
+                            <span *ngIf="data.type == 0">{{'OutgoingTransfer' | localize}}</span>
+                            <span *ngIf="data.type == 1">{{'IncomeTransfer' | localize}}</span>
+                            <span *ngIf="data.type == 2">{{'Treasury' | localize}}</span>
+                            <span *ngIf="data.type == 3">{{'ExchangeCurrency' | localize}}</span>
+                        </ng-template>
+                    </e-column>
+                    <e-column headerText="{{l('ChangeType')}}" textAlign="center" width="150">
+                        <ng-template #template let-data>
+                            <span *ngIf="data.changeType == 0">{{'Update' | localize}}</span>
+                            <span *ngIf="data.changeType == 1">{{'Delete' | localize}}</span>
+                        </ng-template>
+                    </e-column>
+                    <e-column field="number" headerText="{{l('Number')}}" textAlign="center" width="150"></e-column>
+                    <e-column field="currency.name" headerText="{{l('Currency')}}" textAlign="center" width="150"></e-column>
+                    <e-column headerText="{{l('Amount')}}" textAlign="center" width="150">
+                        <ng-template #template let-data>
+                            <span *ngIf="data.amount != undefined">
+                                {{numberWithCommas(data.amount)}}
+                            </span>
+                        </ng-template>
+                    </e-column>
+                    <e-column field="paymentType" headerText="{{l('PaymentType')}}" textAlign="center" width="150">
+                        <ng-template #template let-data>
+                            <span *ngIf="data.paymentType == 0">{{'Cash' | localize}}</span>
+                            <span *ngIf="data.paymentType == 1">{{'Client' | localize}}</span>
+                            <span *ngIf="data.paymentType == 2">{{'Company' | localize}}</span>
+                        </ng-template>
+                    </e-column>
+                    <e-column field="beneficiary.name" headerText="{{l('Beneficiary')}}" textAlign="center" width="150"></e-column>
+                    <e-column field="sender.name" headerText="{{l('Sender')}}" textAlign="center" width="150"></e-column>
+                    <e-column headerText="{{l('Commission')}}" textAlign="center" width="150">
+                        <ng-template #template let-data>
+                            <span *ngIf="data.commission != undefined">
+                                {{numberWithCommas(data.commission)}}
+                            </span>
+                        </ng-template>
+                    </e-column>
+                    <e-column field="toCompany.name" headerText="{{l('ToCompany')}}" textAlign="center" width="150"></e-column>
+                    <e-column field="company.name" headerText="{{l('Company')}}" textAlign="center" width="150"></e-column>
+                    <e-column field="client.name" headerText="{{l('Client')}}" textAlign="center" width="150"></e-column>
+                    <e-column field="date" headerText="{{l('Date')}}" textAlign="center" width="200"></e-column>
+                    <e-column field="changeDate" headerText="{{l('ChangeDate')}}" textAlign="center" width="200"></e-column>    
+                    <e-column field="beforChange" headerText="{{l('BeforChange')}}" textAlign="center" width="2000"></e-column>
+                    <e-column field="afterChange" headerText="{{l('AfterChange')}}" textAlign="center" width="2000"></e-column>                
+                </e-columns>
+            </ejs-grid>
+
+            <ejs-grid *ngIf="type == 1" id="managementGrid" #managementGrid [query]="param" [dataSource]="dataSource1" [allowPaging]="true"
+                [allowSorting]="true" [allowFiltering]="true" [enableRtl]='true' [pageSettings]="pageSettings"
+                [filterSettings]='filterOption'>
+                <!--toolbar-->
+                <!-- <ng-template #toolbarTemplate>
+                    <ejs-toolbar>
+                        <div>
+                            <div style="width: 5px;"></div>
+                            <div>
+                                <button nbButton shape="round" status="primary" outline (click)="clearFilters()">
+                                    <span class="fa-ico-po">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-slash" style="color:Tomato"></i>
+                                    </span>
+                                    {{'ClearFilters' | localize}}
+                                </button>
+                            </div>
+                            <div>
+                                <button nbButton shape="round" status="primary" outline (click)="clearSorts()">
+                                    <span class="fa-ico-po">
+                                        <i class="fas fa-sort-amount-up"></i>
+                                        <i class="fas fa-slash" style="color:Tomato"></i>
+                                    </span>
+                                    {{'ClearSorts' | localize}}
+                                </button>
+                            </div>
+                        </div>
+                    </ejs-toolbar>
+                </ng-template> -->
+                <!--Columns-->
+                <e-columns>
+                    <e-column field="id" headerText="Id" isPrimaryKey="true" [visible]="false"></e-column>
+                    <e-column headerText="{{l('Type')}}" textAlign="center" width="150">
+                        <ng-template #template let-data>
+                            <span *ngIf="data.type == 0">{{'OutgoingTransfer' | localize}}</span>
+                            <span *ngIf="data.type == 1">{{'IncomeTransfer' | localize}}</span>
+                            <span *ngIf="data.type == 2">{{'Treasury' | localize}}</span>
+                            <span *ngIf="data.type == 3">{{'ExchangeCurrency' | localize}}</span>
+                        </ng-template>
+                    </e-column>
+                    <e-column headerText="{{l('ChangeType')}}" textAlign="center" width="150">
+                        <ng-template #template let-data>
+                            <span *ngIf="data.changeType == 0">{{'Update' | localize}}</span>
+                            <span *ngIf="data.changeType == 1">{{'Delete' | localize}}</span>
+                        </ng-template>
+                    </e-column>
+                    <e-column field="number" headerText="{{l('Number')}}" textAlign="center" width="150"></e-column>
+                    <e-column field="currency.name" headerText="{{l('Currency')}}" textAlign="center" width="150"></e-column>
+                    <e-column headerText="{{l('Amount')}}" textAlign="center" width="150">
+                        <ng-template #template let-data>
+                            <span *ngIf="data.amount != undefined">
+                                {{numberWithCommas(data.amount)}}
+                            </span>
+                        </ng-template>
+                    </e-column>
+                    <e-column field="paymentType" headerText="{{l('PaymentType')}}" textAlign="center" width="150">
+                        <ng-template #template let-data>
+                            <span *ngIf="data.paymentType == 0">{{'Cash' | localize}}</span>
+                            <span *ngIf="data.paymentType == 1">{{'Client' | localize}}</span>
+                            <span *ngIf="data.paymentType == 2">{{'Company' | localize}}</span>
+                        </ng-template>
+                    </e-column>
+                    <e-column field="beneficiary.name" headerText="{{l('Beneficiary')}}" textAlign="center" width="150"></e-column>
+                    <e-column field="sender.name" headerText="{{l('Sender')}}" textAlign="center" width="150"></e-column>
+                    <e-column headerText="{{l('Commission')}}" textAlign="center" width="150">
+                        <ng-template #template let-data>
+                            <span *ngIf="data.commission != undefined">
+                                {{numberWithCommas(data.commission)}}
+                            </span>
+                        </ng-template>
+                    </e-column>
+                    <e-column field="toCompany.name" headerText="{{l('ToCompany')}}" textAlign="center" width="150"></e-column>
+                    <e-column field="company.name" headerText="{{l('Company')}}" textAlign="center" width="150"></e-column>
+                    <e-column field="client.name" headerText="{{l('Client')}}" textAlign="center" width="150"></e-column>
+                    <e-column field="date" headerText="{{l('Date')}}" textAlign="center" width="200"></e-column>
+                    <e-column field="changeDate" headerText="{{l('ChangeDate')}}" textAlign="center" width="200"></e-column><e-column field="beforChange" headerText="{{l('BeforChange')}}" textAlign="center" width="2000"></e-column>
+                    <e-column field="afterChange" headerText="{{l('AfterChange')}}" textAlign="center" width="2000"></e-column>
+                </e-columns>
+            </ejs-grid>
+
+            <ejs-grid *ngIf="type == 2" id="managementGrid" #managementGrid [query]="param" [dataSource]="dataSource2"
+                [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true" [enableRtl]='true' [pageSettings]="pageSettings"
+                [filterSettings]='filterOption'>
+                <!--toolbar-->
+                <!-- <ng-template #toolbarTemplate>
+                    <ejs-toolbar>
+                        <div>
+                            <div style="width: 5px;"></div>
+                            <div>
+                                <button nbButton shape="round" status="primary" outline (click)="clearFilters()">
+                                    <span class="fa-ico-po">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-slash" style="color:Tomato"></i>
+                                    </span>
+                                    {{'ClearFilters' | localize}}
+                                </button>
+                            </div>
+                            <div>
+                                <button nbButton shape="round" status="primary" outline (click)="clearSorts()">
+                                    <span class="fa-ico-po">
+                                        <i class="fas fa-sort-amount-up"></i>
+                                        <i class="fas fa-slash" style="color:Tomato"></i>
+                                    </span>
+                                    {{'ClearSorts' | localize}}
+                                </button>
+                            </div>
+                        </div>
+                    </ejs-toolbar>
+                </ng-template> -->
+                <!--Columns-->
+                <e-columns>
+                    <e-column field="id" headerText="Id" isPrimaryKey="true" [visible]="false"></e-column>
+                    <e-column headerText="{{l('Type')}}" textAlign="center" width="150">
+                        <ng-template #template let-data>
+                            <span *ngIf="data.type == 0">{{'OutgoingTransfer' | localize}}</span>
+                            <span *ngIf="data.type == 1">{{'IncomeTransfer' | localize}}</span>
+                            <span *ngIf="data.type == 2">{{'Treasury' | localize}}</span>
+                            <span *ngIf="data.type == 3">{{'ExchangeCurrency' | localize}}</span>
+                        </ng-template>
+                    </e-column>
+                    <e-column headerText="{{l('ChangeType')}}" textAlign="center" width="150">
+                        <ng-template #template let-data>
+                            <span *ngIf="data.changeType == 0">{{'Update' | localize}}</span>
+                            <span *ngIf="data.changeType == 1">{{'Delete' | localize}}</span>
+                        </ng-template>
+                    </e-column>
+                    <e-column field="number" headerText="{{l('Number')}}" textAlign="center" width="150"></e-column>
+                    <e-column field="treasuryActionType" headerText="{{l('ActionType')}}" textAlign="center" width="150">
+                        <ng-template #template let-data>
+                            <span *ngIf="data.treasuryActionType == 0">{{'Spend' | localize}}</span>
+                            <span *ngIf="data.treasuryActionType == 1">{{'Receipt' | localize}}</span>
+                        </ng-template>
+                    </e-column>
+                    <e-column field="currency.name" headerText="{{l('Currency')}}" textAlign="center" width="150"></e-column>
+                    <e-column headerText="{{l('Amount')}}" textAlign="center" width="150">
+                        <ng-template #template let-data>
+                            <span *ngIf="data.amount != undefined">
+                                {{numberWithCommas(data.amount)}}
+                            </span>
+                        </ng-template>
+                    </e-column>
+                    <e-column field="mainAccount" headerText="{{l('MainAccount')}}" textAlign="center" width="150">
+                        <ng-template #template let-data>
+                            <span *ngIf="data.clientId != undefined">{{'Client' | localize}} /
+                                {{data.client.name}}</span>
+                            <span *ngIf="data.companyId != undefined">{{'Company' | localize}} /
+                                {{data.company.name}}</span>
+                            <span *ngIf="data.treasuryActionType == 0 && data.mainAccount == 2">{{'Expence' | localize}}</span>
+                            <span *ngIf="data.treasuryActionType == 0 && data.mainAccount == 'DirectTransfer'">{{'DirectTransfer' | localize}}</span>
+                            <span *ngIf="data.treasuryActionType == 1 && data.mainAccount == 'Income'">{{'Income' | localize}}</span>
+                        </ng-template>
+                    </e-column>
+                    <e-column field="date" headerText="{{l('Date')}}" textAlign="center" width="200"></e-column>
+                    <e-column field="changeDate" headerText="{{l('ChangeDate')}}" textAlign="center" width="200"></e-column><e-column field="beforChange" headerText="{{l('BeforChange')}}" textAlign="center" width="2000"></e-column>
+                    <e-column field="afterChange" headerText="{{l('AfterChange')}}" textAlign="center" width="2000"></e-column>
+                </e-columns>
+            </ejs-grid>
+
+            <ejs-grid *ngIf="type == 3" id="managementGrid" #managementGrid [query]="param" [dataSource]="dataSource3"
+                [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true" [enableRtl]='true' [pageSettings]="pageSettings"
+                [filterSettings]='filterOption'>
+                <!--toolbar-->
+                <!-- <ng-template #toolbarTemplate>
+                    <ejs-toolbar>
+                        <div>
+                            <div style="width: 5px;"></div>
+                            <div>
+                                <button nbButton shape="round" status="primary" outline (click)="clearFilters()">
+                                    <span class="fa-ico-po">
+                                        <i class="fas fa-filter"></i>
+                                        <i class="fas fa-slash" style="color:Tomato"></i>
+                                    </span>
+                                    {{'ClearFilters' | localize}}
+                                </button>
+                            </div>
+                            <div>
+                                <button nbButton shape="round" status="primary" outline (click)="clearSorts()">
+                                    <span class="fa-ico-po">
+                                        <i class="fas fa-sort-amount-up"></i>
+                                        <i class="fas fa-slash" style="color:Tomato"></i>
+                                    </span>
+                                    {{'ClearSorts' | localize}}
+                                </button>
+                            </div>
+                        </div>
+                    </ejs-toolbar>
+                </ng-template> -->
+                <!--Columns-->
+                <e-columns>
+                    <e-column field="id" headerText="Id" isPrimaryKey="true" [visible]="false"></e-column>
+                    <e-column headerText="{{l('Type')}}" textAlign="center" width="150">
+                        <ng-template #template let-data>
+                            <span *ngIf="data.type == 0">{{'OutgoingTransfer' | localize}}</span>
+                            <span *ngIf="data.type == 1">{{'IncomeTransfer' | localize}}</span>
+                            <span *ngIf="data.type == 2">{{'Treasury' | localize}}</span>
+                            <span *ngIf="data.type == 3">{{'ExchangeCurrency' | localize}}</span>
+                        </ng-template>
+                    </e-column>
+                    <e-column headerText="{{l('ChangeType')}}" textAlign="center" width="150">
+                        <ng-template #template let-data>
+                            <span *ngIf="data.changeType == 0">{{'Update' | localize}}</span>
+                            <span *ngIf="data.changeType == 1">{{'Delete' | localize}}</span>
+                        </ng-template>
+                    </e-column>
+                    <!-- <e-column field="number" headerText="{{l('Number')}}" textAlign="center" width="150"></e-column> -->
+                    <e-column field="actionType" headerText="{{'ActionType' | localize}}" width="150">
+                        <ng-template #template let-data>
+                            <span *ngIf="data.actionType == 0 ">بيع</span>
+                            <span *ngIf="data.actionType == 1 ">شراء</span>
+                        </ng-template>
+                    </e-column>
+                    <e-column field="paymentType" headerText="{{l('PaymentType')}}" textAlign="center" width="150">
+                        <ng-template #template let-data>
+                            <span *ngIf="data.paymentType == 0">{{'Cash' | localize}}</span>
+                            <span *ngIf="data.paymentType == 1">{{'Client' | localize}}</span>
+                            <span *ngIf="data.paymentType == 2">{{'Company' | localize}}</span>
+                        </ng-template>
+                    </e-column>
+                    <e-column field="firstCurrency.name" headerText="{{'FirstCurrency' | localize}}" width ="150"></e-column>
+                    <e-column headerText="{{'AmountOfFirstCurrency' | localize}}" width="200">
+                        <ng-template #template let-data>
+                            <span *ngIf="data.amountOfFirstCurrency != undefined">
+                                {{numberWithCommas(data.amountOfFirstCurrency)}}
+                            </span>
+                        </ng-template>
+                    </e-column>
+                    <e-column field="secondCurrency.name" headerText="{{'SecondCurrency' | localize}}" width="150"></e-column>
+                    <e-column headerText="{{'AmoutOfSecondCurrency' | localize}}" width="200">
+                        <ng-template #template let-data>
+                            <span *ngIf="data.amoutOfSecondCurrency != undefined">
+                                {{numberWithCommas(data.amoutOfSecondCurrency)}}
+                            </span>
+                        </ng-template>
+                    </e-column>
+                    <e-column field="date" headerText="{{l('Date')}}" textAlign="center" width="200"></e-column>
+                    <e-column field="changeDate" headerText="{{l('ChangeDate')}}" textAlign="center" width="200"></e-column>
+                    <e-column field="beforChange" headerText="{{l('BeforChange')}}" textAlign="center" width="2000"></e-column>
+                    <e-column field="afterChange" headerText="{{l('AfterChange')}}" textAlign="center" width="2000"></e-column>
+                </e-columns>
+            </ejs-grid>
+        </nb-card-body>
+        </div>
+        </div>
+    </div>

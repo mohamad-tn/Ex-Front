@@ -147,9 +147,8 @@
                                     </e-column>                                    
                                     <e-column headerText="{{'From-Company-Client' | localize}}" width="150">
                                         <ng-template #template let-data>
-                                            <span *ngIf="data.client != undefined">{{'Client' | localize}} / {{data.client.name}}</span>
-                                            <span *ngIf="data.company != undefined">{{'Company' | localize}} / {{data.company.name}}</span>
-                                        </ng-template>
+                                            <span *ngIf="data.fromClient != undefined">{{'Client' | localize}} / {{data.fromClient.name}}</span>
+                                            <span *ngIf="data.fromCompany != undefined">{{'Company' | localize}} / {{data.fromCompany.name}}</span></ng-template>
                                         
                                     </e-column>
                                     <e-column field="amount" headerText="{{'Amount' | localize}}" width ="150"></e-column>

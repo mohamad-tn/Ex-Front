@@ -1,0 +1,43 @@
+<form class="form-horizontal" autocomplete="off" #searshForm="ngForm" (ngSubmit)="save()">
+    <nb-card>
+        <nb-card-header>
+            {{ "Search" | localize }}
+        </nb-card-header>
+        <nb-card-body>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="fromDate">
+                            {{ "FromDate" | localize }}
+                        </label>
+                        <div class="col-md-9">
+                            <ejs-datepicker [format]="'dd/MM/yyyy'" id='fromDate' name='fromDate' cssClass="as-sy-input"
+                                locale='en' required placeholder="{{ 'SelectDate' | localize }}" [(ngModel)]="fromDate"
+                                #fromDateModel="ngModel" #fromDateEl></ejs-datepicker>
+                            <abp-validation-summary [control]="fromDateModel" [controlEl]="fromDateEl">
+                            </abp-validation-summary>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row required">
+                        <label class="col-md-3 col-form-label" for="toDate">
+                            {{ "ToDate" | localize }}
+                        </label>
+                        <div class="col-md-9">
+                            <ejs-datepicker [format]="'dd/MM/yyyy'" id='toDate' name='toDate' cssClass="as-sy-input"
+                                locale='en' required placeholder="{{ 'SelectDate' | localize }}" [(ngModel)]="toDate"
+                                #toDateModel="ngModel" #toDateEl></ejs-datepicker>
+                            <abp-validation-summary [control]="toDateModel" [controlEl]="toDateEl">
+                            </abp-validation-summary>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </nb-card-body>
+        <nb-card-footer>
+            <abp-modal-footer (onCancelClick)="dialogRef.close()" [saveLabel]="'بحث'"></abp-modal-footer>
+        </nb-card-footer>
+    </nb-card>
+</form>

@@ -88,10 +88,10 @@
                                             
                                         </ng-template>
                                     </e-column>
-                                    <e-column field="balance" headerText="{{l('Balance')}}" textAlign="center" width=150>
+                                    <e-column field="balance" headerText="{{l('Balance')}}" textAlign="center" width=225>
                                         <ng-template #template let-data>{{ getBalance(data.balance) }}</ng-template>
                                     </e-column>
-                                    <e-column headerText="{{l('له')}}" textAlign="center" width=120>
+                                    <e-column headerText="{{l('له')}}" textAlign="center" width=225>
                                         <ng-template #template let-data>
                                             <span *ngIf="data.amount < 0">
                                                 {{ numberWithCommasAndAbs(data.amount) }}
@@ -99,14 +99,14 @@
                                             
                                         </ng-template>
                                     </e-column>
-                                    <e-column headerText="{{l('عليه')}}" textAlign="center" width=120>
+                                    <e-column headerText="{{l('عليه')}}" textAlign="center" width=225>
                                         <ng-template #template let-data>
                                             <span *ngIf="data.amount > 0">
                                                 {{ numberWithCommasAndAbs(data.amount) }}
                                             </span>
                                         </ng-template>
                                     </e-column>
-                                    <e-column headerText="{{l('Commission')}}" textAlign="center" width=120>
+                                    <e-column headerText="{{l('Commission')}}" textAlign="center" width=175>
                                         <ng-template #template let-data>
                                             <span *ngIf="data.commission">{{ getBalance(data.commission) }}</span>
                                             <span *ngIf="!data.commission">{{ getBalance(data.clientCommission) }}</span>
@@ -136,7 +136,7 @@
                                             </ng-template>
                                         </ng-template>
                                     </e-column>
-                                    <e-column field="instrumentNo" headerText="{{l('InstrumentNo')}}" textAlign="center" width=120></e-column>
+                                    <e-column field="instrumentNo" headerText="{{l('InstrumentNo')}}" textAlign="center" width=175></e-column>
                                 </e-columns>
                             </ejs-grid>
                         </div>

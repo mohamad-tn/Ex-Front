@@ -15,11 +15,8 @@
                         <nb-actions>
                             <nb-action class="control-item" (click)="showSearchDialog()"><i
                                     class="fa fa-binoculars as-icon-primary" aria-hidden="true"></i></nb-action>
-                            <nb-action class="control-item">
-                                <button type="button" nbButton status="basic" outline useExistingCss="true"
-                                    printTitle="treasury" printSectionId="print-section" ngxPrint>
-                                    <nb-icon icon="printer-outline"></nb-icon>
-                                </button>
+                            <nb-action class="control-item" (click)="downloadImage()">
+                                <nb-icon icon="printer-outline"></nb-icon>
                             </nb-action>
                         </nb-actions>
                     </div>
@@ -64,12 +61,18 @@
                                 </e-column>
                                 <e-column field="firstCurrency.name" headerText="{{'FirstCurrency' | localize}}"
                                     width="150"></e-column>
-                                <e-column field="amountOfFirstCurrency"
-                                    headerText="{{'AmountOfFirstCurrency' | localize}}" width="200"></e-column>
+                                <e-column headerText="{{'AmountOfFirstCurrency' | localize}}" width="200">
+                                    <ng-template #template let-data>
+                                        {{numberWithCommasAndAbs(data.amountOfFirstCurrency)}}
+                                    </ng-template>
+                                </e-column>
                                 <e-column field="secondCurrency.name" headerText="{{'SecondCurrency' | localize}}"
                                     width="150"></e-column>
-                                <e-column field="amoutOfSecondCurrency"
-                                    headerText="{{'AmoutOfSecondCurrency' | localize}}" width="200"></e-column>
+                                <e-column headerText="{{'AmoutOfSecondCurrency' | localize}}" width="200">
+                                    <ng-template #template let-data>
+                                        {{numberWithCommasAndAbs(data.amoutOfSecondCurrency)}}
+                                    </ng-template>
+                                </e-column>
                                 <e-column field="date" headerText="{{'Date' | localize}}" format="dd/MM/yyyy"
                                     width="200"></e-column>
                             </e-columns>
@@ -78,120 +81,126 @@
                 </div>
 
                 <!-- Print ngx print -->
-                <div id="print-section" dir="rtl" style="width:100%;display:none">
-                    <div style="width:100%;text-align: center;">
-                        <h3>{{'ExchangeCurrencyStatement' | localize}}</h3>
+                <div id="t5" class="p-4" #screen>
+                    <div id="print-section" dir="rtl" style="width:100%;display:none">
+                        <div style="width:100%;text-align: center;">
+                            <h3>{{'ExchangeCurrencyStatement' | localize}}</h3>
+                        </div>
+                        <br />
+                        <div dir="rtl" style="width:80%;float: right;text-align: center;">
+                            <table dir="rtl"
+                                style="color: #424242;border: 1px solid #dee2e6;width: 100%;margin-bottom: 1rem;background-color: transparent;border-collapse: collapse;display: table;text-indent: initial;border-spacing: 2px;">
+                                <thead style="display: table-header-group;vertical-align: middle;border-color: inherit;">
+                                    <tr style="display: table-row;vertical-align: inherit;border-color: inherit;">
+                
+                                        <th
+                                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                                            {{l('FromDate')}}</th>
+                                        <th
+                                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                                            {{fromDate | date:'dd/MM/yyyy'}}</th>
+                
+                                        <th
+                                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                                            {{l('ToDate')}}</th>
+                                        <th
+                                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                                            {{toDate | date:'dd/MM/yyyy'}}</th>
+                
+                                        <th
+                                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                                            {{l('ActionType')}}</th>
+                                        <th
+                                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                                            {{actionType}}</th>
+                
+                                        <th
+                                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                                            {{l('PaymentType')}}</th>
+                                        <th
+                                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                                            {{paymentType}}</th>
+                
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <br />
+                        <div dir="rtl" style="width:100%;">
+                            <table dir="rtl"
+                                style="color: #424242;border: 1px solid #dee2e6;width: 100%;margin-bottom: 1rem;background-color: transparent;border-collapse: collapse;display: table;text-indent: initial;border-spacing: 2px;">
+                                <thead style="display: table-header-group;vertical-align: middle;border-color: inherit;">
+                                    <tr style="display: table-row;vertical-align: inherit;border-color: inherit;">
+                                        <th
+                                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                                            {{l('ActionType')}}</th>
+                                        <th
+                                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                                            {{l('PaymentType')}}</th>
+                                        <th
+                                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                                            {{l('FirstCurrency')}}</th>
+                                        <th
+                                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                                            {{l('AmountOfFirstCurrency')}}</th>
+                                        <th
+                                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                                            {{l('SecondCurrency')}}</th>
+                                        <th
+                                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                                            {{l('AmoutOfSecondCurrency')}}</th>
+                                        <th
+                                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
+                                            {{l('Date')}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of data">
+                
+                                        <td
+                                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                
+                                            <span *ngIf="item.actionType == 0 ">بيع</span>
+                                            <span *ngIf="item.actionType == 1 ">شراء</span>
+                                        </td>
+                                        <td
+                                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                                            <span *ngIf="item.paymentType == 0 ">نقدي</span>
+                                            <span *ngIf="item.paymentType == 1 ">ذمم</span>
+                                            <span *ngIf="item.paymentType == 2 ">شركة</span>
+                                        </td>
+                                        <td
+                                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                                            <span>{{item.firstCurrency?.name }}</span>
+                                        </td>
+                                        <td
+                                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                                            <span>{{ item.amountOfFirstCurrency }}</span>
+                                        </td>
+                                        <td
+                                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                                            <span>{{ item.secondCurrency?.name }}</span>
+                                        </td>
+                                        <td
+                                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                                            <span>{{ item.amoutOfSecondCurrency }}</span>
+                                        </td>
+                                        <td
+                                            style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
+                                            <span *ngIf="item.date != undefined">{{ getRealDate(item.date) |
+                                                date:'dd/MM/yyyy'}}</span>
+                                            <span *ngIf="item.date == undefined"></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <br />
-                    <div dir="rtl" style="width:80%;float: right;text-align: center;">
-                        <table dir="rtl"
-                            style="color: #424242;border: 1px solid #dee2e6;width: 100%;margin-bottom: 1rem;background-color: transparent;border-collapse: collapse;display: table;text-indent: initial;border-spacing: 2px;">
-                            <thead style="display: table-header-group;vertical-align: middle;border-color: inherit;">
-                                <tr style="display: table-row;vertical-align: inherit;border-color: inherit;">
-
-                                    <th
-                                        style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
-                                        {{l('FromDate')}}</th>
-                                    <th
-                                        style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
-                                        {{fromDate | date:'dd/MM/yyyy'}}</th>
-
-                                    <th
-                                        style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
-                                        {{l('ToDate')}}</th>
-                                    <th
-                                        style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
-                                        {{toDate | date:'dd/MM/yyyy'}}</th>
-
-                                    <th
-                                        style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
-                                        {{l('ActionType')}}</th>
-                                    <th
-                                        style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
-                                        {{actionType}}</th>
-
-                                    <th
-                                        style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
-                                        {{l('PaymentType')}}</th>
-                                    <th
-                                        style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
-                                        {{paymentType}}</th>
-
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                    <br />
-                    <div dir="rtl" style="width:100%;">
-                        <table dir="rtl"
-                            style="color: #424242;border: 1px solid #dee2e6;width: 100%;margin-bottom: 1rem;background-color: transparent;border-collapse: collapse;display: table;text-indent: initial;border-spacing: 2px;">
-                            <thead style="display: table-header-group;vertical-align: middle;border-color: inherit;">
-                                <tr style="display: table-row;vertical-align: inherit;border-color: inherit;">
-                                    <th
-                                        style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
-                                        {{l('ActionType')}}</th>
-                                    <th
-                                        style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
-                                        {{l('PaymentType')}}</th>
-                                    <th
-                                        style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
-                                        {{l('FirstCurrency')}}</th>
-                                    <th
-                                        style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
-                                        {{l('AmountOfFirstCurrency')}}</th>
-                                    <th
-                                        style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
-                                        {{l('SecondCurrency')}}</th>
-                                    <th
-                                        style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
-                                        {{l('AmoutOfSecondCurrency')}}</th>
-                                    <th
-                                        style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;background-color: #e9ecef;">
-                                        {{l('Date')}}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let item of data">
-
-                                    <td
-                                        style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
-
-                                        <span *ngIf="item.actionType == 0 ">بيع</span>
-                                        <span *ngIf="item.actionType == 1 ">شراء</span>
-                                    </td>
-                                    <td
-                                        style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
-                                        <span *ngIf="item.paymentType == 0 ">نقدي</span>
-                                        <span *ngIf="item.paymentType == 1 ">ذمم</span>
-                                        <span *ngIf="item.paymentType == 2 ">شركة</span>
-                                    </td>
-                                    <td
-                                        style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
-                                        <span>{{item.firstCurrency?.name }}</span>
-                                    </td>
-                                    <td
-                                        style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
-                                        <span>{{ item.amountOfFirstCurrency }}</span>
-                                    </td>
-                                    <td
-                                        style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
-                                        <span>{{ item.secondCurrency?.name }}</span>
-                                    </td>
-                                    <td
-                                        style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
-                                        <span>{{ item.amoutOfSecondCurrency }}</span>
-                                    </td>
-                                    <td
-                                        style="padding: 0.5rem;border: 2px solid #dee2e6;text-align: center;vertical-align: middle;border-color: #8a949d91;color: #495057;">
-                                        <span *ngIf="item.date != undefined">{{ getRealDate(item.date) |
-                                            date:'dd/MM/yyyy'}}</span>
-                                        <span *ngIf="item.date == undefined"></span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
+                </div>
+                
+                <div id="download">
+                    <span #canvas></span>
+                    <a #downloadLink></a>
                 </div>
 
 
