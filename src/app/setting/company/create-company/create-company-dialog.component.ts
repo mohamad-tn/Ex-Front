@@ -93,7 +93,6 @@ export class CreateCompanyDialogComponent extends AppComponentBase
 
   save(): void {
     this.saving = true;
-    console.log(this.company);
     this._companyService
       .create(this.company)
       .pipe(

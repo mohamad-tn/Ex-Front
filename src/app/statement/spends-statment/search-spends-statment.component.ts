@@ -50,7 +50,8 @@ export class SearchSpendsStatmentComponent extends AppComponentBase implements O
     this.mainAccounts = [
       {'name' : 'ذمم عملاء' , 'id' : 0},
       {'name' : 'ذمم شركات' , 'id' : 1},
-      {'name' : 'إيرادات عامة' , 'id' : 2}
+      {'name' : 'إيرادات عامة' , 'id' : 2},
+      {'name' : 'الكل' , 'id' : 4},
     ];
 
     this.initialClients();

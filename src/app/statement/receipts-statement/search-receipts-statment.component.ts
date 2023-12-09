@@ -47,7 +47,7 @@ export class SearchReceiptsStatmentComponent extends AppComponentBase implements
       {'name' : 'ذمم عملاء' , 'id' : 0},
       {'name' : 'ذمم شركات' , 'id' : 1},
       {'name' : 'مصاريف عامة' , 'id' : 3},
-      //{'name' : 'حوالات مباشرة' , 'id' : 4}
+      {'name' : 'الكل' , 'id' : 4},
     ];
 
     this.initialClients();

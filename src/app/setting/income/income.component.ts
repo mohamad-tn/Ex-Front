@@ -63,7 +63,6 @@ export class IncomeComponent extends AppComponentBase implements OnInit {
     this._modalService
       .open(CreateIncomeDialogComponent)
       .onClose.subscribe((e: any) => {
-        console.log("close:: " + e);
         this.refresh();
       });
   }
@@ -75,7 +74,6 @@ export class IncomeComponent extends AppComponentBase implements OnInit {
         },
       })
       .onClose.subscribe((e: any) => {
-        console.log("close:: " + e);
         this.refresh();
       });
   }

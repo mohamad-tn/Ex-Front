@@ -26,7 +26,7 @@
                         </div>
                     </div>
                     <!--Phone-->
-                    <div class="form-group row required">
+                    <div class="form-group row">
                         <label class="col-md-3 col-form-label" for="phone">
                             {{ "PhoneNumber" | localize }}
                         </label>
@@ -39,7 +39,6 @@
                             name="phone" 
                             id="phone" 
                             minlength="2" 
-                            required 
                             [(ngModel)]="company.phone" 
                             #phoneModel="ngModel" 
                             #phoneEl />
@@ -48,7 +47,7 @@
                         </div>
                     </div>
                     <!--Address-->
-                    <div class="form-group row required">
+                    <div class="form-group row">
                         <label class="col-md-3 col-form-label" for="address">
                             {{ "Address" | localize }}
                         </label>
@@ -60,8 +59,7 @@
                             class="form-control"
                             name="address" 
                             id="address" 
-                            minlength="2" 
-                            required 
+                            minlength="2"
                             [(ngModel)]="company.address" 
                             #addressModel="ngModel" 
                             #addressEl />

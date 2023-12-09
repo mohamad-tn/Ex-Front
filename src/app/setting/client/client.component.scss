@@ -9,3 +9,15 @@
     top: 3px;
     left: -4px;
 }
+
+.as-head{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+@media (min-width: 800px){
+    .float{
+        float: left;
+    }
+  }

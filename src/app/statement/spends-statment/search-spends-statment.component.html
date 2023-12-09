@@ -55,7 +55,7 @@
                     </div>
                 </div>
 
-                <div class="row " *ngIf="mainAccountIds[0] == 4">
+                <!-- <div class="row " *ngIf="mainAccountIds[0] == 4">
                     <label class="col-md-12 col-form-label" for="beneficiary">
                         {{ "Beneficiary" | localize }}
                     </label>
@@ -65,17 +65,15 @@
                             [(ngModel)]="beneficiary.id" #beneficiaryModel="ngModel" #beneficiaryEl></ejs-listbox>
                         
                     </div>
-                </div>
+                </div> -->
 
-                <div class="row " *ngIf="mainAccountIds[0] == 3">
+                <div class="row " *ngIf="mainAccountIds[0] == 4">
                     <label class="col-md-12 col-form-label" for="expense">
-                        {{ "Expense" | localize }}
+                        {{'الكل'}}
                     </label>
                     <div class="col-md-12">
-                        <ejs-listbox id='expense' name='expense' cssClass="as-sy-input as-listbox" [selectionSettings]="selectionSettings" [dataSource]='expenses'
-                            [enableRtl]="true" [fields]='fields' [(ngModel)]="expenseId"
-                            #expenseModel="ngModel" #expenseEl></ejs-listbox>
-                        
+                        <ejs-listbox id='mainAccountEmpty' name='mainAccountEmpty' cssClass="as-sy-input as-listbox" [enableRtl]="true"
+                            [fields]='fields'></ejs-listbox>
                     </div>
                 </div>
 

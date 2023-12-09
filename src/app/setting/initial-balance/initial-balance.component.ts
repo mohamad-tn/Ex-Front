@@ -46,10 +46,8 @@ export class InitialBalanceComponent extends AppComponentBase implements OnInit 
   actionComplete(args) {
     
     if(args.requestType === 'save'){
-      console.log(args.data);
       let treasuryBalance = new TreasuryBalanceDto();
       treasuryBalance.init(args.data);
-      console.log(treasuryBalance);
       this._treasuryBalanceServiceProxy.updateAndGet(treasuryBalance)
       .pipe(
         finalize(() => {

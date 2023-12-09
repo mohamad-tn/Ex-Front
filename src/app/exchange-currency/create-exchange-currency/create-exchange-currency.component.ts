@@ -39,6 +39,10 @@ export class CreateExchangeCurrencyComponent
   date: Date = new Date();
   saving: boolean;
   public fields: Object = { text: "name", value: "id" };
+  parentCol = "col-lg-4 col-md-4";
+  childCol = "col-lg-12 col-md-12";
+  exParentCol = "col-lg-8 col-md-8";
+  exChildCol = "col-lg-6 col-md-6 balance-box";
 
   constructor(
     injector: Injector,
@@ -48,9 +52,8 @@ export class CreateExchangeCurrencyComponent
     private _companyAppService: CompanyServiceProxy,
     private _exchangePriceAppService: ExchangePriceServiceProxy,
     private _exchangeCurrencyAppService: ExchangeCurrencyServiceProxy,
-    private _clientAppService: ClientServiceProxy
-  ) //private _treasuryAppService: TreasuryServiceProxy,
-  {
+    private _clientAppService: ClientServiceProxy //private _treasuryAppService: TreasuryServiceProxy,
+  ) {
     super(injector);
   }
 
@@ -101,6 +104,19 @@ export class CreateExchangeCurrencyComponent
 
   // on change handler
   onchangePaymentType(args) {
+    if (args.value == 0) {
+      this.exchangeCurrency.clientId = undefined;
+      this.exchangeCurrency.companyId = undefined;
+    }
+
+    if (args.value == 1) {
+      this.exchangeCurrency.companyId = undefined;
+    }
+
+    if (args.value == 2) {
+      this.exchangeCurrency.clientId = undefined;
+    }
+
     this.onchnage({
       paymentType: args.value,
       actionType: this.exchangeCurrency.actionType,
@@ -131,6 +147,15 @@ export class CreateExchangeCurrencyComponent
 
   onchangeFirstCurrency(args) {
     this.firstCurrency = this.currencies.find((x) => x.id == args.value);
+
+    this.updateCol();
+
+    //exchange prices
+    let firstCurrencyPrice = this.exchangePrices.find(
+      (x) => x.currencyId == this.firstCurrency.id
+    );
+    this.firstExchangePrice = firstCurrencyPrice;
+
     this.onchnage({
       paymentType: this.exchangeCurrency.paymentType,
       actionType: this.exchangeCurrency.actionType,
@@ -143,6 +168,14 @@ export class CreateExchangeCurrencyComponent
 
   onchangeSecondCurrency(args) {
     this.secondCurrency = this.currencies.find((x) => x.id == args.value);
+
+    this.updateCol();
+    //exchange prices
+    let secondCurrencyPrice = this.exchangePrices.find(
+      (x) => x.currencyId == this.secondCurrency.id
+    );
+    this.secondExchangePrice = secondCurrencyPrice;
+
     this.onchnage({
       paymentType: this.exchangeCurrency.paymentType,
       actionType: this.exchangeCurrency.actionType,
@@ -151,6 +184,37 @@ export class CreateExchangeCurrencyComponent
       firstCurrencyId: this.exchangeCurrency.firstCurrencyId,
       secondCurrencyId: args.value,
     });
+  }
+
+  updateCol() {
+    if (!this.firstCurrency || !this.secondCurrency) return;
+
+    if (
+      this.secondCurrency.id == this.mainCurrency.id ||
+      this.firstCurrency.id == this.mainCurrency.id
+    ) {
+      this.parentCol = "col-lg-8 col-md-8";
+      this.childCol = "col-lg-6 col-md-6";
+      this.exParentCol = "col-lg-4 col-md-4";
+      this.exChildCol = "col-lg-12 col-md-12 balance-box";
+    }
+    if (
+      this.secondCurrency.id == this.mainCurrency.id &&
+      this.firstCurrency.id == this.mainCurrency.id
+    ) {
+      this.parentCol = "col-lg-12 col-md-12";
+      this.childCol = "col-lg-4 col-md-4";
+      this.exParentCol = "hideCol";
+    }
+    if (
+      this.secondCurrency.id != this.mainCurrency.id &&
+      this.firstCurrency.id != this.mainCurrency.id
+    ) {
+      this.parentCol = "col-lg-4 col-md-4";
+      this.childCol = "col-lg-12 col-md-12";
+      this.exParentCol = "col-lg-8 col-md-8";
+      this.exChildCol = "col-lg-6 col-md-6 balance-box";
+    }
   }
 
   onchangeClient(args) {
@@ -186,10 +250,8 @@ export class CreateExchangeCurrencyComponent
 
     if (data.clientId != undefined && data.secondCurrencyId != undefined) {
       this.getClientBalanceSecondCurrency(data);
-    } else if (
-      data.companyId != undefined &&
-      data.firstCurrencyId != undefined
-    ) {
+    }
+    if (data.companyId != undefined && data.firstCurrencyId != undefined) {
       this.getCompanyBalanceFirstCurrency(data);
     }
 
@@ -224,6 +286,8 @@ export class CreateExchangeCurrencyComponent
   currentBalanceFirstCurrency: number;
   previousBalanceSecondCurrency: number;
   currentBalanceSecondCurrency: number;
+  firstExchangePrice: ExchangePriceDto = new ExchangePriceDto();
+  secondExchangePrice: ExchangePriceDto = new ExchangePriceDto();
 
   getTreasuryBalanceFirstCurrency(data) {
     //this._treasuryAppService.
@@ -290,28 +354,32 @@ export class CreateExchangeCurrencyComponent
   onchangeFirstAmount(args) {
     let amount = args.value;
     let value = amount * this.exchangeCurrency.exchangePrice;
-    this.exchangeCurrency.amoutOfSecondCurrency = Math.round(value * 10) / 10;
+    this.exchangeCurrency.amoutOfSecondCurrency = value;
+    // this.exchangeCurrency.amoutOfSecondCurrency = Math.round(value * 10) / 10;
     this.updateCurrentBalance();
   }
 
   onchangeSeconedAmount(args) {
-    let amount = args.value;
-    if (
-      this.exchangeCurrency.exchangePrice != undefined &&
-      this.exchangeCurrency.exchangePrice > 0
-    ) {
-      let value = amount / this.exchangeCurrency.exchangePrice;
-      this.exchangeCurrency.amountOfFirstCurrency = Math.round(value * 10) / 10;
-      this.updateCurrentBalance();
-    }
+    this.updateCurrentBalance();
+
+    // let amount = args.value;
+    // if (
+    //   this.exchangeCurrency.exchangePrice != undefined &&
+    //   this.exchangeCurrency.exchangePrice > 0
+    // ) {
+    //   let value = amount / this.exchangeCurrency.exchangePrice;
+    //   this.exchangeCurrency.amountOfFirstCurrency = value;
+    //   // this.exchangeCurrency.amountOfFirstCurrency = Math.round(value * 10) / 10;
+    //   this.updateCurrentBalance();
+    // }
   }
 
   onchangeExchangePrice(args) {
     let exchangePrice = args.value;
     this.exchangeCurrency.amoutOfSecondCurrency =
       this.exchangeCurrency.amountOfFirstCurrency * exchangePrice;
-    this.exchangeCurrency.amoutOfSecondCurrency =
-      Math.round(this.exchangeCurrency.amoutOfSecondCurrency * 10) / 10;
+    // this.exchangeCurrency.amoutOfSecondCurrency =
+    //   Math.round(this.exchangeCurrency.amoutOfSecondCurrency * 10) / 10;
   }
   getMainCurrency() {
     this.mainCurrency = this.currencies.find((x) => x.isMainCurrency == true);
@@ -360,6 +428,9 @@ export class CreateExchangeCurrencyComponent
         (x) => x.currencyId == this.secondCurrency.id
       );
 
+      this.firstExchangePrice = firstCurrencyPrice;
+      this.secondExchangePrice = secondCurrencyPrice;
+
       if (
         firstCurrencyPrice != undefined &&
         secondCurrencyPrice != undefined &&
@@ -382,7 +453,8 @@ export class CreateExchangeCurrencyComponent
       }
     }
 
-    this.exchangeCurrency.exchangePrice = Math.round(price * 100000) / 100000;
+    this.exchangeCurrency.exchangePrice = price;
+    // this.exchangeCurrency.exchangePrice = Math.round(price * 100000) / 100000;
     // update amount
     if (this.exchangeCurrency.amountOfFirstCurrency) {
       this.exchangeCurrency.amoutOfSecondCurrency =
@@ -398,16 +470,15 @@ export class CreateExchangeCurrencyComponent
   updateCurrentBalance() {
     let firstValue =
       this.exchangeCurrency.actionType == 0
-        ? -1 * this.exchangeCurrency.amountOfFirstCurrency
-        : this.exchangeCurrency.amountOfFirstCurrency;
+        ? -1 *
+          (Math.round(this.exchangeCurrency.amountOfFirstCurrency * 10) / 10)
+        : Math.round(this.exchangeCurrency.amountOfFirstCurrency * 10) / 10;
 
     let secondValue =
       this.exchangeCurrency.actionType == 0
-        ? this.exchangeCurrency.amoutOfSecondCurrency
-        : -1 * this.exchangeCurrency.amoutOfSecondCurrency;
-
-        console.log(firstValue);
-        console.log(secondValue);
+        ? Math.round(this.exchangeCurrency.amoutOfSecondCurrency * 10) / 10
+        : -1 *
+          (Math.round(this.exchangeCurrency.amoutOfSecondCurrency * 10) / 10);
 
     this.currentBalanceFirstCurrency =
       this.previousBalanceFirstCurrency != undefined
@@ -417,10 +488,6 @@ export class CreateExchangeCurrencyComponent
       this.previousBalanceSecondCurrency != undefined
         ? this.previousBalanceSecondCurrency + secondValue
         : secondValue;
-
-        console.log(this.currentBalanceFirstCurrency);
-        console.log(this.currentBalanceSecondCurrency);
-        
   }
 
   save() {
@@ -495,5 +562,19 @@ export class CreateExchangeCurrencyComponent
         clientId: data.clientId,
       },
     ]);
+  }
+
+  getFirstExchangeTitle(name) {
+    if (name) {
+      return `سعر صرف ال${name} مقابل ال${this.mainCurrency?.name}`;
+    }
+    return `سعر صرف العملة الاولى مقابل ال${this.mainCurrency?.name}`;
+  }
+
+  getSecondExchangeTitle(name) {
+    if (name) {
+      return `سعر صرف ال${name} مقابل ال${this.mainCurrency?.name}`;
+    }
+    return `سعر صرف العملة الثانية مقابل ال${this.mainCurrency?.name}`;
   }
 }

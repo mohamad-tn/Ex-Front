@@ -104,9 +104,10 @@ export class EditIncomeTransferComponent
     let routeData = this._route.snapshot.params;
     let faxNumber = routeData?.number == 'undefined' ? undefined : routeData?.number;
     let companyId = routeData?.companyId == 'undefined' ? undefined : routeData?.companyId;
-    if(companyId == undefined && faxNumber == undefined){
-      this._router.navigateByUrl('/app/transfer/create-income-transfer');
-    }
+    
+    // if(companyId == undefined && faxNumber == undefined){
+    //   this._router.navigateByUrl('/app/transfer/create-income-transfer');
+    // }
     
     this._incomeTransferService.getForEdit(routeData?.fromDate, routeData?.toDate, companyId, faxNumber)
     .subscribe(result =>{
@@ -120,13 +121,10 @@ export class EditIncomeTransferComponent
     this.incomeTransfer = this.searchResult[index];
     this.incomeTransfer.companyId = this.searchResult[index].companyId;
     //this.date = new Date(this.searchResult[index].date);
-    console.log(this.searchResult[index].date);
-    var dateMomentObject = moment(this.searchResult[index].date, "dd/MM/yyyy hh:mm:ss").toISOString(); 
-    console.log(dateMomentObject);
+    var dateMomentObject = moment(this.searchResult[index].date, "dd/MM/yyyy hh:mm:ss").toISOString();
     //this.date = dateMomentObject.toDate(); 
     //let c = dateMomentObject.year;
     this.date = this.getDateFromString(this.searchResult[index].date);
-    console.log(this.date);
     let count = this.searchResult[index].incomeTransferDetails.length;
     this.removeAllRows();
     for(let i = 0; i < count; i++){
@@ -190,7 +188,7 @@ export class EditIncomeTransferComponent
     let tr = this.generateTr(index, detailId);
 
     //Currency
-    let tdCurrency = this.generateTd("currency-" + index);
+    let tdCurrency = this.generateTd("currency-" + index, "200");
     let currencyModel = new SyncDropdownlistModel({
       parentEle: tdCurrency,
       index: index,
@@ -207,7 +205,7 @@ export class EditIncomeTransferComponent
     tr.append(tdCurrency);
 
     //Amount
-    let tdAmount = this.generateTd("amount-" + index);
+    let tdAmount = this.generateTd("amount-" + index, "500");
     let amountModel = new SyncNumericTextBoxModel({
       index: index,
       propName: "amount",
@@ -223,7 +221,7 @@ export class EditIncomeTransferComponent
     tr.append(tdAmount);
 
     //Commission
-    let tdCommission = this.generateTd("commission-" + index);
+    let tdCommission = this.generateTd("commission-" + index, "300");
     let commissionModel = new SyncNumericTextBoxModel({
       index: index,
       propName: "commission",
@@ -238,7 +236,7 @@ export class EditIncomeTransferComponent
     tr.append(tdCommission);
 
     //Percentage
-    let tdPercentage = this.generateTd("percentage-" + index);
+    let tdPercentage = this.generateTd("percentage-" + index, "300");
     let percentageModel = new SyncNumericTextBoxModel({
       index: index,
       propName: "percentage",
@@ -255,7 +253,7 @@ export class EditIncomeTransferComponent
     //Sender
     let tdSender = this.generateTd("sender-" + index, '500');
     let senderParentDiv = this.generateِDiv(tdSender, "row");
-    let senderDiv = this.generateِDiv(senderParentDiv, "col-md-6");
+    let senderDiv = this.generateِDiv(senderParentDiv, "col-md-12");
     var sender = this.customers.find(x=>x.id == data?.senderId);
     let senderModel = {
       parentEle: senderDiv,
@@ -269,7 +267,7 @@ export class EditIncomeTransferComponent
     
     this.generateِAutoComplete(senderModel);
 
-    let senderPhoneDiv = this.generateِDiv(senderParentDiv, "col-md-6");
+    let senderPhoneDiv = this.generateِDiv(senderParentDiv, "col-md-12");
     let senderPhoneModel = {
       parentEle: senderPhoneDiv,
       index: index,
@@ -281,7 +279,7 @@ export class EditIncomeTransferComponent
     tr.append(tdSender);
 
     //Payment Type
-    let tdPaymentType = this.generateTd("paymentType-" + index);
+    let tdPaymentType = this.generateTd("paymentType-" + index, "300");
     let paymentTypeModel = new SyncDropdownlistModel({
       parentEle: tdPaymentType,
       index: index,
@@ -377,7 +375,7 @@ export class EditIncomeTransferComponent
         let parentDiv = this.generateِDiv(tdBeneficiary, "row");
 
         let beneficiary = this.customers.find(x=>x.id == data?.beneficiaryId);
-        let beneficiaryDiv = this.generateِDiv(parentDiv, "col-md-6");
+        let beneficiaryDiv = this.generateِDiv(parentDiv, "col-md-12");
         var beneficiaryModel = new SyncAutoCompleteModel({
           parentEle: beneficiaryDiv,
           index: Number(index),
@@ -389,7 +387,7 @@ export class EditIncomeTransferComponent
         beneficiaryModel.value = beneficiary?.name;
         this.generateِAutoComplete(beneficiaryModel);
 
-        let phoneDiv = this.generateِDiv(parentDiv, "col-md-6");
+        let phoneDiv = this.generateِDiv(parentDiv, "col-md-12");
         let phoneModel = new SyncTextBoxModel({
           parentEle: phoneDiv,
           index: Number(index),
@@ -636,7 +634,7 @@ export class EditIncomeTransferComponent
         let parentDiv = this.generateِDiv(tdBeneficiary, "row");
         
         let beneficiary = this.customers.find(x=>x.id == incomeTransferDetail?.beneficiaryId);
-        let beneficiaryDiv = this.generateِDiv(parentDiv, "col-md-6");
+        let beneficiaryDiv = this.generateِDiv(parentDiv, "col-md-12");
         var beneficiaryModel = new SyncAutoCompleteModel({
           parentEle: beneficiaryDiv,
           index: Number(index),
@@ -648,7 +646,7 @@ export class EditIncomeTransferComponent
         beneficiaryModel.value = beneficiary?.name;
         this.generateِAutoComplete(beneficiaryModel);
 
-        let phoneDiv = this.generateِDiv(parentDiv, "col-md-6");
+        let phoneDiv = this.generateِDiv(parentDiv, "col-md-12");
         let phoneModel = new SyncTextBoxModel({
           parentEle: phoneDiv,
           index: Number(index),
@@ -821,7 +819,6 @@ export class EditIncomeTransferComponent
     }
   };
   public onchangeAmount: EmitType<ChangeEventArgs> = (e: ChangeEventArgs) => {
-    //console.log(e);
   };
 
   //helper methods
@@ -1010,6 +1007,7 @@ export class EditIncomeTransferComponent
       senderCustomer.phoneNumber = senderPhoneEle.value;
     }
     incomeTransferDetail.sender = senderCustomer;
+
 
     // payment type
     let paymentTypeId = 'paymentType' + index; 

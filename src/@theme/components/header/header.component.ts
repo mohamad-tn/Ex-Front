@@ -13,12 +13,14 @@ import { AppComponentBase } from '@shared/app-component-base';
 import { DOCUMENT } from '@angular/common';
 
 @Component({
-  selector: 'ngx-header',
-  styleUrls: ['./header.component.scss'],
-  templateUrl: './header.component.html',
+  selector: "ngx-header",
+  styleUrls: ["./header.component.scss"],
+  templateUrl: "./header.component.html",
 })
-export class HeaderComponent extends AppComponentBase implements OnInit, OnDestroy {
-
+export class HeaderComponent
+  extends AppComponentBase
+  implements OnInit, OnDestroy
+{
   private destroy$: Subject<void> = new Subject<void>();
   public readonly materialTheme$: Observable<boolean>;
   public readonly onClickUserMenu$: Observable<boolean>;
@@ -27,36 +29,36 @@ export class HeaderComponent extends AppComponentBase implements OnInit, OnDestr
 
   themes = [
     {
-      value: 'default',
-      name: 'Light',
+      value: "default",
+      name: "Light",
     },
     {
-      value: 'dark',
-      name: 'Dark',
+      value: "dark",
+      name: "Dark",
     },
     {
-      value: 'cosmic',
-      name: 'Cosmic',
+      value: "cosmic",
+      name: "Cosmic",
     },
     {
-      value: 'corporate',
-      name: 'Corporate',
+      value: "corporate",
+      name: "Corporate",
     },
     {
-      value: 'material-light',
-      name: 'Material Light',
+      value: "material-light",
+      name: "Material Light",
     },
     {
-      value: 'material-dark',
-      name: 'Material Dark',
+      value: "material-dark",
+      name: "Material Dark",
     },
   ];
 
-  currentTheme = 'material-light';
-  currentDirection= NbLayoutDirection;
-  userMenu = [ { title: 'Profile' }, { title: 'Log out' } ];
-  languagesMenu = [ { title: 'EN' }, { title: 'AR' } ];
-  tag = 'user-context-menu';
+  currentTheme = "default";
+  currentDirection = NbLayoutDirection;
+  userMenu = [{ title: "Profile" }, { title: "Log out" }];
+  languagesMenu = [{ title: "EN" }, { title: "AR" }];
+  tag = "user-context-menu";
   public constructor(
     private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
@@ -74,44 +76,51 @@ export class HeaderComponent extends AppComponentBase implements OnInit, OnDestr
     @Inject(DOCUMENT) private document: any
   ) {
     super(injector);
-    this.materialTheme$ = this.themeService.onThemeChange()
-      .pipe(map(theme => {
-        const themeName: string = theme?.name || '';
-        return themeName.startsWith('material');
-      }));
-      
-      menuService.onItemClick()
+    this.materialTheme$ = this.themeService.onThemeChange().pipe(
+      map((theme) => {
+        const themeName: string = theme?.name || "";
+        return themeName.startsWith("default");
+      })
+    );
+
+    menuService
+      .onItemClick()
       .pipe(filter(({ tag }) => tag === this.tag))
-      .subscribe(bag => this.onClickUserMenu(bag));
+      .subscribe((bag) => this.onClickUserMenu(bag));
   }
 
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
     //Direction
     this.directionService.setDirection(this.currentDirection.RTL);
-    this.userService.getUsers()
+    this.userService
+      .getUsers()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((users: any) => this.user = this.appSession.user);
+      .subscribe((users: any) => (this.user = this.appSession.user));
 
     const { xl } = this.breakpointService.getBreakpointsMap();
-    this.themeService.onMediaQueryChange()
+    this.themeService
+      .onMediaQueryChange()
       .pipe(
         map(([, currentBreakpoint]) => currentBreakpoint.width < xl),
-        takeUntil(this.destroy$),
+        takeUntil(this.destroy$)
       )
-      .subscribe((isLessThanXl: boolean) => this.userPictureOnly = isLessThanXl);
+      .subscribe(
+        (isLessThanXl: boolean) => (this.userPictureOnly = isLessThanXl)
+      );
 
-    this.themeService.onThemeChange()
+    this.themeService
+      .onThemeChange()
       .pipe(
         map(({ name }) => name),
-        takeUntil(this.destroy$),
+        takeUntil(this.destroy$)
       )
-      .subscribe(themeName => {
+      .subscribe((themeName) => {
         this.currentTheme = themeName;
-        this.rippleService.toggle(themeName?.startsWith('material'));
+        this.rippleService.toggle(themeName?.startsWith("default"));
       });
 
-      this.changeTheme('material-light');
+    this.changeTheme("default");
   }
 
   ngOnDestroy() {
@@ -125,7 +134,7 @@ export class HeaderComponent extends AppComponentBase implements OnInit, OnDestr
   }
 
   toggleSidebar(): boolean {
-    this.sidebarService.toggle(true, 'menu-sidebar');
+    this.sidebarService.toggle(true, "menu-sidebar");
     this.layoutService.changeLayoutSize();
 
     return false;
@@ -137,15 +146,15 @@ export class HeaderComponent extends AppComponentBase implements OnInit, OnDestr
   }
 
   startSearch() {
-    this.analytics.trackEvent('startSearch');
+    this.analytics.trackEvent("startSearch");
   }
 
   trackEmailClick() {
-    this.analytics.trackEvent('clickContactEmail', 'click');
+    this.analytics.trackEvent("clickContactEmail", "click");
   }
 
-  onClickUserMenu(bag: NbMenuBag){
-    if(bag.item.title == 'Log out'){
+  onClickUserMenu(bag: NbMenuBag) {
+    if (bag.item.title == "Log out") {
       this.logout();
     }
   }
@@ -156,11 +165,14 @@ export class HeaderComponent extends AppComponentBase implements OnInit, OnDestr
   screenIsFull: boolean = false;
   openFullScreen() {
     let elem = document.documentElement;
-      let methodToBeInvoked = elem.requestFullscreen  || elem['mozRequestFullscreen'] || elem['msRequestFullscreen'];
-      if (methodToBeInvoked){
-        methodToBeInvoked.call(elem);
-        this.screenIsFull = true;
-      }
+    let methodToBeInvoked =
+      elem.requestFullscreen ||
+      elem["mozRequestFullscreen"] ||
+      elem["msRequestFullscreen"];
+    if (methodToBeInvoked) {
+      methodToBeInvoked.call(elem);
+      this.screenIsFull = true;
+    }
   }
 
   closeFullScreen() {

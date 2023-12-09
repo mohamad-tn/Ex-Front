@@ -15,91 +15,108 @@ import { TotalBalanceStatmentComponent } from './total-balance-statment/total-ba
 import { TotalClientBalanceStatmentComponent } from './total-client-balance-statment/total-client-balance-statment.component';
 import { TotalCompanyBalanceStatmentComponent } from './total-company-balance-statment/total-company-balance-statment.component';
 import { TreasuryBalanceStatementComponent } from './treasury-balance-statment/treasury-balance-statement.component';
+import { ManagementStatementComponent } from './management-statement/management-statement.component';
+import { CustomerStatementComponent } from './customer-statement/customer-statement.component';
 
-const routes: Routes = [{
-  path: '',
-  component: StatementComponent,
-  children: [
-    {
-      path: 'client-balance-statement',
-      component: ClientBalanceStatementComponent,
-      //data: { permission : 'Pages.ClientBalanceStatements' },
-      canActivate: [AppRouteGuard]
-    },
-    {
-      path: 'total-client-balance-statement',
-      component: TotalClientBalanceStatmentComponent,
-      //data: { permission : 'Pages.TotalClientBalanceStatments' },
-      canActivate: [AppRouteGuard]
-    },
-    {
-      path: 'company-balance-statement',
-      component: CompanyBalanceStatementComponent,
-      //data: { permission : 'Pages.CompanyBalanceStatements' },
-      canActivate: [AppRouteGuard]
-    },
-    {
-      path: 'total-company-balance-statement',
-      component: TotalCompanyBalanceStatmentComponent,
-      //data: { permission : 'Pages.TotalCompanyBalanceStatments' },
-      canActivate: [AppRouteGuard]
-    },
-    {
-      path: 'total-balance-statement',
-      component: TotalBalanceStatmentComponent,
-      //data: { permission : 'Pages.TotalBalanceStatments' },
-      canActivate: [AppRouteGuard]
-    },
-    {
-      path: 'outgoing-transfer-statement',
-      component: OutgoingTransferStatementComponent,
-      //data: { permission : 'Pages.OutgoingTransferStatements' },
-      canActivate: [AppRouteGuard]
-    },
-    {
-      path: 'treasury-balance-statement',
-      component: TreasuryBalanceStatementComponent,
-      //data: { permission : 'Pages.CompanyBalanceStatements' },
-      canActivate: [AppRouteGuard]
-    },
-    {
-      path: 'spends-statement',
-      component: SpendsStatmentComponent,
-      //data: { permission : 'Pages.SpendsStatments' },
-      canActivate: [AppRouteGuard]
-    },
-    {
-      path: 'receipts-statement',
-      component: ReceiptsStatmentComponent,
-      //data: { permission : 'Pages.ReceiptsStatments' },
-      canActivate: [AppRouteGuard]
-    },
-    {
-      path: 'defaulters-of-payment-statement',
-      component: DefaultersOfPaymentStatementComponent,
-      //data: { permission : 'Pages.DefaultersOfPaymentStatements' },
-      canActivate: [AppRouteGuard]
-    },//
-    {
-      path: 'inactive-client-statement',
-      component: InactiveClientStatementComponent,
-      //data: { permission : 'Pages.InactiveClientStatement' },
-      canActivate: [AppRouteGuard]
-    },
-    {
-      path: 'exchange-currency-statement',
-      component: ExchangeCurrencyStatementComponent,
-      //data: { permission : 'Pages.InactiveClientStatement' },
-      canActivate: [AppRouteGuard]
-    },
-    {
-      path: 'summary-statement',
-      component: SummaryStatementComponent,
-      //data: { permission : 'Pages.SummaryStatements' },
-      canActivate: [AppRouteGuard]
-    },
-  ],
-}];
+const routes: Routes = [
+  {
+    path: "",
+    component: StatementComponent,
+    children: [
+      {
+        path: "client-balance-statement",
+        component: ClientBalanceStatementComponent,
+        //data: { permission : 'Pages.ClientBalanceStatements' },
+        canActivate: [AppRouteGuard],
+      },
+      {
+        path: "total-client-balance-statement",
+        component: TotalClientBalanceStatmentComponent,
+        //data: { permission : 'Pages.TotalClientBalanceStatments' },
+        canActivate: [AppRouteGuard],
+      },
+      {
+        path: "company-balance-statement",
+        component: CompanyBalanceStatementComponent,
+        //data: { permission : 'Pages.CompanyBalanceStatements' },
+        canActivate: [AppRouteGuard],
+      },
+      {
+        path: "total-company-balance-statement",
+        component: TotalCompanyBalanceStatmentComponent,
+        //data: { permission : 'Pages.TotalCompanyBalanceStatments' },
+        canActivate: [AppRouteGuard],
+      },
+      {
+        path: "total-balance-statement",
+        component: TotalBalanceStatmentComponent,
+        //data: { permission : 'Pages.TotalBalanceStatments' },
+        canActivate: [AppRouteGuard],
+      },
+      {
+        path: "outgoing-transfer-statement",
+        component: OutgoingTransferStatementComponent,
+        //data: { permission : 'Pages.OutgoingTransferStatements' },
+        canActivate: [AppRouteGuard],
+      },
+      {
+        path: "treasury-balance-statement",
+        component: TreasuryBalanceStatementComponent,
+        //data: { permission : 'Pages.CompanyBalanceStatements' },
+        canActivate: [AppRouteGuard],
+      },
+      {
+        path: "spends-statement",
+        component: SpendsStatmentComponent,
+        //data: { permission : 'Pages.SpendsStatments' },
+        canActivate: [AppRouteGuard],
+      },
+      {
+        path: "receipts-statement",
+        component: ReceiptsStatmentComponent,
+        //data: { permission : 'Pages.ReceiptsStatments' },
+        canActivate: [AppRouteGuard],
+      },
+      {
+        path: "defaulters-of-payment-statement",
+        component: DefaultersOfPaymentStatementComponent,
+        //data: { permission : 'Pages.DefaultersOfPaymentStatements' },
+        canActivate: [AppRouteGuard],
+      }, //
+      {
+        path: "inactive-client-statement",
+        component: InactiveClientStatementComponent,
+        //data: { permission : 'Pages.InactiveClientStatement' },
+        canActivate: [AppRouteGuard],
+      },
+      {
+        path: "exchange-currency-statement",
+        component: ExchangeCurrencyStatementComponent,
+        //data: { permission : 'Pages.InactiveClientStatement' },
+        canActivate: [AppRouteGuard],
+      },
+      {
+        path: "customer-statement",
+        component: CustomerStatementComponent,
+        //data: { permission : 'Pages.SummaryStatements' },
+        canActivate: [AppRouteGuard],
+      },
+      {
+        path: "management-statement",
+        component: ManagementStatementComponent,
+        //data: { permission : 'Pages.SummaryStatements' },
+        canActivate: [AppRouteGuard],
+      },
+
+      {
+        path: "summary-statement",
+        component: SummaryStatementComponent,
+        //data: { permission : 'Pages.SummaryStatements' },
+        canActivate: [AppRouteGuard],
+      },
+    ],
+  },
+];
 
 @NgModule({
   imports: [

@@ -73,7 +73,6 @@ export class OutgoingImageTakenDialogComponent extends AppComponentBase implemen
   }
 
   public cameraWasSwitched(deviceId: string): void {
-    console.log('active device: ' + deviceId);
     this.deviceId = deviceId;
   }
 

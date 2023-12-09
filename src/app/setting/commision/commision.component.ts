@@ -58,7 +58,6 @@ export class CommisionComponent extends AppComponentBase implements OnInit {
     this._modalService.open(
       CreateCommisionDialogComponent
     ).onClose.subscribe((e:any) => {
-      console.log("close:: "+e);
       this.refresh();
     });
   }
@@ -71,7 +70,6 @@ export class CommisionComponent extends AppComponentBase implements OnInit {
         },
       }
     ).onClose.subscribe((e:any) => {
-      console.log("close:: "+e);
       this.refresh();
     });
   }

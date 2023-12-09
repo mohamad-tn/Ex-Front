@@ -43,7 +43,6 @@ export class ResetPasswordDialogComponent extends AppComponentBase
 
   public resetPassword(): void {
     this.isLoading = true;
-    console.log(this.resetPasswordDto);
     this._userService
       .resetPassword(this.resetPasswordDto)
       .pipe(

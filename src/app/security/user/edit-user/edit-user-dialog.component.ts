@@ -62,7 +62,6 @@ export class EditUserDialogComponent
     this.initialBranches();
     this.getRoles();
     this._userService.get(this.id).subscribe((result) => {
-      console.log(result);
       this.user = result;
     });
   }

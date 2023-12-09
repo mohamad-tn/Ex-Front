@@ -2,15 +2,22 @@
     <div class="col-md-12">
         <nb-card class="as-case-card">
             <nb-card-header>
-                <div class="header-container">
-                    <nb-actions>
-                        <nb-action class="control-item" icon="swap-outline"></nb-action>
-                        <nb-action class="control-item ">
-                            <h5>{{ "بحث الصندوق" | localize }}</h5>
-                        </nb-action>
-                    </nb-actions>
+                <div class="as-head">
+                    <div class="header-container">
+                        <nb-actions>
+                            <nb-action class="control-item" icon="swap-outline"></nb-action>
+                            <nb-action class="control-item ">
+                                <h5>{{ "بحث الصندوق" | localize }}</h5>
+                            </nb-action>
+                        </nb-actions>
+                    </div>
+                    <div class="header-container">
+                        <nb-actions class="float">
+                            <nb-action class="control-item" icon="corner-up-left-outline"
+                                routerLink="/app/treasury/treasury-action"></nb-action>
+                        </nb-actions>
+                    </div>
                 </div>
-                
             </nb-card-header>
             <nb-card-body class="as-case-card-body">
                 <!-- Grid -->
@@ -36,7 +43,7 @@
                                     </ng-template>
                                 </e-column>
                                 
-                                <e-column headerText="{{'MainAccount' | localize}}" width="150">
+                                <e-column headerText="{{'MainAccount' | localize}}" width="225">
                                     <ng-template #template let-data>
                                         <span *ngIf="data.mainAccountClientId != undefined">{{'Client' | localize}} / {{data.mainAccountClient.name}}</span>
                                         <span *ngIf="data.mainAccountCompanyId != undefined">{{'Company' | localize}} / {{data.mainAccountCompany.name}}</span>

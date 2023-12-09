@@ -10,103 +10,183 @@
                         </nb-action>
                     </nb-actions>
                 </div>
+                <div class="header-container"></div>
                 <div class="header-container">
-                    <nb-actions>
+                    <nb-actions class="float">
                         <nb-action>
-                            <button nbButton status="primary" type="submit" [disabled]="!createExchangeCurrencyForm.form.valid || saving">
+                            <button nbButton status="primary" type="submit"
+                                [disabled]="!createExchangeCurrencyForm.form.valid || saving">
                                 <nb-icon icon="save"></nb-icon>
                                 {{ 'Save' | localize }}
                             </button>
                         </nb-action>
-                        <nb-action class="control-item" (click)="showSearchDialog()"><i class="fa fa-binoculars as-icon-primary" aria-hidden="true"></i></nb-action>
+                        <nb-action class="control-item" (click)="showSearchDialog()"><i
+                                class="fa fa-binoculars as-icon-primary" aria-hidden="true"></i></nb-action>
+                        <nb-action class="control-item" icon="corner-up-left-outline"
+                            (click)="goToPreviousUrl()"></nb-action>
                     </nb-actions>
                 </div>
             </div>
-            
-            
-            
         </nb-card-header>
         <nb-card-body>
             <div class="row">
-                <div class="col-lg-4 col-md-4">
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="name">
-                            {{ "PaymentType" | localize }}
-                        </label>
-                        <div class="col-md-9">
-                            <ejs-dropdownlist id='paymentType' name='paymentType' cssClass="as-sy-input"
-                                [dataSource]='paymentTypes' [enableRtl]="true" [fields]='fields'
-                                (change)="onchangePaymentType($event)" required [(ngModel)]="exchangeCurrency.paymentType"
-                                #paymentTypeModel="ngModel" #paymentTypeEl></ejs-dropdownlist>
-                            <abp-validation-summary [control]="paymentTypeModel" [controlEl]="paymentTypeEl">
-                            </abp-validation-summary>
+                <div [class]="parentCol">
+                    <div class="row">
+                        <div [class]="childCol">
+                            <div class="form-group row required">
+                                <label class="col-md-3 col-form-label" for="date">
+                                    {{ "Date" | localize }}
+                                </label>
+                                <div class="col-md-9">
+                                    <ejs-datepicker [format]="'dd/MM/yyyy'" id='date' name='date' cssClass="as-sy-input"
+                                        required [locale]="'en-US'" placeholder="{{ 'Date' | localize }}"
+                                        [(ngModel)]="date" #dateModel="ngModel" #dateEl>
+                                    </ejs-datepicker>
+                                    <abp-validation-summary [control]="dateModel" [controlEl]="dateEl">
+                                    </abp-validation-summary>
+                                </div>
+                            </div>
+                        </div>
+                        <div [class]="childCol">
+                            <div class="form-group row required">
+                                <label class="col-md-3 col-form-label" for="name">
+                                    {{ "PaymentType" | localize }}
+                                </label>
+                                <div class="col-md-9">
+                                    <ejs-dropdownlist id='paymentType' name='paymentType' cssClass="as-sy-input"
+                                        [dataSource]='paymentTypes' [enableRtl]="true" [fields]='fields'
+                                        (change)="onchangePaymentType($event)" required
+                                        [(ngModel)]="exchangeCurrency.paymentType" #paymentTypeModel="ngModel"
+                                        #paymentTypeEl></ejs-dropdownlist>
+                                    <abp-validation-summary [control]="paymentTypeModel" [controlEl]="paymentTypeEl">
+                                    </abp-validation-summary>
+                                </div>
+                            </div>
+                        </div>
+                        <div [class]="childCol">
+                            <div class="form-group row required">
+                                <label class="col-md-3 col-form-label" for="actionType">
+                                    {{ "ActionType" | localize }}
+                                </label>
+                                <div class="col-md-9">
+                                    <ejs-dropdownlist id='actionType' name='actionType' cssClass="as-sy-input"
+                                        [dataSource]='actionTypes' [enableRtl]="true" [fields]='fields'
+                                        (change)="onchangeActionType($event)" required
+                                        [(ngModel)]="exchangeCurrency.actionType" #actionTypeModel="ngModel"
+                                        #actionTypeEl></ejs-dropdownlist>
+                                    <abp-validation-summary [control]="actionTypeModel" [controlEl]="actionTypeEl">
+                                    </abp-validation-summary>
+                                </div>
+                            </div>
+                        </div>
+                        <div [class]="childCol" *ngIf="exchangeCurrency.paymentType == 1">
+                            <div class="form-group row required">
+                                <label class="col-md-3 col-form-label" for="client">
+                                    {{ "Client" | localize }}
+                                </label>
+                                <div class="col-md-9">
+                                    <ejs-dropdownlist id='client' name='client' cssClass="as-sy-input"
+                                        [dataSource]='clients' [enableRtl]="true" [fields]='fields'
+                                        (change)="onchangeClient($event)" [(ngModel)]="exchangeCurrency.clientId"
+                                        #clientModel="ngModel" #clientEl></ejs-dropdownlist>
+                                    <abp-validation-summary [control]="clientModel" [controlEl]="clientEl">
+                                    </abp-validation-summary>
+                                </div>
+                            </div>
+                        </div>
+                        <div [class]="childCol" *ngIf="exchangeCurrency.paymentType == 2">
+                            <div class="form-group row required">
+                                <label class="col-md-3 col-form-label" for="client">
+                                    {{ "Company" | localize }}
+                                </label>
+                                <div class="col-md-9">
+                                    <ejs-dropdownlist id='company' name='company' cssClass="as-sy-input"
+                                        [dataSource]='companies' [enableRtl]="true" [fields]='fields'
+                                        (change)="onchangeCompany($event)" [(ngModel)]="exchangeCurrency.companyId"
+                                        #companyModel="ngModel" #companyEl></ejs-dropdownlist>
+                                    <abp-validation-summary [control]="companyModel" [controlEl]="companyEl">
+                                    </abp-validation-summary>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-    
-                <div class="col-lg-4 col-md-4">
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="actionType">
-                            {{ "ActionType" | localize }}
-                        </label>
-                        <div class="col-md-9">
-                            <ejs-dropdownlist id='actionType' name='actionType' cssClass="as-sy-input"
-                                [dataSource]='actionTypes' [enableRtl]="true" [fields]='fields'
-                                (change)="onchangeActionType($event)" required [(ngModel)]="exchangeCurrency.actionType"
-                                #actionTypeModel="ngModel" #actionTypeEl></ejs-dropdownlist>
-                            <abp-validation-summary [control]="actionTypeModel" [controlEl]="actionTypeEl">
-                            </abp-validation-summary>
+                <div [class]="exParentCol">
+                    <div class="row">
+                        <div [class]="exChildCol" *ngIf="exchangeCurrency?.firstCurrencyId != mainCurrency?.id">
+                            <div class="row">
+                                <label class="col-md-12 balance-text col-form-label">
+                                    {{ getFirstExchangeTitle(firstCurrency?.name) }}
+                                </label>
+                            </div>
+                            <div class="row">
+                                <label class="col-md-5 balance-text col-form-label">
+                                    {{ "MainPrice" | localize }}
+                                </label>
+                                <div class="col-md-7">
+                                    <input class="e-input as-sy-input" type="text" tabindex="-1"
+                                        value="{{ this.firstExchangePrice?.mainPrice }}" readonly />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="col-md-5 balance-text col-form-label">
+                                    {{ "PurchasingPrice" | localize }}
+                                </label>
+                                <div class="col-md-7">
+                                    <input class="e-input as-sy-input" type="text" tabindex="-1"
+                                        value="{{ this.firstExchangePrice?.purchasingPrice }}" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-5 balance-text col-form-label">
+                                    {{ "SellingPrice" | localize }}
+                                </label>
+                                <div class="col-md-7">
+                                    <input class="e-input as-sy-input" type="text" tabindex="-1"
+                                        value="{{ this.firstExchangePrice?.sellingPrice }}" readonly />
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-    
-                <div class="col-lg-4 col-md-4">
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="date">
-                            {{ "Date" | localize }}
-                        </label>
-                        <div class="col-md-9">
-                            <ejs-datepicker [format]="'dd/MM/yyyy'" id='date' name='date' cssClass="as-sy-input" required [locale]="'en-US'"
-                                placeholder="{{ 'Date' | localize }}" [(ngModel)]="date" #dateModel="ngModel" #dateEl>
-                            </ejs-datepicker>
-                            <abp-validation-summary [control]="dateModel" [controlEl]="dateEl">
-                            </abp-validation-summary>
-                        </div>  
+                        <div [class]="exChildCol" *ngIf="exchangeCurrency?.secondCurrencyId != mainCurrency?.id">
+                            <div class="row">
+                                <label class="col-md-12 balance-text col-form-label">
+                                    {{ getSecondExchangeTitle(secondCurrency?.name) }}
+                                </label>
+                            </div>
+                            <div class="row">
+                                <label class="col-md-5 balance-text col-form-label">
+                                    {{ "MainPrice" | localize }}
+                                </label>
+                                <div class="col-md-7">
+                                    <input class="e-input as-sy-input" type="text" tabindex="-1"
+                                        value="{{ this.secondExchangePrice?.mainPrice }}" readonly />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="col-md-5 balance-text col-form-label">
+                                    {{ "PurchasingPrice" | localize }}
+                                </label>
+                                <div class="col-md-7">
+                                    <input class="e-input as-sy-input" type="text" tabindex="-1"
+                                        value="{{ this.secondExchangePrice?.purchasingPrice }}" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-5 balance-text col-form-label">
+                                    {{ "SellingPrice" | localize }}
+                                </label>
+                                <div class="col-md-7">
+                                    <input class="e-input as-sy-input" type="text" tabindex="-1"
+                                        value="{{ this.secondExchangePrice?.sellingPrice }}" readonly />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <br />
             <div class="row">
-                <div class="col-lg-4 col-md-4" *ngIf="exchangeCurrency.paymentType == 1">
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="client">
-                            {{ "Client" | localize }}
-                        </label>
-                        <div class="col-md-9">
-                            <ejs-dropdownlist id='client' name='client' cssClass="as-sy-input"
-                                [dataSource]='clients' [enableRtl]="true" [fields]='fields'
-                                (change)="onchangeClient($event)" [(ngModel)]="exchangeCurrency.clientId"
-                                #clientModel="ngModel" #clientEl></ejs-dropdownlist>
-                            <abp-validation-summary [control]="clientModel" [controlEl]="clientEl">
-                            </abp-validation-summary>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-4" *ngIf="exchangeCurrency.paymentType == 2">
-                    <div class="form-group row required">
-                        <label class="col-md-3 col-form-label" for="client">
-                            {{ "Company" | localize }}
-                        </label>
-                        <div class="col-md-9">
-                            <ejs-dropdownlist id='company' name='company' cssClass="as-sy-input"
-                                [dataSource]='companies' [enableRtl]="true" [fields]='fields'
-                                (change)="onchangeCompany($event)" [(ngModel)]="exchangeCurrency.companyId"
-                                #companyModel="ngModel" #companyEl></ejs-dropdownlist>
-                            <abp-validation-summary [control]="companyModel" [controlEl]="companyEl">
-                            </abp-validation-summary>
-                        </div>
-                    </div>
-                </div>
+
             </div>
             <br />
             <div class="row">
@@ -123,7 +203,8 @@
                                         (change)="onchangeFirstCurrency($event)" required
                                         [(ngModel)]="exchangeCurrency.firstCurrencyId" #firstCurrencyModel="ngModel"
                                         #firstCurrencyEl></ejs-dropdownlist>
-                                    <abp-validation-summary [control]="firstCurrencyModel" [controlEl]="firstCurrencyEl">
+                                    <abp-validation-summary [control]="firstCurrencyModel"
+                                        [controlEl]="firstCurrencyEl">
                                     </abp-validation-summary>
                                 </div>
                             </div>
@@ -139,7 +220,8 @@
                                         (change)="onchangeSecondCurrency($event)" required
                                         [(ngModel)]="exchangeCurrency.secondCurrencyId" #secondCurrencyModel="ngModel"
                                         #secondCurrencyEl></ejs-dropdownlist>
-                                    <abp-validation-summary [control]="secondCurrencyModel" [controlEl]="secondCurrencyEl">
+                                    <abp-validation-summary [control]="secondCurrencyModel"
+                                        [controlEl]="secondCurrencyEl">
                                     </abp-validation-summary>
                                 </div>
                             </div>
@@ -161,7 +243,7 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-5 balance-text col-form-label">
-                                    {{ "CurrentBalance" | localize }}  / {{firstCurrency?.name}}
+                                    {{ "CurrentBalance" | localize }} / {{firstCurrency?.name}}
                                 </label>
                                 <div class="col-md-7">
                                     <input class="e-input as-sy-input" type="text" tabindex="-1"
@@ -200,24 +282,21 @@
                         <div class="col-md-6">
                             <div class="form-group row">
                                 <label class="col-md-4 col-form-label" for="amountOfFirstCurrency">
-                                    <span *ngIf="firstCurrency == undefined">{{ "AmountOfFirstCurrency" | localize }}</span>
-                                    <span *ngIf="firstCurrency != undefined">{{ "Amount" | localize }}{{' ' + firstCurrency.name}}</span>
+                                    <span *ngIf="firstCurrency == undefined">{{ "AmountOfFirstCurrency" | localize
+                                        }}</span>
+                                    <span *ngIf="firstCurrency != undefined">{{ "Amount" | localize }}{{' ' +
+                                        firstCurrency.name}}</span>
                                 </label>
-                                <div  class="col-md-8">
-                                    <ejs-numerictextbox [showSpinButton]="false"  
-                                    format='N'
-                                    cssClass="as-sy-input"
-                                    id='amountOfFirstCurrency' 
-                                    name='amountOfFirstCurrency' 
-                                    class="e-input as-sy-input"
-                                    autocomplete="off" 
-                                    [showSpinButton]="false"
-                                    (change)="onchangeFirstAmount($event)"
-                                    [(ngModel)]="exchangeCurrency.amountOfFirstCurrency"
-                                    #amountOfFirstCurrencyModel="ngModel" 
-                                    #amountOfFirstCurrencyEl
-                                    ></ejs-numerictextbox>
-                                    <abp-validation-summary [control]="amountOfFirstCurrencyModel" [controlEl]="amountOfFirstCurrencyEl">
+                                <div class="col-md-8">
+                                    <ejs-numerictextbox [showSpinButton]="false" format='N' cssClass="as-sy-input"
+                                        id='amountOfFirstCurrency' name='amountOfFirstCurrency'
+                                        class="e-input as-sy-input" autocomplete="off" [showSpinButton]="false"
+                                        (change)="onchangeFirstAmount($event)"
+                                        [(ngModel)]="exchangeCurrency.amountOfFirstCurrency"
+                                        #amountOfFirstCurrencyModel="ngModel"
+                                        #amountOfFirstCurrencyEl></ejs-numerictextbox>
+                                    <abp-validation-summary [control]="amountOfFirstCurrencyModel"
+                                        [controlEl]="amountOfFirstCurrencyEl">
                                     </abp-validation-summary>
                                 </div>
                             </div>
@@ -225,23 +304,20 @@
                         <div class="col-md-6">
                             <div class="form-group row">
                                 <label class="col-md-4 col-form-label" for="amountOfSecondCurrency">
-                                    <span *ngIf="secondCurrency == undefined">{{ "AmoutOfSecondCurrency" | localize }}</span>
-                                    <span *ngIf="secondCurrency != undefined">{{ "Amount" | localize }}{{' ' + secondCurrency.name}}</span>
+                                    <span *ngIf="secondCurrency == undefined">{{ "AmoutOfSecondCurrency" | localize
+                                        }}</span>
+                                    <span *ngIf="secondCurrency != undefined">{{ "Amount" | localize }}{{' ' +
+                                        secondCurrency.name}}</span>
                                 </label>
-                                <div  class="col-md-8">
-                                    <ejs-numerictextbox [showSpinButton]="false"  
-                                    id='amountOfSecondCurrency' 
-                                    name='amountOfSecondCurrency' 
-                                    format='N'
-                                    [showSpinButton]="false"
-                                    cssClass="as-sy-input"
-                                    (change)="onchangeSeconedAmount($event)"
-                                    [enableRtl]="true" 
-                                    [(ngModel)]="exchangeCurrency.amoutOfSecondCurrency"
-                                    #amountOfSecondCurrencyModel="ngModel" 
-                                    #amountOfSecondCurrencyEl
-                                    ></ejs-numerictextbox>
-                                    <abp-validation-summary [control]="amountOfSecondCurrencyModel" [controlEl]="amountOfSecondCurrencyEl">
+                                <div class="col-md-8">
+                                    <ejs-numerictextbox [showSpinButton]="false" id='amountOfSecondCurrency'
+                                        name='amountOfSecondCurrency' format='N' [showSpinButton]="false"
+                                        cssClass="as-sy-input" (change)="onchangeSeconedAmount($event)"
+                                        [enableRtl]="true" [(ngModel)]="exchangeCurrency.amoutOfSecondCurrency"
+                                        #amountOfSecondCurrencyModel="ngModel"
+                                        #amountOfSecondCurrencyEl></ejs-numerictextbox>
+                                    <abp-validation-summary [control]="amountOfSecondCurrencyModel"
+                                        [controlEl]="amountOfSecondCurrencyEl">
                                     </abp-validation-summary>
                                 </div>
                             </div>
@@ -250,40 +326,34 @@
                             <div class="form-group row">
                                 <label class="col-md-4 col-form-label" for="paidAmountOfFirstCurrency">
                                     <span *ngIf="exchangeCurrency.actionType == 0">{{ "PaidAmount" | localize }}</span>
-                                    <span *ngIf="exchangeCurrency.actionType == 1  || exchangeCurrency.actionType == undefined">{{ "ReceivedAmount" | localize }}</span>
-                                    
+                                    <span
+                                        *ngIf="exchangeCurrency.actionType == 1  || exchangeCurrency.actionType == undefined">{{
+                                        "ReceivedAmount" | localize }}</span>
+
                                     <!-- <span *ngIf="firstCurrency != undefined">{{ "PaidAmount" | localize }}{{' ' + firstCurrency.name}}</span> -->
                                 </label>
-                                <div  class="col-md-8" *ngIf="exchangeCurrency.actionType == 0">
-                                    <ejs-numerictextbox [showSpinButton]="false"  
-                                    id='paidAmountOfFirstCurrency' 
-                                    name='paidAmountOfFirstCurrency' 
-                                    format='N'
-                                    [readonly]="exchangeCurrency.paymentType != 1"
-                                    cssClass="as-sy-input"
-                                    [enableRtl]="true" 
-                                    [showSpinButton]="false"
-                                    [(ngModel)]="exchangeCurrency.paidAmountOfFirstCurrency"
-                                    #paidAmountOfFirstCurrencyModel="ngModel" 
-                                    #paidAmountOfFirstCurrencyEl
-                                    ></ejs-numerictextbox>
-                                    <abp-validation-summary [control]="paidAmountOfFirstCurrencyModel" [controlEl]="paidAmountOfFirstCurrencyEl">
+                                <div class="col-md-8" *ngIf="exchangeCurrency.actionType == 0">
+                                    <ejs-numerictextbox [showSpinButton]="false" id='paidAmountOfFirstCurrency'
+                                        name='paidAmountOfFirstCurrency' format='N'
+                                        [readonly]="exchangeCurrency.paymentType != 1" cssClass="as-sy-input"
+                                        [enableRtl]="true" [showSpinButton]="false"
+                                        [(ngModel)]="exchangeCurrency.paidAmountOfFirstCurrency"
+                                        #paidAmountOfFirstCurrencyModel="ngModel"
+                                        #paidAmountOfFirstCurrencyEl></ejs-numerictextbox>
+                                    <abp-validation-summary [control]="paidAmountOfFirstCurrencyModel"
+                                        [controlEl]="paidAmountOfFirstCurrencyEl">
                                     </abp-validation-summary>
                                 </div>
-                                <div  class="col-md-8" *ngIf="exchangeCurrency.actionType == 1">
-                                    <ejs-numerictextbox [showSpinButton]="false"  
-                                    id='receivedAmountOfFirstCurrency' 
-                                    name='receivedAmountOfFirstCurrency' 
-                                    format='N'
-                                    [readonly]="exchangeCurrency.paymentType != 1"
-                                    cssClass="as-sy-input"
-                                    [enableRtl]="true" 
-                                    [showSpinButton]="false"
-                                    [(ngModel)]="exchangeCurrency.receivedAmountOfFirstCurrency"
-                                    #receivedAmountOfFirstCurrencyModel="ngModel" 
-                                    #receivedAmountOfFirstCurrencyEl
-                                    ></ejs-numerictextbox>
-                                    <abp-validation-summary [control]="receivedAmountOfFirstCurrencyModel" [controlEl]="receivedAmountOfFirstCurrencyEl">
+                                <div class="col-md-8" *ngIf="exchangeCurrency.actionType == 1">
+                                    <ejs-numerictextbox [showSpinButton]="false" id='receivedAmountOfFirstCurrency'
+                                        name='receivedAmountOfFirstCurrency' format='N'
+                                        [readonly]="exchangeCurrency.paymentType != 1" cssClass="as-sy-input"
+                                        [enableRtl]="true" [showSpinButton]="false"
+                                        [(ngModel)]="exchangeCurrency.receivedAmountOfFirstCurrency"
+                                        #receivedAmountOfFirstCurrencyModel="ngModel"
+                                        #receivedAmountOfFirstCurrencyEl></ejs-numerictextbox>
+                                    <abp-validation-summary [control]="receivedAmountOfFirstCurrencyModel"
+                                        [controlEl]="receivedAmountOfFirstCurrencyEl">
                                     </abp-validation-summary>
                                 </div>
                             </div>
@@ -291,44 +361,38 @@
                         <div class="col-md-6">
                             <div class="form-group row">
                                 <label class="col-md-4 col-form-label" for="receivedAmountOfFirstCurrency">
-                                    <span *ngIf="exchangeCurrency.actionType == 0  || exchangeCurrency.actionType == undefined">{{ "ReceivedAmount" | localize }}</span>
+                                    <span
+                                        *ngIf="exchangeCurrency.actionType == 0  || exchangeCurrency.actionType == undefined">{{
+                                        "ReceivedAmount" | localize }}</span>
                                     <span *ngIf="exchangeCurrency.actionType == 1">{{ "PaidAmount" | localize }}</span>
                                     <!-- <span *ngIf="secondCurrency != undefined">{{ "ReceivedAmount" | localize }}{{' ' + secondCurrency.name}}</span> -->
                                 </label>
-                                <div  class="col-md-8" *ngIf="exchangeCurrency.actionType == 0">
-                                    <ejs-numerictextbox [showSpinButton]="false"  
-                                    id='receivedAmountOfSecondCurrency' 
-                                    name='receivedAmountOfSecondCurrency' 
-                                    format='N'
-                                    [readonly]="exchangeCurrency.paymentType != 1"
-                                    cssClass="as-sy-input"
-                                    [enableRtl]="true" 
-                                    [showSpinButton]="false"
-                                    [(ngModel)]="exchangeCurrency.receivedAmountOfSecondCurrency"
-                                    #receivedAmountOfSecondCurrencyModel="ngModel" 
-                                    #receivedAmountOfSecondCurrencyEl
-                                    ></ejs-numerictextbox>
-                                    <abp-validation-summary [control]="receivedAmountOfSecondCurrencyModel" [controlEl]="receivedAmountOfSecondCurrencyEl">
+                                <div class="col-md-8" *ngIf="exchangeCurrency.actionType == 0">
+                                    <ejs-numerictextbox [showSpinButton]="false" id='receivedAmountOfSecondCurrency'
+                                        name='receivedAmountOfSecondCurrency' format='N'
+                                        [readonly]="exchangeCurrency.paymentType != 1" cssClass="as-sy-input"
+                                        [enableRtl]="true" [showSpinButton]="false"
+                                        [(ngModel)]="exchangeCurrency.receivedAmountOfSecondCurrency"
+                                        #receivedAmountOfSecondCurrencyModel="ngModel"
+                                        #receivedAmountOfSecondCurrencyEl></ejs-numerictextbox>
+                                    <abp-validation-summary [control]="receivedAmountOfSecondCurrencyModel"
+                                        [controlEl]="receivedAmountOfSecondCurrencyEl">
                                     </abp-validation-summary>
                                 </div>
-                                <div  class="col-md-8" *ngIf="exchangeCurrency.actionType == 1">
-                                    <ejs-numerictextbox [showSpinButton]="false"  
-                                    id='paidAmountOfSecondCurrency' 
-                                    name='paidAmountOfSecondCurrency' 
-                                    format='N'
-                                    [readonly]="exchangeCurrency.paymentType != 1"
-                                    cssClass="as-sy-input"
-                                    [enableRtl]="true" 
-                                    [showSpinButton]="false"
-                                    [(ngModel)]="exchangeCurrency.paidAmountOfSecondCurrency"
-                                    #paidAmountOfSecondCurrencyModel="ngModel" 
-                                    #paidAmountOfSecondCurrencyEl
-                                    ></ejs-numerictextbox>
-                                    <abp-validation-summary [control]="paidAmountOfSecondCurrencyModel" [controlEl]="paidAmountOfSecondCurrencyEl">
+                                <div class="col-md-8" *ngIf="exchangeCurrency.actionType == 1">
+                                    <ejs-numerictextbox [showSpinButton]="false" id='paidAmountOfSecondCurrency'
+                                        name='paidAmountOfSecondCurrency' format='N'
+                                        [readonly]="exchangeCurrency.paymentType != 1" cssClass="as-sy-input"
+                                        [enableRtl]="true" [showSpinButton]="false"
+                                        [(ngModel)]="exchangeCurrency.paidAmountOfSecondCurrency"
+                                        #paidAmountOfSecondCurrencyModel="ngModel"
+                                        #paidAmountOfSecondCurrencyEl></ejs-numerictextbox>
+                                    <abp-validation-summary [control]="paidAmountOfSecondCurrencyModel"
+                                        [controlEl]="paidAmountOfSecondCurrencyEl">
                                     </abp-validation-summary>
                                 </div>
-                                
-                                
+
+
                             </div>
                         </div>
                     </div>
@@ -341,24 +405,16 @@
                                 {{ "ExchangePrice" | localize }}
                             </label>
                             <div class="col-md-8">
-                                    <ejs-numerictextbox [showSpinButton]="false"  
-                                    id='exchangePrice' 
-                                    name='exchangePrice' 
-                                    required
-                                    format='N'
-                                    (change)="onchangeExchangePrice($event)"
-                                    [showSpinButton]="false"
-                                    cssClass="as-sy-input"
-                                    [enableRtl]="true" 
-                                    [(ngModel)]="exchangeCurrency.exchangePrice"
-                                    #exchangePriceModel="ngModel" 
-                                    #exchangePriceEl
-                                    ></ejs-numerictextbox>
-                                    <abp-validation-summary [control]="exchangePriceModel" [controlEl]="exchangePriceEl">
-                                    </abp-validation-summary>
+                                <ejs-numerictextbox [showSpinButton]="false" id='exchangePrice' name='exchangePrice'
+                                    required format='N7' (change)="onchangeExchangePrice($event)"
+                                    [showSpinButton]="false" cssClass="as-sy-input" [enableRtl]="true"
+                                    [(ngModel)]="exchangeCurrency.exchangePrice" #exchangePriceModel="ngModel"
+                                    #exchangePriceEl></ejs-numerictextbox>
+                                <abp-validation-summary [control]="exchangePriceModel" [controlEl]="exchangePriceEl">
+                                </abp-validation-summary>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -368,23 +424,15 @@
                         <label class="col-md-2 col-form-label" for="note">
                             {{ "Note" | localize }}
                         </label>
-                        <div  class="col-md-10">
-                            <textarea 
-                            style="width:100%;" 
-                            id='note' 
-                            name='note' 
-                            class="e-input as-sy-input"
-                            autocomplete="off" 
-                            [(ngModel)]="exchangeCurrency.note"
-                            ></textarea>
+                        <div class="col-md-10">
+                            <textarea style="width:100%;" id='note' name='note' class="e-input as-sy-input"
+                                autocomplete="off" [(ngModel)]="exchangeCurrency.note"></textarea>
                         </div>
                     </div>
                 </div>
             </div>
         </nb-card-body>
         <nb-card-footer>
-            
         </nb-card-footer>
     </nb-card>
-    
-    </form>
+</form>

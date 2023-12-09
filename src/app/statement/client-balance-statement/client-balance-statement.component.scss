@@ -13,3 +13,14 @@
 .balance-box label{
     color:silver;
 }
+.as-head{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+@media (min-width: 800px){
+    .float{
+        float: left;
+    }
+  }

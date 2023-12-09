@@ -48,6 +48,7 @@ import { CORPORATE_THEME } from './styles/theme.corporate';
 import { DARK_THEME } from './styles/theme.dark';
 import { MATERIAL_LIGHT_THEME } from './styles/material/theme.material-light';
 import { MATERIAL_DARK_THEME } from './styles/material/theme.material-dark';
+import { StatusCardComponent } from './components/status-card/status-card.component';
 
 const NB_MODULES = [
   NbLayoutModule,
@@ -78,6 +79,7 @@ const COMPONENTS = [
   SwitcherComponent,
   SampleLayoutComponent,
   ThemeSettingsComponent,
+  StatusCardComponent,
 ];
 const PIPES = [
   CapitalizePipe,

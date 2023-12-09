@@ -1,0 +1,13 @@
+@import '../../../@theme/styles/themes';
+
+@media (min-width: 800px){
+    .float{
+        float: left;
+    }
+  }
+
+  .as-head{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}

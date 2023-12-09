@@ -1,5 +1,5 @@
 import { ConditionalExpr } from '@angular/compiler';
-import { Component, Inject, Injector, OnInit, Optional, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, Injector, OnInit, Optional, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbDialogService } from '@nebular/theme';
 import { AppComponentBase } from '@shared/app-component-base';
@@ -8,17 +8,20 @@ import { GridComponent, PageSettingsModel } from '@syncfusion/ej2-angular-grids'
 import { SearchCompanyBalanceStatmentDialogComponent } from '../company-balance-statement/search-company-balance-statment-dialog.component';
 import { SearchTotalCompanyBalanceStatmentDialogComponent } from './search-total-company-balance-statment-dialog.component';
 import { TotalCompanyBalanceStatment } from './total-company-balance-statment';
+import html2canvas from 'html2canvas';
 
 @Component({
-  selector: 'app-total-company-balance-statment',
-  templateUrl: './total-company-balance-statment.component.html',
-  styleUrls: ['./total-company-balance-statment.component.scss']
+  selector: "app-total-company-balance-statment",
+  templateUrl: "./total-company-balance-statment.component.html",
+  styleUrls: ["./total-company-balance-statment.component.scss"],
 })
-export class TotalCompanyBalanceStatmentComponent extends AppComponentBase implements OnInit {
-
+export class TotalCompanyBalanceStatmentComponent
+  extends AppComponentBase
+  implements OnInit
+{
   // Grid
-  @ViewChild('cashFlowGrid') public grid: GridComponent;
-  
+  @ViewChild("cashFlowGrid") public grid: GridComponent;
+
   dataSource: TotalCompanyBalanceStatment[] = [];
   companyCashFlows: CompanyCashFlowTotalDto[] = [];
   public pageSettings: PageSettingsModel;
@@ -28,7 +31,7 @@ export class TotalCompanyBalanceStatmentComponent extends AppComponentBase imple
   showColumnBalance2: boolean = false;
   showColumnBalance3: boolean = false;
   showColumnBalance4: boolean = false;
-  
+
   constructor(
     injector: Injector,
     private _router: Router,
@@ -37,39 +40,42 @@ export class TotalCompanyBalanceStatmentComponent extends AppComponentBase imple
     private _companyCashFlowService: CompanyCashFlowServiceProxy,
 
     @Optional() @Inject(API_BASE_URL) baseUrl?: string
-  ) { 
+  ) {
     super(injector);
   }
 
   ngOnInit(): void {
-    this.pageSettings = {pageSize: 10, pageCount: 10, pageSizes: this.pageSizes};
-    setTimeout(()=>this.showSearchDialog(),500);
+    this.pageSettings = {
+      pageSize: 10,
+      pageCount: 10,
+      pageSizes: this.pageSizes,
+    };
+    setTimeout(() => this.showSearchDialog(), 500);
     //this.initialCashFlow('');
   }
 
-  initialCashFlow(toDate){
-    this._companyCashFlowService.getCompanysBalances(toDate)
-    .subscribe(result =>{
-      this.companyCashFlows = result;
-      this.initialDataSource(result);
-    })
+  initialCashFlow(toDate) {
+    this._companyCashFlowService
+      .getCompanysBalances(toDate)
+      .subscribe((result) => {
+        this.companyCashFlows = result;
+        this.initialDataSource(result);
+      });
   }
 
   toDate: Date = new Date();
   showSearchDialog() {
-    this._modalService.open(
-      SearchTotalCompanyBalanceStatmentDialogComponent
-    ).onClose.subscribe((e:any) => {
-      if(e != undefined && e?.toDate){
-        this.toDate = new Date(e?.toDate);
-        this.initialCashFlow(e.toDate);
-      }
-      
-    });
+    this._modalService
+      .open(SearchTotalCompanyBalanceStatmentDialogComponent)
+      .onClose.subscribe((e: any) => {
+        if (e != undefined && e?.toDate) {
+          this.toDate = new Date(e?.toDate);
+          this.initialCashFlow(e.toDate);
+        }
+      });
   }
 
-
-  initialDataSource(items: CompanyCashFlowTotalDto[]){
+  initialDataSource(items: CompanyCashFlowTotalDto[]) {
     this.totalBalanceForHim0 = 0;
     this.totalBalanceOnHim0 = 0;
     this.totalBalanceForHim1 = 0;
@@ -80,89 +86,85 @@ export class TotalCompanyBalanceStatmentComponent extends AppComponentBase imple
     this.totalBalanceOnHim3 = 0;
     this.totalBalanceForHim4 = 0;
     this.totalBalanceOnHim4 = 0;
-    
+
     this.dataSource = [];
-    items.forEach(item => {
+    items.forEach((item) => {
       let data = new TotalCompanyBalanceStatment();
       data.companyId = item.companyId;
       data.companyName = item.companyName;
       data.isActiveToday = item.isActiveToday;
       data.isMatching = item.isMatching;
       var currencyCount = item.currencyBalances.length;
-      if(currencyCount > 0){
+      if (currencyCount > 0) {
         data.balance0 = item.currencyBalances[0].currentBalance;
         this.showColumnBalance0 = true;
       }
 
-      if(currencyCount > 1){
+      if (currencyCount > 1) {
         data.balance1 = item.currencyBalances[1].currentBalance;
         this.showColumnBalance1 = true;
       }
 
-      if(currencyCount > 2){
+      if (currencyCount > 2) {
         data.balance2 = item.currencyBalances[2].currentBalance;
         this.showColumnBalance2 = true;
       }
 
-      if(currencyCount > 3){
+      if (currencyCount > 3) {
         data.balance3 = item.currencyBalances[3].currentBalance;
         this.showColumnBalance3 = true;
       }
 
-      if(currencyCount > 4){
+      if (currencyCount > 4) {
         data.balance4 = item.currencyBalances[4].currentBalance;
         this.showColumnBalance4 = true;
       }
 
       this.dataSource.push(data);
     });
-    
+
     this.calculateTotal();
     //this.grid.refresh();
-    
   }
 
-  getColumnName(index){
-    try{
-      if(this.companyCashFlows != undefined  && this.companyCashFlows[0].currencyBalances?.length > 0){
+  getColumnName(index) {
+    try {
+      if (
+        this.companyCashFlows != undefined &&
+        this.companyCashFlows[0].currencyBalances?.length > 0
+      ) {
         return this.companyCashFlows[0].currencyBalances[index]?.currencyName;
       }
-      return '';
-    }catch{
-      return '';
+      return "";
+    } catch {
+      return "";
     }
-    
   }
 
-  
-  
-  showSearchDetailDialog(data){
-    this._modalService.open(
-      SearchCompanyBalanceStatmentDialogComponent,
-      {
+  showSearchDetailDialog(data) {
+    this._modalService
+      .open(SearchCompanyBalanceStatmentDialogComponent, {
         context: {
           selectedCompanyId: data.companyId,
         },
-      }
-    ).onClose.subscribe((e:any) => {
-      if(e != undefined && e?.input){
-        
-        this.navigateToCompanyBalanceDetailPage(e?.input);
-      }
-      
-    });
+      })
+      .onClose.subscribe((e: any) => {
+        if (e != undefined && e?.input) {
+          this.navigateToCompanyBalanceDetailPage(e?.input);
+        }
+      });
   }
 
   navigateToCompanyBalanceDetailPage(data) {
-    this._router.navigate(
-      ['/app/statement/company-balance-statement',
-        {
-          'companyId': data.companyId,
-          'currencyId': data.currencyId,
-          'fromDate': data.fromDate,
-          'toDate': data.toDate
-        }
-      ]);
+    this._router.navigate([
+      "/app/statement/company-balance-statement",
+      {
+        companyId: data.companyId,
+        currencyId: data.currencyId,
+        fromDate: data.fromDate,
+        toDate: data.toDate,
+      },
+    ]);
   }
 
   //-----------
@@ -177,40 +179,61 @@ export class TotalCompanyBalanceStatmentComponent extends AppComponentBase imple
   totalBalanceForHim4 = 0;
   totalBalanceOnHim4 = 0;
 
-  calculateTotal(){
-    this.dataSource.forEach(item =>{
-
-      if(item.balance0 < 0){
+  calculateTotal() {
+    this.dataSource.forEach((item) => {
+      if (item.balance0 < 0) {
         this.totalBalanceForHim0 += item.balance0;
-      }else{
+      } else {
         this.totalBalanceOnHim0 += item.balance0;
       }
 
-      if(item.balance1 < 0){
+      if (item.balance1 < 0) {
         this.totalBalanceForHim1 += item.balance1;
-      }else{
+      } else {
         this.totalBalanceOnHim1 += item.balance1;
       }
 
-      if(item.balance2 < 0){
+      if (item.balance2 < 0) {
         this.totalBalanceForHim2 += item.balance2;
-      }else{
+      } else {
         this.totalBalanceOnHim2 += item.balance2;
       }
 
-      if(item.balance3 < 0){
+      if (item.balance3 < 0) {
         this.totalBalanceForHim3 += item.balance3;
-      }else{
+      } else {
         this.totalBalanceOnHim3 += item.balance3;
       }
 
-      if(item.balance4 < 0){
+      if (item.balance4 < 0) {
         this.totalBalanceForHim4 += item.balance4;
-      }else{
+      } else {
         this.totalBalanceOnHim4 += item.balance4;
       }
-
     });
   }
-  
+
+  name = "Company-Balance-Statement";
+
+  @ViewChild("screen") screen: ElementRef;
+  @ViewChild("canvas") canvas: ElementRef;
+  @ViewChild("downloadLink") downloadLink: ElementRef;
+
+  downloadImage() {
+    document.getElementById("print-section").style.display = "contents";
+    document.getElementById("t2").style.width = "595px";
+    document.getElementById("t2").style.height = "842px";
+    html2canvas(this.screen.nativeElement).then((canvas) => {
+      this.canvas.nativeElement.src = canvas.toDataURL();
+      this.downloadLink.nativeElement.href = canvas.toDataURL("image/png");
+      this.downloadLink.nativeElement.download =
+        "Company-Balance-Statement-To_Date : " +
+        this.toDate.toLocaleDateString() +
+        ".png";
+      this.downloadLink.nativeElement.click();
+    });
+    document.getElementById("print-section").style.display = "none";
+    document.getElementById("t2").style.width = "0px";
+    document.getElementById("t2").style.height = "0px";
+  }
 }
