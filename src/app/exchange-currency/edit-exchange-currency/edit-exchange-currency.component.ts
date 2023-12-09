@@ -7,12 +7,13 @@ import { finalize } from 'rxjs/operators';
 import { SearchExchangeCurrencyComponent } from '../search-exchange-currency/search-exchange-currency.component';
 
 @Component({
-  selector: 'app-edit-exchange-currency',
-  templateUrl: './edit-exchange-currency.component.html',
-  styleUrls: ['./edit-exchange-currency.component.scss']
+  selector: "app-edit-exchange-currency",
+  templateUrl: "./edit-exchange-currency.component.html",
+  styleUrls: ["./edit-exchange-currency.component.scss"],
 })
-export class EditExchangeCurrencyComponent extends AppComponentBase
-implements OnInit
+export class EditExchangeCurrencyComponent
+  extends AppComponentBase
+  implements OnInit
 {
   exchangeCurrency: UpdateExchangeCurrencyDto = new UpdateExchangeCurrencyDto();
   paymentTypes: object[] = [];
@@ -23,8 +24,13 @@ implements OnInit
   clients: ClientDto[] = [];
   date: Date = new Date();
   saving: boolean;
-  onInitial:boolean = true;
+  onInitial: boolean = true;
   public fields: Object = { text: "name", value: "id" };
+  parentCol = "col-lg-4 col-md-4";
+  childCol = "col-lg-12 col-md-12";
+  exParentCol = "col-lg-8 col-md-8";
+  exChildCol = "col-lg-6 col-md-6 balance-box";
+  previousUrl: string = "";
 
   constructor(
     injector: Injector,
@@ -35,8 +41,7 @@ implements OnInit
     private _companyAppService: CompanyServiceProxy,
     private _exchangePriceAppService: ExchangePriceServiceProxy,
     private _exchangeCurrencyAppService: ExchangeCurrencyServiceProxy,
-    private _clientAppService: ClientServiceProxy,
-    //private _treasuryAppService: TreasuryServiceProxy,
+    private _clientAppService: ClientServiceProxy //private _treasuryAppService: TreasuryServiceProxy,
   ) {
     super(injector);
   }
@@ -53,24 +58,23 @@ implements OnInit
       { name: "شراء", id: 1 },
     ];
 
+    this._route.queryParams.subscribe((params) => {
+      this.previousUrl = params.previousUrl;
+    });
     let routeData = this._route.snapshot.params;
-    
-    if(routeData != undefined){
+
+    if (routeData != undefined) {
       this.initialCurrencies();
       this.initialCompanies();
       this.initialClients();
       this.initialExchangePrices();
       this.initialExchangeCurrency(routeData?.id);
     }
-
-    
   }
 
-  initialExchangeCurrency(id){
-    this._exchangeCurrencyAppService.getForEdit(id)
-    .subscribe(result=>{
+  initialExchangeCurrency(id) {
+    this._exchangeCurrencyAppService.getForEdit(id).subscribe((result) => {
       this.exchangeCurrency = result;
-      
     });
   }
 
@@ -101,7 +105,6 @@ implements OnInit
 
   // on change handler
   onchangePaymentType(args) {
-
     if (args.value == 0) {
       this.exchangeCurrency.clientId = undefined;
       this.exchangeCurrency.companyId = undefined;
@@ -137,11 +140,20 @@ implements OnInit
   }
 
   onchangeFirstCurrency(args) {
-    if(args.itemData != undefined){
-      if(this.onInitial){
+    if (args.itemData != undefined) {
+      if (this.onInitial) {
         this.onInitial = false;
-      }else{
+      } else {
         this.firstCurrency = this.currencies.find((x) => x.id == args.value);
+
+        this.updateCol();
+
+        //exchange prices
+        let firstCurrencyPrice = this.exchangePrices.find(
+          (x) => x.currencyId == this.firstCurrency.id
+        );
+        this.firstExchangePrice = firstCurrencyPrice;
+
         this.onchnage({
           paymentType: this.exchangeCurrency.paymentType,
           actionType: this.exchangeCurrency.actionType,
@@ -155,8 +167,15 @@ implements OnInit
   }
 
   onchangeSecondCurrency(args) {
-    
     this.secondCurrency = this.currencies.find((x) => x.id == args.value);
+
+    this.updateCol();
+    //exchange prices
+    let secondCurrencyPrice = this.exchangePrices.find(
+      (x) => x.currencyId == this.secondCurrency.id
+    );
+    this.secondExchangePrice = secondCurrencyPrice;
+
     this.onchnage({
       paymentType: this.exchangeCurrency.paymentType,
       actionType: this.exchangeCurrency.actionType,
@@ -165,10 +184,44 @@ implements OnInit
       firstCurrencyId: this.exchangeCurrency.firstCurrencyId,
       secondCurrencyId: args.value,
     });
-    
   }
 
-  onchangeClient(args){
+  updateCol() {
+    if (
+      !this.exchangeCurrency?.firstCurrencyId ||
+      !this.exchangeCurrency?.secondCurrencyId
+    )
+      return;
+
+    if (
+      this.exchangeCurrency?.secondCurrencyId == this.mainCurrency.id ||
+      this.exchangeCurrency?.firstCurrencyId == this.mainCurrency.id
+    ) {
+      this.parentCol = "col-lg-8 col-md-8";
+      this.childCol = "col-lg-6 col-md-6";
+      this.exParentCol = "col-lg-4 col-md-4";
+      this.exChildCol = "col-lg-12 col-md-12 balance-box";
+    }
+    if (
+      this.exchangeCurrency?.secondCurrencyId == this.mainCurrency.id &&
+      this.exchangeCurrency?.firstCurrencyId == this.mainCurrency.id
+    ) {
+      this.parentCol = "col-lg-12 col-md-12";
+      this.childCol = "col-lg-4 col-md-4";
+      this.exParentCol = "hideCol";
+    }
+    if (
+      this.exchangeCurrency?.secondCurrencyId != this.mainCurrency.id &&
+      this.exchangeCurrency?.firstCurrencyId != this.mainCurrency.id
+    ) {
+      this.parentCol = "col-lg-4 col-md-4";
+      this.childCol = "col-lg-12 col-md-12";
+      this.exParentCol = "col-lg-8 col-md-8";
+      this.exChildCol = "col-lg-6 col-md-6 balance-box";
+    }
+  }
+
+  onchangeClient(args) {
     this.onchnage({
       paymentType: this.exchangeCurrency.paymentType,
       actionType: this.exchangeCurrency.actionType,
@@ -179,7 +232,7 @@ implements OnInit
     });
   }
 
-  onchangeCompany(args){
+  onchangeCompany(args) {
     this.onchnage({
       paymentType: this.exchangeCurrency.paymentType,
       actionType: this.exchangeCurrency.actionType,
@@ -190,45 +243,35 @@ implements OnInit
     });
   }
 
-
   onchnage(data) {
     debugger;
     if (data.actionType == undefined || data.paymentType == undefined) {
       return;
     }
-    
+
     if (data.clientId != undefined && data.firstCurrencyId != undefined) {
       this.getClientBalanceFirstCurrency(data);
-    } 
-    
-    if (
-      data.clientId != undefined &&
-      data.secondCurrencyId != undefined
-    ) {
+    }
+
+    if (data.clientId != undefined && data.secondCurrencyId != undefined) {
       this.getClientBalanceSecondCurrency(data);
     }
-    if (
-      data.companyId != undefined &&
-      data.firstCurrencyId != undefined
-    ) {
+    if (data.companyId != undefined && data.firstCurrencyId != undefined) {
       this.getCompanyBalanceFirstCurrency(data);
-    } 
-    
-    if (
-      data.companyId != undefined &&
-      data.secondCurrencyId != undefined
-    ) {
+    }
+
+    if (data.companyId != undefined && data.secondCurrencyId != undefined) {
       this.getCompanyBalanceSecondCurrency(data);
-    } 
-    
+    }
+
     if (
       data.companyId == undefined &&
       data.clientId == undefined &&
       data.firstCurrencyId != undefined
     ) {
       this.getTreasuryBalanceFirstCurrency(data);
-    } 
-    
+    }
+
     if (
       data.companyId == undefined &&
       data.clientId == undefined &&
@@ -248,6 +291,8 @@ implements OnInit
   currentBalanceFirstCurrency: number;
   previousBalanceSecondCurrency: number;
   currentBalanceSecondCurrency: number;
+  firstExchangePrice: ExchangePriceDto = new ExchangePriceDto();
+  secondExchangePrice: ExchangePriceDto = new ExchangePriceDto();
 
   getTreasuryBalanceFirstCurrency(data) {
     //this._treasuryAppService.
@@ -312,26 +357,38 @@ implements OnInit
   }
 
   onchangeFirstAmount(args) {
-    let amount = args.value;
-    let value = amount * this.exchangeCurrency.exchangePrice;
-    this.exchangeCurrency.amoutOfSecondCurrency = value;
-    // this.exchangeCurrency.amoutOfSecondCurrency = Math.round(value * 10) / 10;
-    this.updateCurrentBalance();
-  }
-
-  onchangeSeconedAmount(args) {
-    let amount = args.value;
-    if (this.exchangeCurrency.exchangePrice != undefined && this.exchangeCurrency.exchangePrice > 0) {
-      let value = amount / this.exchangeCurrency.exchangePrice;
-      this.exchangeCurrency.amountOfFirstCurrency = value;
-      // this.exchangeCurrency.amountOfFirstCurrency = Math.round(value * 10) / 10;
+    if (args.event != undefined) {
+      let amount = args.value;
+      let value = amount * this.exchangeCurrency.exchangePrice;
+      this.exchangeCurrency.amoutOfSecondCurrency = value;
+      // this.exchangeCurrency.amoutOfSecondCurrency = Math.round(value * 10) / 10;
+      this.updateCurrentBalance();
+    } else {
       this.updateCurrentBalance();
     }
   }
 
-  onchangeExchangePrice(args){
-    let exchangePrice = args.value;
-    this.exchangeCurrency.amoutOfSecondCurrency = this.exchangeCurrency.amountOfFirstCurrency * exchangePrice;
+  onchangeSeconedAmount(args) {
+    this.updateCurrentBalance();
+
+    // let amount = args.value;
+    // if (
+    //   this.exchangeCurrency.exchangePrice != undefined &&
+    //   this.exchangeCurrency.exchangePrice > 0
+    // ) {
+    //   let value = amount / this.exchangeCurrency.exchangePrice;
+    //   this.exchangeCurrency.amountOfFirstCurrency = value;
+    //   // this.exchangeCurrency.amountOfFirstCurrency = Math.round(value * 10) / 10;
+    //   this.updateCurrentBalance();
+    // }
+  }
+
+  onchangeExchangePrice(args) {
+    if (args.event != undefined) {
+      let exchangePrice = args.value;
+      this.exchangeCurrency.amoutOfSecondCurrency =
+        this.exchangeCurrency.amountOfFirstCurrency * exchangePrice;
+    }
     // this.exchangeCurrency.amoutOfSecondCurrency = Math.round(this.exchangeCurrency.amoutOfSecondCurrency * 10)/10;
   }
   getMainCurrency() {
@@ -346,44 +403,59 @@ implements OnInit
     ) {
       return;
     }
-    
+
     let price = 0.0;
     if (this.mainCurrency.id == this.firstCurrency.id) {
-      let secondCurrencyPrice = this.exchangePrices.find((x) => x.currencyId == this.secondCurrency.id);
+      let secondCurrencyPrice = this.exchangePrices.find(
+        (x) => x.currencyId == this.secondCurrency.id
+      );
 
       if (secondCurrencyPrice != undefined && data.actionType == 0) {
         price = secondCurrencyPrice.sellingPrice;
       } else if (secondCurrencyPrice != undefined && data.actionType == 1) {
         price = secondCurrencyPrice.purchasingPrice;
       }
-      
-    } else if(this.mainCurrency.id == this.secondCurrency.id){
-
-      let firstCurrencyPrice = this.exchangePrices.find((x) => x.currencyId == this.firstCurrency.id);
-      let secondCurrencyPrice = this.exchangePrices.find((x) => x.currencyId == this.secondCurrency.id);
+    } else if (this.mainCurrency.id == this.secondCurrency.id) {
+      let firstCurrencyPrice = this.exchangePrices.find(
+        (x) => x.currencyId == this.firstCurrency.id
+      );
+      let secondCurrencyPrice = this.exchangePrices.find(
+        (x) => x.currencyId == this.secondCurrency.id
+      );
 
       if (secondCurrencyPrice != undefined && data.actionType == 0) {
         price = 1 / firstCurrencyPrice.sellingPrice;
       } else if (secondCurrencyPrice != undefined && data.actionType == 1) {
         price = 1 / firstCurrencyPrice.purchasingPrice;
       }
+    } else {
+      // mainCurrency != firstCurrency AND mainCurrency != secondCurrency
 
-      
-    }else{ // mainCurrency != firstCurrency AND mainCurrency != secondCurrency
+      let firstCurrencyPrice = this.exchangePrices.find(
+        (x) => x.currencyId == this.firstCurrency.id
+      );
+      let secondCurrencyPrice = this.exchangePrices.find(
+        (x) => x.currencyId == this.secondCurrency.id
+      );
 
-      let firstCurrencyPrice = this.exchangePrices.find((x) => x.currencyId == this.firstCurrency.id);
-      let secondCurrencyPrice = this.exchangePrices.find((x) => x.currencyId == this.secondCurrency.id);
-
-      if (firstCurrencyPrice != undefined && secondCurrencyPrice != undefined && data.actionType == 0) {
-      
+      if (
+        firstCurrencyPrice != undefined &&
+        secondCurrencyPrice != undefined &&
+        data.actionType == 0
+      ) {
         if (firstCurrencyPrice.sellingPrice > 0) {
-          price = secondCurrencyPrice.sellingPrice / firstCurrencyPrice.sellingPrice;
+          price =
+            secondCurrencyPrice.sellingPrice / firstCurrencyPrice.sellingPrice;
         }
-
-      } else if (firstCurrencyPrice != undefined && secondCurrencyPrice != undefined && data.actionType == 1) {
-      
+      } else if (
+        firstCurrencyPrice != undefined &&
+        secondCurrencyPrice != undefined &&
+        data.actionType == 1
+      ) {
         if (firstCurrencyPrice.purchasingPrice > 0) {
-          price = secondCurrencyPrice.purchasingPrice / firstCurrencyPrice.purchasingPrice;
+          price =
+            secondCurrencyPrice.purchasingPrice /
+            firstCurrencyPrice.purchasingPrice;
         }
       }
     }
@@ -391,16 +463,18 @@ implements OnInit
     this.exchangeCurrency.exchangePrice = price;
     // this.exchangeCurrency.exchangePrice = Math.round(price * 100000) / 100000;
     // update amount
-    if(this.exchangeCurrency.amountOfFirstCurrency){
-      this.exchangeCurrency.amoutOfSecondCurrency = this.exchangeCurrency.amountOfFirstCurrency * this.exchangeCurrency.exchangePrice;
-      this.exchangeCurrency.amoutOfSecondCurrency = Math.round(this.exchangeCurrency.amoutOfSecondCurrency * 10)/10;
-    }
+    // if (this.exchangeCurrency.amountOfFirstCurrency) {
+    //   this.exchangeCurrency.amoutOfSecondCurrency =
+    //     this.exchangeCurrency.amountOfFirstCurrency *
+    //     this.exchangeCurrency.exchangePrice;
+    //   this.exchangeCurrency.amoutOfSecondCurrency =
+    //     Math.round(this.exchangeCurrency.amoutOfSecondCurrency * 10) / 10;
+    // }
 
     this.updateCurrentBalance();
   }
 
-  updateCurrentBalance(){
-    
+  updateCurrentBalance() {
     let firstValue =
       this.exchangeCurrency.actionType == 0
         ? -1 *
@@ -413,15 +487,27 @@ implements OnInit
         : (-1 * Math.round(this.exchangeCurrency.amoutOfSecondCurrency * 10)) /
           10;
 
-    this.currentBalanceFirstCurrency = this.previousBalanceFirstCurrency != undefined ? (this.previousBalanceFirstCurrency + firstValue) : firstValue;
-    this.currentBalanceSecondCurrency = this.previousBalanceSecondCurrency != undefined ? (this.previousBalanceSecondCurrency + secondValue) : secondValue;
+    this.currentBalanceFirstCurrency =
+      this.previousBalanceFirstCurrency != undefined
+        ? this.previousBalanceFirstCurrency + firstValue
+        : firstValue;
+    this.currentBalanceSecondCurrency =
+      this.previousBalanceSecondCurrency != undefined
+        ? this.previousBalanceSecondCurrency + secondValue
+        : secondValue;
   }
 
-  save(){
-    if(this.exchangeCurrency.paidAmountOfFirstCurrency == null || this.exchangeCurrency.paidAmountOfFirstCurrency == undefined){
+  save() {
+    if (
+      this.exchangeCurrency.paidAmountOfFirstCurrency == null ||
+      this.exchangeCurrency.paidAmountOfFirstCurrency == undefined
+    ) {
       this.exchangeCurrency.paidAmountOfFirstCurrency = 0;
     }
-    if(this.exchangeCurrency.receivedAmountOfSecondCurrency == null || this.exchangeCurrency.receivedAmountOfSecondCurrency == undefined){
+    if (
+      this.exchangeCurrency.receivedAmountOfSecondCurrency == null ||
+      this.exchangeCurrency.receivedAmountOfSecondCurrency == undefined
+    ) {
       this.exchangeCurrency.receivedAmountOfSecondCurrency = 0;
     }
     this.exchangeCurrency.date = this.date.toISOString();
@@ -434,35 +520,51 @@ implements OnInit
         })
       )
       .subscribe(() => {
-        this.notify.info(this.l('SavedSuccessfully'));
-        this._router.navigateByUrl('/app/exchange-currency/create');
+        this.notify.info(this.l("SavedSuccessfully"));
+        this._router.navigateByUrl("/app/exchange-currency/create");
       });
   }
 
   showSearchDialog() {
-    this._modalService.open(
-      SearchExchangeCurrencyComponent
-    ).onClose.subscribe((e:any) => {
-      if(e){
-        this.navigateToExchangeCurrencyListPage(e);
-      }
-      
-    });
-  }
-
-  navigateToExchangeCurrencyListPage(data){
-    this._router.navigate(
-      ['/app/exchange-currency/list-exchange-currency',
-        {
-          "paymentType": data.paymentType,
-          "actionType" : data.actionType,
-          "fromDate" : data.fromDate,
-          "toDate" : data.toDate,
-          "currencyId" : data.currencyId,
-          "companyId" : data.mainAccountCompanyId,
-          "clientId" : data.mainAccountClientId
+    this._modalService
+      .open(SearchExchangeCurrencyComponent)
+      .onClose.subscribe((e: any) => {
+        if (e) {
+          this.navigateToExchangeCurrencyListPage(e);
         }
-      ]);
+      });
   }
 
+  navigateToExchangeCurrencyListPage(data) {
+    this._router.navigate([
+      "/app/exchange-currency/list-exchange-currency",
+      {
+        paymentType: data.paymentType,
+        actionType: data.actionType,
+        fromDate: data.fromDate,
+        toDate: data.toDate,
+        currencyId: data.currencyId,
+        companyId: data.mainAccountCompanyId,
+        clientId: data.mainAccountClientId,
+      },
+    ]);
+  }
+
+  getFirstExchangeTitle(name) {
+    if (name) {
+      return `سعر صرف ال${name} مقابل ال${this.mainCurrency?.name}`;
+    }
+    return `سعر صرف العملة الاولى مقابل ال${this.mainCurrency?.name}`;
+  }
+
+  getSecondExchangeTitle(name) {
+    if (name) {
+      return `سعر صرف ال${name} مقابل ال${this.mainCurrency?.name}`;
+    }
+    return `سعر صرف العملة الثانية مقابل ال${this.mainCurrency?.name}`;
+  }
+
+  goToPreviousUrl() {
+    this._router.navigateByUrl(this.previousUrl);
+  }
 }

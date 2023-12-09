@@ -50,7 +50,6 @@ export class CountryComponent extends AppComponentBase implements OnInit {
     this._modalService.open(
       CreateCountryDialogComponent
     ).onClose.subscribe((e:any) => {
-      console.log("close:: "+e);
       this.refresh();
     });
   }
@@ -63,7 +62,6 @@ export class CountryComponent extends AppComponentBase implements OnInit {
         },
       }
     ).onClose.subscribe((e:any) => {
-      console.log("close:: "+e);
       this.refresh();
     });
   }

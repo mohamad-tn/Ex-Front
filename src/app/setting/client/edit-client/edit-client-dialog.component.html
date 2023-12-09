@@ -19,13 +19,13 @@
                         </div>
                     </div>
                     <!--Address-->
-                    <div class="form-group row required">
+                    <div class="form-group row">
                         <label class="col-md-3 col-form-label" for="address">
                             {{ "Address" | localize }}
                         </label>
                         <div class="col-md-9">
                             <input nbInput type="text" class="form-control" fullWidth name="address" id="address"
-                                minlength="2" required [(ngModel)]="client.address" #addressModel="ngModel"
+                                minlength="2" [(ngModel)]="client.address" #addressModel="ngModel"
                                 #addressEl />
                             <abp-validation-summary [control]="addressModel" [controlEl]="addressEl">
                             </abp-validation-summary>

@@ -607,7 +607,6 @@ export class CreateIncomeTransferComponent
     }
   };
   public onchangeAmount: EmitType<ChangeEventArgs> = (e: ChangeEventArgs) => {
-    console.log(e);
   };
 
   //helper methods

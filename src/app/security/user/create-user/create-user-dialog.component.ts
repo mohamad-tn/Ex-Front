@@ -100,7 +100,6 @@ export class CreateUserDialogComponent
     if (checked) {
       this.rolesNames.push(role.normalizedName);
       this.user.roleNames = this.rolesNames;
-      console.log(this.user);
     } else {
       let index: number = this.user.roleNames.indexOf(role.normalizedName);
       if (index !== -1) {

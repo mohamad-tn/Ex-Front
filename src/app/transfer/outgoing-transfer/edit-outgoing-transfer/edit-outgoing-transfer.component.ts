@@ -90,7 +90,6 @@ export class EditOutgoingTransferComponent
         this._outgoingTransferAppService
           .getById(this.transferId)
           .subscribe((result) => {
-            console.log(result);
             this.outgoingTransfer = result;
             /////
             if (result.toBranchId !== null) {

@@ -104,9 +104,10 @@ export class EditIncomeTransferComponent
     let routeData = this._route.snapshot.params;
     let faxNumber = routeData?.number == 'undefined' ? undefined : routeData?.number;
     let companyId = routeData?.companyId == 'undefined' ? undefined : routeData?.companyId;
-    if(companyId == undefined && faxNumber == undefined){
-      this._router.navigateByUrl('/app/transfer/create-income-transfer');
-    }
+    
+    // if(companyId == undefined && faxNumber == undefined){
+    //   this._router.navigateByUrl('/app/transfer/create-income-transfer');
+    // }
     
     this._incomeTransferService.getForEdit(routeData?.fromDate, routeData?.toDate, companyId, faxNumber)
     .subscribe(result =>{
@@ -120,13 +121,10 @@ export class EditIncomeTransferComponent
     this.incomeTransfer = this.searchResult[index];
     this.incomeTransfer.companyId = this.searchResult[index].companyId;
     //this.date = new Date(this.searchResult[index].date);
-    console.log(this.searchResult[index].date);
-    var dateMomentObject = moment(this.searchResult[index].date, "dd/MM/yyyy hh:mm:ss").toISOString(); 
-    console.log(dateMomentObject);
+    var dateMomentObject = moment(this.searchResult[index].date, "dd/MM/yyyy hh:mm:ss").toISOString();
     //this.date = dateMomentObject.toDate(); 
     //let c = dateMomentObject.year;
     this.date = this.getDateFromString(this.searchResult[index].date);
-    console.log(this.date);
     let count = this.searchResult[index].incomeTransferDetails.length;
     this.removeAllRows();
     for(let i = 0; i < count; i++){
@@ -821,7 +819,6 @@ export class EditIncomeTransferComponent
     }
   };
   public onchangeAmount: EmitType<ChangeEventArgs> = (e: ChangeEventArgs) => {
-    //console.log(e);
   };
 
   //helper methods
@@ -1010,6 +1007,7 @@ export class EditIncomeTransferComponent
       senderCustomer.phoneNumber = senderPhoneEle.value;
     }
     incomeTransferDetail.sender = senderCustomer;
+
 
     // payment type
     let paymentTypeId = 'paymentType' + index; 

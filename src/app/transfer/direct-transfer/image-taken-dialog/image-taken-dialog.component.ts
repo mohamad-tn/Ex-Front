@@ -73,7 +73,6 @@ export class ImageTakenDialogComponent extends AppComponentBase implements OnIni
   }
 
   public cameraWasSwitched(deviceId: string): void {
-    console.log('active device: ' + deviceId);
     this.deviceId = deviceId;
   }
 

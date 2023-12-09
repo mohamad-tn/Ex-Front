@@ -16,6 +16,7 @@ import { TotalClientBalanceStatmentComponent } from './total-client-balance-stat
 import { TotalCompanyBalanceStatmentComponent } from './total-company-balance-statment/total-company-balance-statment.component';
 import { TreasuryBalanceStatementComponent } from './treasury-balance-statment/treasury-balance-statement.component';
 import { ManagementStatementComponent } from './management-statement/management-statement.component';
+import { CustomerStatementComponent } from './customer-statement/customer-statement.component';
 
 const routes: Routes = [
   {
@@ -92,6 +93,12 @@ const routes: Routes = [
         path: "exchange-currency-statement",
         component: ExchangeCurrencyStatementComponent,
         //data: { permission : 'Pages.InactiveClientStatement' },
+        canActivate: [AppRouteGuard],
+      },
+      {
+        path: "customer-statement",
+        component: CustomerStatementComponent,
+        //data: { permission : 'Pages.SummaryStatements' },
         canActivate: [AppRouteGuard],
       },
       {

@@ -19,27 +19,27 @@
                         </div>
                     </div>
                     <!--Address-->
-                    <div class="form-group row required">
+                    <div class="form-group row">
                         <label class="col-md-3 col-form-label" for="address">
                             {{ "Address" | localize }}
                         </label>
                         <div class="col-md-9">
                             <input nbInput type="text" class="form-control" fullWidth name="address" id="address"
-                                minlength="2" required [(ngModel)]="client.address" #addressModel="ngModel"
+                                minlength="2" [(ngModel)]="client.address" #addressModel="ngModel"
                                 #addressEl />
                             <abp-validation-summary [control]="addressModel" [controlEl]="addressEl">
                             </abp-validation-summary>
                         </div>
                     </div>
                     <!--Province-->
-                    <div class="form-group row required">
+                    <div class="form-group row">
                         <label class="col-md-3 col-form-label" for="provice">
                             {{ "Province" | localize }}
                         </label>
                         <div class="col-md-9">
                             <ejs-dropdownlist #provinceDropdown cssClass="as-sy-input" id='provice' [enableRtl]="true"
                                 [(ngModel)]="client.provinceId" #proviceModel="ngModel" #proviceEl name='provice'
-                                required [dataSource]='provinces' [fields]='provinceFields'></ejs-dropdownlist>
+                                [dataSource]='provinces' [fields]='provinceFields'></ejs-dropdownlist>
 
                             <abp-validation-summary [control]="proviceModel" [controlEl]="proviceEl">
                             </abp-validation-summary>

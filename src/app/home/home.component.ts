@@ -81,7 +81,6 @@ export class HomeComponent extends AppComponentBase implements OnInit {
       this.userId = this.appSession.userId;
       this.branchOutgoingTransfers(this.userId);
       this.branchIncomingTransfers(this.userId);
-      console.log(this.isGranted("Pages.BranchTransfersCounter"));
 
       setTimeout(() => {
         this.ngOnInit();

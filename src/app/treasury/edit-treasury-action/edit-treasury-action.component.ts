@@ -37,6 +37,7 @@ export class EditTreasuryActionComponent
   date: Date = new Date();
   public beneficiaries: object[] = [];
   onInitial: boolean = true;
+  previousUrl: string = "";
   public fields: Object = { text: "name", value: "id" };
   public exchangePartyFields: Object = {
     text: "name",
@@ -65,6 +66,10 @@ export class EditTreasuryActionComponent
       { name: "صرف", id: 0 },
       { name: "قبض", id: 1 },
     ];
+
+    this._route.queryParams.subscribe((params) => {
+      this.previousUrl = params.previousUrl;
+    });
 
     this.initialCurrencies();
     this.initialClients();
@@ -179,7 +184,6 @@ export class EditTreasuryActionComponent
   initialExchangeParties() {
     this._treasuryActionAppService.getExchangeParties().subscribe((result) => {
       this.exchangeParties = result;
-      console.log(result);
     });
   }
 
@@ -532,5 +536,9 @@ export class EditTreasuryActionComponent
     if (this.treasuryAction.incomeId == undefined) return "";
 
     return this.incomes.find((x) => x.id == this.treasuryAction.incomeId)?.name;
+  }
+
+  goToPreviousUrl() {
+    this._router.navigateByUrl(this.previousUrl);
   }
 }

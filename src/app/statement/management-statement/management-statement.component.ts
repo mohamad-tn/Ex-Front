@@ -66,7 +66,6 @@ export class ManagementStatementComponent
   exchangeCount: string;
   getChangesCount() {
     this._managementService.getChangesCount().subscribe((result) => {
-      console.log(result);
       this.outgoingCount = result[0].toString();
       this.incomeCount = result[1].toString();
       this.treasuryCount = result[2].toString();
@@ -88,7 +87,8 @@ export class ManagementStatementComponent
           this.param = new Query()
             .addParams("fromDate", this.fromDate.toISOString())
             .addParams("toDate", this.toDate.toISOString())
-            .addParams("type", type);
+            .addParams("type", type)
+            .addParams("userId", this.appSession.userId.toString());
 
           this.type = type;
           this.loading = true;

@@ -9,13 +9,15 @@ import { DataManager, UrlAdaptor, Query, Predicate  } from '@syncfusion/ej2-data
 import { finalize } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-list-exchange-currency',
-  templateUrl: './list-exchange-currency.component.html',
-  styleUrls: ['./list-exchange-currency.component.scss']
+  selector: "app-list-exchange-currency",
+  templateUrl: "./list-exchange-currency.component.html",
+  styleUrls: ["./list-exchange-currency.component.scss"],
 })
-export class ListExchangeCurrencyComponent extends AppComponentBase implements OnInit {
-
-  @ViewChild('searchExchangeGrid') gridInstance: GridComponent;
+export class ListExchangeCurrencyComponent
+  extends AppComponentBase
+  implements OnInit
+{
+  @ViewChild("searchExchangeGrid") gridInstance: GridComponent;
   public dataSource: DataManager;
   private baseUrl: string;
   public pageSettings: PageSettingsModel;
@@ -23,7 +25,7 @@ export class ListExchangeCurrencyComponent extends AppComponentBase implements O
   public param: Query;
   filterParams: Predicate;
   filtering: boolean = false;
-  gridHeight: string = '40vh';
+  gridHeight: string = "40vh";
 
   fromDate: Date = new Date();
   toDate: Date = new Date();
@@ -39,29 +41,45 @@ export class ListExchangeCurrencyComponent extends AppComponentBase implements O
     private _route: ActivatedRoute,
     private _modalService: NbDialogService,
     private _exchangeCurrencyAppService: ExchangeCurrencyServiceProxy,
-    @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+    @Optional() @Inject(API_BASE_URL) baseUrl?: string
+  ) {
     super(injector);
     this.baseUrl = baseUrl;
   }
 
   ngOnInit(): void {
-    this.pageSettings = {pageSize: 20, pageCount: 20, pageSizes: this.pageSizes};
+    this.pageSettings = {
+      pageSize: 20,
+      pageCount: 20,
+      pageSizes: this.pageSizes,
+    };
     this.dataSource = new DataManager({
-      url: this.baseUrl + '/api/services/app/ExchangeCurrency/GetForGrid',
-      adaptor: new UrlAdaptor()
+      url: this.baseUrl + "/api/services/app/ExchangeCurrency/GetForGrid",
+      adaptor: new UrlAdaptor(),
     });
-    
+
     let routeData = this._route.snapshot.params;
-    
-    if(routeData != undefined){
+
+    if (routeData != undefined) {
       this.fromDate = new Date(routeData?.fromDate);
       this.toDate = new Date(routeData?.toDate);
-      this.actionType = routeData?.actionType == 'undefined' ? undefined : routeData?.actionType;
-      this.paymentType = routeData?.paymentType == 'undefined' ? undefined : routeData?.paymentType;
-      this.companyId = routeData?.companyId == 'undefined' ? undefined : routeData?.companyId;
-      this.clientId = routeData?.clientId == 'undefined' ? undefined : routeData?.clientId;
-      this.currencyId = routeData?.currencyId == 'undefined' ? undefined : routeData?.currencyId;
-      
+      this.actionType =
+        routeData?.actionType == "undefined"
+          ? undefined
+          : routeData?.actionType;
+      this.paymentType =
+        routeData?.paymentType == "undefined"
+          ? undefined
+          : routeData?.paymentType;
+      this.companyId =
+        routeData?.companyId == "undefined" ? undefined : routeData?.companyId;
+      this.clientId =
+        routeData?.clientId == "undefined" ? undefined : routeData?.clientId;
+      this.currencyId =
+        routeData?.currencyId == "undefined"
+          ? undefined
+          : routeData?.currencyId;
+
       this.param = new Query()
         .addParams("paymentType", this.paymentType)
         .addParams("actionType", this.actionType)
@@ -72,42 +90,49 @@ export class ListExchangeCurrencyComponent extends AppComponentBase implements O
         .addParams("toDate", this.toDate.toISOString())
         .addParams("userId", this.appSession.userId.toString());
 
-        //this.gridInstance.refresh();
+      //this.gridInstance.refresh();
     }
   }
 
-  showEditPage(id){
-    this._modalService.open(
-      CheckEditPasswordComponent
-    ).onClose.subscribe((e:any) => {
-      if(e.success == true){
-        this.openEditPage(id);
-      }
-    });
+  showEditPage(id) {
+    this._modalService
+      .open(CheckEditPasswordComponent)
+      .onClose.subscribe((e: any) => {
+        if (e.success == true) {
+          this.openEditPage(id);
+        }
+      });
   }
 
-  openEditPage(id){
+  openEditPage(id) {
     this._router.navigate(
-      ['/app/exchange-currency/edit-exchange-currency',
+      [
+        "/app/exchange-currency/edit-exchange-currency",
         {
-          "id" : id,
-        }
-      ]);
+          id: id,
+        },
+      ],
+      {
+        queryParams: {
+          previousUrl: this._router.url,
+        },
+      }
+    );
   }
 
   delete(id): void {
-    this._modalService.open(
-      CheckEditPasswordComponent
-    ).onClose.subscribe((e:any) => {
-      if(e.success == true){
-        this.openDeleteDialog(id);
-      }
-    });
+    this._modalService
+      .open(CheckEditPasswordComponent)
+      .onClose.subscribe((e: any) => {
+        if (e.success == true) {
+          this.openDeleteDialog(id);
+        }
+      });
   }
 
-  openDeleteDialog(id){
+  openDeleteDialog(id) {
     abp.message.confirm(
-      this.l('هل انت متأكد الحذف'),
+      this.l("هل انت متأكد الحذف"),
       undefined,
       (result: boolean) => {
         if (result) {
@@ -116,7 +141,7 @@ export class ListExchangeCurrencyComponent extends AppComponentBase implements O
             .pipe(
               finalize(() => {
                 this.gridInstance.refresh();
-                abp.notify.success(this.l('SuccessfullyDeleted'));
+                abp.notify.success(this.l("SuccessfullyDeleted"));
               })
             )
             .subscribe(() => {});

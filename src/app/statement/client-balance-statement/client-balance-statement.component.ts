@@ -99,7 +99,6 @@ export class ClientBalanceStatementComponent extends AppComponentBase  implement
   matchItems: MatchingItemDto[] = [];
   
   checkedMatched(matched: boolean, id: number){
-    console.log(matched);
     let index = this.matchItems.findIndex(x=>x.id == id);
     if(index > -1){
       this.matchItems.splice(index,1);

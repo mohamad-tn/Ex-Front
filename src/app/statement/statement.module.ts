@@ -45,8 +45,10 @@ import { InactiveClientStatementComponent } from './inactive-client-statement/in
 import { SearchInactiveClientStatementComponent } from './inactive-client-statement/search-inactive-client-statement.component';
 import { ExchangeCurrencyStatementComponent } from './exchange-currency-statement/exchange-currency-statement.component';
 import { SearchExchangeCurrencyStatementComponent } from './exchange-currency-statement/search-exchange-currency-statement.component';
-import { NgxPrintDirective, NgxPrintModule } from 'ngx-print';
+import {NgxPrintModule } from 'ngx-print';
 import { ManagementStatementComponent } from "./management-statement/management-statement.component";
+import { SearchManagementStatementComponent } from "./management-statement/search-management-statement.component";
+import { CustomerStatementComponent } from "./customer-statement/customer-statement.component";
 
 
 const NB_MODULES = [
@@ -119,6 +121,8 @@ const SYNCFUSION_SERVICES = [
     ExchangeCurrencyStatementComponent,
     SearchExchangeCurrencyStatementComponent,
     ManagementStatementComponent,
+    SearchManagementStatementComponent,
+    CustomerStatementComponent,
   ],
   imports: [
     CommonModule,

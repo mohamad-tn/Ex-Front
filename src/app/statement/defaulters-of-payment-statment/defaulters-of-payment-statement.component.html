@@ -7,16 +7,19 @@
                         <nb-actions>
                             <nb-action class="control-item" icon="swap-outline"></nb-action>
                             <nb-action class="control-item ">
-                                <h5>{{'DefaultersOfPayment' | localize}}</h5> 
+                                <h5>{{'InactiveClientStatment' | localize}}</h5>
                             </nb-action>
                         </nb-actions>
                     </div>
+                    <div class="header-container"></div>
                     <div class="header-container">
-                        <nb-actions>
-                            <nb-action class="control-item" (click)="showSearchDialog()"><i class="fa fa-binoculars as-icon-primary" aria-hidden="true"></i></nb-action>
+                        <nb-actions class="float">
+                            <nb-action class="control-item" (click)="showSearchDialog()"><i class="fa fa-binoculars as-icon-primary"
+                                    aria-hidden="true"></i></nb-action>
                             <nb-action class="control-item" (click)="downloadImage()">
                                 <nb-icon icon="printer-outline"></nb-icon>
                             </nb-action>
+                            <nb-action class="control-item" icon="corner-up-left-outline" routerLink="/app/home"></nb-action>
                         </nb-actions>
                     </div>
                 </div>

@@ -1,13 +1,6 @@
 @import '../../../@theme/styles/themes';
 
 @include nb-install-component() {
-    nb-card {
-        width: 50rem;
-    }
-    nb-card-body{
-        min-height: 35vh;
-    }
-
     .as-head{
         display: flex;
         justify-content: space-between;
@@ -18,5 +11,15 @@
         cursor: pointer;
         color:nb-theme(color-primary-default);
         text-shadow: 2px 2px 2px #8f9bb3;
+    }
+}
+
+@media (min-width: 800px) {
+        nb-card {
+            width: 52rem;
+        }
+
+        nb-card-body{
+        min-height: 30vh;
     }
 }

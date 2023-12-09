@@ -176,7 +176,7 @@ export class SummaryStatementComponent
           } else {
             currencyTotalBalance =
               currencyTotalBalance +
-              z.mainPrice * this.calculatTotal1(z.currencyId);
+              this.calculatTotal1(z.currencyId) / z.mainPrice;
             this.totalAmount = mainCurrencyTotalBalance + currencyTotalBalance;
           }
         });

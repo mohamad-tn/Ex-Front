@@ -3,22 +3,24 @@
         <div class="col-md-12">
             <form class="form-horizontal" autocomplete="off" #createTransferForm="ngForm" (ngSubmit)="save()">
             <nb-card class="as-case-card">
-                <nb-card-header  class="as-head">
+                <nb-card-header class="as-head">
                     <div class="header-container">
                         <nb-actions>
                             <nb-action class="control-item" icon="swap-outline"></nb-action>
                             <nb-action class="control-item ">
-                                <h5>{{ "OutgoingTransfers" | localize }}</h5> 
+                                <h5>{{ "OutgoingTransfers" | localize }}</h5>
                             </nb-action>
                             <nb-action class="control-item">
                                 <span class="as-list-number">{{'ListNumber' | localize}} : {{ outgoingTransfer.number }}</span>
                             </nb-action>
                         </nb-actions>
                     </div>
+                    <div class="header-container"></div>
                     <div class="header-container">
-                        <nb-actions>
+                        <nb-actions class="float">
                             <nb-action>
-                                <button nbButton status="primary" outline="true" type="submit" [disabled]="!createTransferForm.form.valid || saving">
+                                <button nbButton status="primary" outline="true" type="submit"
+                                    [disabled]="!createTransferForm.form.valid || saving">
                                     <nb-icon icon="save" status="primary"></nb-icon>
                                     {{ 'Save' | localize }}
                                 </button>
@@ -26,6 +28,8 @@
                             <nb-action class="control-item" (click)="downloadImage()">
                                 <nb-icon icon="printer-outline"></nb-icon>
                             </nb-action>
+                            <nb-action class="control-item" icon="corner-up-left-outline"
+                                routerLink="/app/transfer/search-outgoing-transfer"></nb-action>
                         </nb-actions>
                     </div>
                 </nb-card-header>

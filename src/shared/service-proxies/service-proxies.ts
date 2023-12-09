@@ -3822,6 +3822,62 @@ export class CustomerServiceProxy {
     }
 
     /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getCustomerWithImages(id: number | undefined): Observable<CustomerWithImagesDto> {
+        let url_ = this.baseUrl + "/api/services/app/Customer/GetCustomerWithImages?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetCustomerWithImages(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetCustomerWithImages(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<CustomerWithImagesDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<CustomerWithImagesDto>;
+        }));
+    }
+
+    protected processGetCustomerWithImages(response: HttpResponseBase): Observable<CustomerWithImagesDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CustomerWithImagesDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<CustomerWithImagesDto>(null as any);
+    }
+
+    /**
      * @return Success
      */
     getTreasuryActionBeneficiaries(): Observable<CustomerDto[]> {
@@ -4287,6 +4343,62 @@ export class ExchangePriceServiceProxy {
             }));
         }
         return _observableOf<ExchangePriceDto[]>(null as any);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getById(id: number | undefined): Observable<ExchangePriceDto> {
+        let url_ = this.baseUrl + "/api/services/app/ExchangePrice/GetById?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetById(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ExchangePriceDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ExchangePriceDto>;
+        }));
+    }
+
+    protected processGetById(response: HttpResponseBase): Observable<ExchangePriceDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ExchangePriceDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ExchangePriceDto>(null as any);
     }
 
     /**
@@ -6144,7 +6256,7 @@ export class ManagementServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    getForGrid(body: BwireDataManagerRequest | undefined): Observable<ReadGrudDto> {
+    getForGrid(body: ManagementDataManagerRequest | undefined): Observable<ReadGrudDto> {
         let url_ = this.baseUrl + "/api/services/app/Management/GetForGrid";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -10706,169 +10818,6 @@ export interface IBranchDto {
     users: UserDto[] | undefined;
 }
 
-export class BwireDataManagerRequest implements IBwireDataManagerRequest {
-    skip: number;
-    take: number;
-    antiForgery: string | undefined;
-    requiresCounts: boolean;
-    table: string | undefined;
-    group: string[] | undefined;
-    select: string[] | undefined;
-    expand: string[] | undefined;
-    sorted: Sort[] | undefined;
-    search: SearchFilter[] | undefined;
-    where: WhereFilter[] | undefined;
-    aggregates: Aggregate[] | undefined;
-    onDemandGroupInfo: OnDemandGroupInfo;
-    isLazyLoad: boolean;
-    type: number;
-    fromDate: string | undefined;
-    toDate: string | undefined;
-
-    constructor(data?: IBwireDataManagerRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.skip = _data["skip"];
-            this.take = _data["take"];
-            this.antiForgery = _data["antiForgery"];
-            this.requiresCounts = _data["requiresCounts"];
-            this.table = _data["table"];
-            if (Array.isArray(_data["group"])) {
-                this.group = [] as any;
-                for (let item of _data["group"])
-                    this.group.push(item);
-            }
-            if (Array.isArray(_data["select"])) {
-                this.select = [] as any;
-                for (let item of _data["select"])
-                    this.select.push(item);
-            }
-            if (Array.isArray(_data["expand"])) {
-                this.expand = [] as any;
-                for (let item of _data["expand"])
-                    this.expand.push(item);
-            }
-            if (Array.isArray(_data["sorted"])) {
-                this.sorted = [] as any;
-                for (let item of _data["sorted"])
-                    this.sorted.push(Sort.fromJS(item));
-            }
-            if (Array.isArray(_data["search"])) {
-                this.search = [] as any;
-                for (let item of _data["search"])
-                    this.search.push(SearchFilter.fromJS(item));
-            }
-            if (Array.isArray(_data["where"])) {
-                this.where = [] as any;
-                for (let item of _data["where"])
-                    this.where.push(WhereFilter.fromJS(item));
-            }
-            if (Array.isArray(_data["aggregates"])) {
-                this.aggregates = [] as any;
-                for (let item of _data["aggregates"])
-                    this.aggregates.push(Aggregate.fromJS(item));
-            }
-            this.onDemandGroupInfo = _data["onDemandGroupInfo"] ? OnDemandGroupInfo.fromJS(_data["onDemandGroupInfo"]) : <any>undefined;
-            this.isLazyLoad = _data["isLazyLoad"];
-            this.type = _data["type"];
-            this.fromDate = _data["fromDate"];
-            this.toDate = _data["toDate"];
-        }
-    }
-
-    static fromJS(data: any): BwireDataManagerRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new BwireDataManagerRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["skip"] = this.skip;
-        data["take"] = this.take;
-        data["antiForgery"] = this.antiForgery;
-        data["requiresCounts"] = this.requiresCounts;
-        data["table"] = this.table;
-        if (Array.isArray(this.group)) {
-            data["group"] = [];
-            for (let item of this.group)
-                data["group"].push(item);
-        }
-        if (Array.isArray(this.select)) {
-            data["select"] = [];
-            for (let item of this.select)
-                data["select"].push(item);
-        }
-        if (Array.isArray(this.expand)) {
-            data["expand"] = [];
-            for (let item of this.expand)
-                data["expand"].push(item);
-        }
-        if (Array.isArray(this.sorted)) {
-            data["sorted"] = [];
-            for (let item of this.sorted)
-                data["sorted"].push(item.toJSON());
-        }
-        if (Array.isArray(this.search)) {
-            data["search"] = [];
-            for (let item of this.search)
-                data["search"].push(item.toJSON());
-        }
-        if (Array.isArray(this.where)) {
-            data["where"] = [];
-            for (let item of this.where)
-                data["where"].push(item.toJSON());
-        }
-        if (Array.isArray(this.aggregates)) {
-            data["aggregates"] = [];
-            for (let item of this.aggregates)
-                data["aggregates"].push(item.toJSON());
-        }
-        data["onDemandGroupInfo"] = this.onDemandGroupInfo ? this.onDemandGroupInfo.toJSON() : <any>undefined;
-        data["isLazyLoad"] = this.isLazyLoad;
-        data["type"] = this.type;
-        data["fromDate"] = this.fromDate;
-        data["toDate"] = this.toDate;
-        return data;
-    }
-
-    clone(): BwireDataManagerRequest {
-        const json = this.toJSON();
-        let result = new BwireDataManagerRequest();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IBwireDataManagerRequest {
-    skip: number;
-    take: number;
-    antiForgery: string | undefined;
-    requiresCounts: boolean;
-    table: string | undefined;
-    group: string[] | undefined;
-    select: string[] | undefined;
-    expand: string[] | undefined;
-    sorted: Sort[] | undefined;
-    search: SearchFilter[] | undefined;
-    where: WhereFilter[] | undefined;
-    aggregates: Aggregate[] | undefined;
-    onDemandGroupInfo: OnDemandGroupInfo;
-    isLazyLoad: boolean;
-    type: number;
-    fromDate: string | undefined;
-    toDate: string | undefined;
-}
-
 export class CashFlowDataManagerRequest implements ICashFlowDataManagerRequest {
     skip: number;
     take: number;
@@ -13078,6 +13027,7 @@ export class CreateManagementDto implements ICreateManagementDto {
     toCompanyId: number | undefined;
     senderId: number | undefined;
     beneficiaryId: number | undefined;
+    branchId: number;
 
     constructor(data?: ICreateManagementDto) {
         if (data) {
@@ -13119,6 +13069,7 @@ export class CreateManagementDto implements ICreateManagementDto {
             this.toCompanyId = _data["toCompanyId"];
             this.senderId = _data["senderId"];
             this.beneficiaryId = _data["beneficiaryId"];
+            this.branchId = _data["branchId"];
         }
     }
 
@@ -13160,6 +13111,7 @@ export class CreateManagementDto implements ICreateManagementDto {
         data["toCompanyId"] = this.toCompanyId;
         data["senderId"] = this.senderId;
         data["beneficiaryId"] = this.beneficiaryId;
+        data["branchId"] = this.branchId;
         return data;
     }
 
@@ -13201,6 +13153,7 @@ export interface ICreateManagementDto {
     toCompanyId: number | undefined;
     senderId: number | undefined;
     beneficiaryId: number | undefined;
+    branchId: number;
 }
 
 export class CreateRoleDto implements ICreateRoleDto {
@@ -13626,6 +13579,77 @@ export interface ICustomerDto {
     address: string | undefined;
     phoneNumber: string | undefined;
     identificationNumber: string | undefined;
+}
+
+export class CustomerWithImagesDto implements ICustomerWithImagesDto {
+    id: number;
+    name: string | undefined;
+    address: string | undefined;
+    phoneNumber: string | undefined;
+    identificationNumber: string | undefined;
+    images: FileUploadDto[] | undefined;
+
+    constructor(data?: ICustomerWithImagesDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.address = _data["address"];
+            this.phoneNumber = _data["phoneNumber"];
+            this.identificationNumber = _data["identificationNumber"];
+            if (Array.isArray(_data["images"])) {
+                this.images = [] as any;
+                for (let item of _data["images"])
+                    this.images.push(FileUploadDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): CustomerWithImagesDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CustomerWithImagesDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["address"] = this.address;
+        data["phoneNumber"] = this.phoneNumber;
+        data["identificationNumber"] = this.identificationNumber;
+        if (Array.isArray(this.images)) {
+            data["images"] = [];
+            for (let item of this.images)
+                data["images"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): CustomerWithImagesDto {
+        const json = this.toJSON();
+        let result = new CustomerWithImagesDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICustomerWithImagesDto {
+    id: number;
+    name: string | undefined;
+    address: string | undefined;
+    phoneNumber: string | undefined;
+    identificationNumber: string | undefined;
+    images: FileUploadDto[] | undefined;
 }
 
 export class DataManagerRequest implements IDataManagerRequest {
@@ -15041,6 +15065,173 @@ export class IsTenantAvailableOutput implements IIsTenantAvailableOutput {
 export interface IIsTenantAvailableOutput {
     state: TenantAvailabilityState;
     tenantId: number | undefined;
+}
+
+export class ManagementDataManagerRequest implements IManagementDataManagerRequest {
+    skip: number;
+    take: number;
+    antiForgery: string | undefined;
+    requiresCounts: boolean;
+    table: string | undefined;
+    group: string[] | undefined;
+    select: string[] | undefined;
+    expand: string[] | undefined;
+    sorted: Sort[] | undefined;
+    search: SearchFilter[] | undefined;
+    where: WhereFilter[] | undefined;
+    aggregates: Aggregate[] | undefined;
+    onDemandGroupInfo: OnDemandGroupInfo;
+    isLazyLoad: boolean;
+    userId: number;
+    type: number;
+    fromDate: string | undefined;
+    toDate: string | undefined;
+
+    constructor(data?: IManagementDataManagerRequest) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.skip = _data["skip"];
+            this.take = _data["take"];
+            this.antiForgery = _data["antiForgery"];
+            this.requiresCounts = _data["requiresCounts"];
+            this.table = _data["table"];
+            if (Array.isArray(_data["group"])) {
+                this.group = [] as any;
+                for (let item of _data["group"])
+                    this.group.push(item);
+            }
+            if (Array.isArray(_data["select"])) {
+                this.select = [] as any;
+                for (let item of _data["select"])
+                    this.select.push(item);
+            }
+            if (Array.isArray(_data["expand"])) {
+                this.expand = [] as any;
+                for (let item of _data["expand"])
+                    this.expand.push(item);
+            }
+            if (Array.isArray(_data["sorted"])) {
+                this.sorted = [] as any;
+                for (let item of _data["sorted"])
+                    this.sorted.push(Sort.fromJS(item));
+            }
+            if (Array.isArray(_data["search"])) {
+                this.search = [] as any;
+                for (let item of _data["search"])
+                    this.search.push(SearchFilter.fromJS(item));
+            }
+            if (Array.isArray(_data["where"])) {
+                this.where = [] as any;
+                for (let item of _data["where"])
+                    this.where.push(WhereFilter.fromJS(item));
+            }
+            if (Array.isArray(_data["aggregates"])) {
+                this.aggregates = [] as any;
+                for (let item of _data["aggregates"])
+                    this.aggregates.push(Aggregate.fromJS(item));
+            }
+            this.onDemandGroupInfo = _data["onDemandGroupInfo"] ? OnDemandGroupInfo.fromJS(_data["onDemandGroupInfo"]) : <any>undefined;
+            this.isLazyLoad = _data["isLazyLoad"];
+            this.userId = _data["userId"];
+            this.type = _data["type"];
+            this.fromDate = _data["fromDate"];
+            this.toDate = _data["toDate"];
+        }
+    }
+
+    static fromJS(data: any): ManagementDataManagerRequest {
+        data = typeof data === 'object' ? data : {};
+        let result = new ManagementDataManagerRequest();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["skip"] = this.skip;
+        data["take"] = this.take;
+        data["antiForgery"] = this.antiForgery;
+        data["requiresCounts"] = this.requiresCounts;
+        data["table"] = this.table;
+        if (Array.isArray(this.group)) {
+            data["group"] = [];
+            for (let item of this.group)
+                data["group"].push(item);
+        }
+        if (Array.isArray(this.select)) {
+            data["select"] = [];
+            for (let item of this.select)
+                data["select"].push(item);
+        }
+        if (Array.isArray(this.expand)) {
+            data["expand"] = [];
+            for (let item of this.expand)
+                data["expand"].push(item);
+        }
+        if (Array.isArray(this.sorted)) {
+            data["sorted"] = [];
+            for (let item of this.sorted)
+                data["sorted"].push(item.toJSON());
+        }
+        if (Array.isArray(this.search)) {
+            data["search"] = [];
+            for (let item of this.search)
+                data["search"].push(item.toJSON());
+        }
+        if (Array.isArray(this.where)) {
+            data["where"] = [];
+            for (let item of this.where)
+                data["where"].push(item.toJSON());
+        }
+        if (Array.isArray(this.aggregates)) {
+            data["aggregates"] = [];
+            for (let item of this.aggregates)
+                data["aggregates"].push(item.toJSON());
+        }
+        data["onDemandGroupInfo"] = this.onDemandGroupInfo ? this.onDemandGroupInfo.toJSON() : <any>undefined;
+        data["isLazyLoad"] = this.isLazyLoad;
+        data["userId"] = this.userId;
+        data["type"] = this.type;
+        data["fromDate"] = this.fromDate;
+        data["toDate"] = this.toDate;
+        return data;
+    }
+
+    clone(): ManagementDataManagerRequest {
+        const json = this.toJSON();
+        let result = new ManagementDataManagerRequest();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IManagementDataManagerRequest {
+    skip: number;
+    take: number;
+    antiForgery: string | undefined;
+    requiresCounts: boolean;
+    table: string | undefined;
+    group: string[] | undefined;
+    select: string[] | undefined;
+    expand: string[] | undefined;
+    sorted: Sort[] | undefined;
+    search: SearchFilter[] | undefined;
+    where: WhereFilter[] | undefined;
+    aggregates: Aggregate[] | undefined;
+    onDemandGroupInfo: OnDemandGroupInfo;
+    isLazyLoad: boolean;
+    userId: number;
+    type: number;
+    fromDate: string | undefined;
+    toDate: string | undefined;
 }
 
 export class ManagementDto implements IManagementDto {

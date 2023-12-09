@@ -3,12 +3,21 @@
         <div class="col-md-12">
             <nb-card class="as-case-card">
                 <nb-card-header>
-                    <nb-actions>
-                        <nb-action class="control-item" icon="percent-outline"></nb-action>
-                        <nb-action class="control-item ">
-                            <h5>{{ "Commision" | localize }}</h5> 
-                        </nb-action>
-                    </nb-actions>
+                    <div class="as-head">
+                        <div class="header-container">
+                            <nb-actions>
+                                <nb-action class="control-item" icon="percent-outline"></nb-action>
+                                <nb-action class="control-item ">
+                                    <h5>{{ "Commision" | localize }}</h5>
+                                </nb-action>
+                            </nb-actions>
+                        </div>
+                        <div class="header-container">
+                            <nb-actions class="float">
+                                <nb-action class="control-item" icon="corner-up-left-outline" routerLink="/app/home"></nb-action>
+                            </nb-actions>
+                        </div>
+                    </div>
                 </nb-card-header>
                 <nb-card-body class="as-case-card-body">
                     <ejs-grid id="commisionGrid" #commisionGrid [dataSource]="commisions" [allowPaging]="true"
@@ -57,12 +66,12 @@
                                 </ng-template>
                             </e-column>
                             <e-column field="id" headerText="Id" isPrimaryKey="true" [visible]="false"></e-column>
-                            <e-column field="currency.name" headerText="{{'Currency' | localize}}" textAlign="center"></e-column>
-                            <e-column field="from" headerText="{{'From' | localize}}" textAlign="center" format='N2'></e-column>
-                            <e-column field="to" headerText="{{'To' | localize}}" textAlign="center" format='N2'></e-column>
-                            <e-column field="percentage" headerText="{{'Percentage' | localize}}" textAlign="center" format='N2'  >
+                            <e-column field="currency.name" headerText="{{'Currency' | localize}}" textAlign="center" width="150" width="150"></e-column>
+                            <e-column field="from" headerText="{{'From' | localize}}" textAlign="center" format='N2' width="150"></e-column>
+                            <e-column field="to" headerText="{{'To' | localize}}" textAlign="center" format='N2' width="150"></e-column>
+                            <e-column field="percentage" headerText="{{'Percentage' | localize}}" textAlign="center" format='N2' width="150" width="150">
                             </e-column>
-                            <e-column field="value" headerText="{{'Value' | localize}}" textAlign="center" format='N2'></e-column>
+                            <e-column field="value" headerText="{{'Value' | localize}}" textAlign="center" format='N2' width="150"></e-column>
                         </e-columns>
                     </ejs-grid>
                 </nb-card-body>
