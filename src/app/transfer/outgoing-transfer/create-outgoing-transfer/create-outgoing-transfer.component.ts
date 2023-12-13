@@ -528,6 +528,10 @@ export class CreateOutgoingTransferComponent
     document.getElementById("print-section").style.display = "contents";
     document.getElementById("t4").style.width = "595px";
     document.getElementById("t4").style.height = "842px";
+    document.getElementById("createOutgoingPrint").className = "as-case-card-body";
+    document.getElementById("createOutgoingPrint").style.display = "contents";
+    document.getElementById("download").style.display = "contents";
+
     html2canvas(this.screen.nativeElement).then((canvas) => {
       this.canvas.nativeElement.src = canvas.toDataURL();
       this.downloadLink.nativeElement.href = canvas.toDataURL("image/png");
@@ -538,6 +542,9 @@ export class CreateOutgoingTransferComponent
     document.getElementById("print-section").style.display = "none";
     document.getElementById("t4").style.width = "0px";
     document.getElementById("t4").style.height = "0px";
+    document.getElementById("createOutgoingPrint").className = "";
+    document.getElementById("createOutgoingPrint").style.display = "none";
+    document.getElementById("download").style.display = "none";
   }
 
   getCurrencyName(): string {

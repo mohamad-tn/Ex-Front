@@ -66,8 +66,8 @@
                                 </ng-template>
                             </e-column>
                             <e-column field="id" headerText="Id" isPrimaryKey="true" [visible]="false"></e-column>
-                            <e-column field="name" headerText="{{'Name' | localize}}" textAlign="center"></e-column>
-                            <e-column field="isMainCurrency" headerText="{{'IsMainCurrency' | localize}}" textAlign="center">
+                            <e-column field="name" headerText="{{'Name' | localize}}" textAlign="center" width="150"></e-column>
+                            <e-column field="isMainCurrency" headerText="{{'IsMainCurrency' | localize}}" textAlign="center" width="200">
                                 <ng-template #template let-data>
                                     <nb-checkbox [checked]="data.isMainCurrency" ></nb-checkbox>
                                 </ng-template>
