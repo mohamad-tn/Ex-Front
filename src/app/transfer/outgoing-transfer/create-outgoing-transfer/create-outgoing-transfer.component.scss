@@ -99,6 +99,7 @@
       max-width: 50%;
       margin-top: 2rem;
     }
+    
   }
   
   @media (max-width: 600px) {
@@ -114,3 +115,11 @@
         float: left;
     }
   }
+
+.scrollbar {
+  height: 500px !important;
+  width: inherit !important;
+  background: #fff !important;
+  overflow-y: scroll !important;
+  overflow-x: hidden !important;
+}

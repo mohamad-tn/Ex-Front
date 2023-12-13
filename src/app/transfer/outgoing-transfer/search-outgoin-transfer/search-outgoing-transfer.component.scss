@@ -12,3 +12,13 @@
         float: left;
     }
   }
+
+  @media (max-width: 800px){
+    .scrollbar {
+  height: 500px !important;
+  width: inherit !important;
+  background: #fff !important;
+  overflow-y: scroll !important;
+  overflow-x: hidden !important;
+}
+  }
